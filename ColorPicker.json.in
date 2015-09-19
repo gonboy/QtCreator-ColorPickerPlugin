@@ -1,0 +1,12 @@
+{
+    \"Name\" : \"ColorPicker\",
+    \"Version\" : \"$$QTCREATOR_VERSION\",
+    \"CompatVersion\" : \"$$QTCREATOR_COMPAT_VERSION\",
+    \"Vendor\" : \"Axel Airo\",
+    \"Copyright\" : \"(C) 2015 Axel Airo\",
+    \"License\" : "\ \",
+    \"Category\" : \"Qt Creator\",
+    \"Description\" : \"A Color Picker plugin for QtCreator.\",
+    \"Url\" : \"",
+    $$dependencyList
+}
