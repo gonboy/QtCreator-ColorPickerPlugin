@@ -8,6 +8,7 @@ QtcPlugin {
     Depends { name: "TextEditor" }
 
     files: [
+        "colorpickerconstants.h",
         "colorpickerplugin.cpp",
         "colorpickerplugin.h",
         "colorwatcher.cpp",
