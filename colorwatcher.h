@@ -30,7 +30,7 @@ private:
     QScopedPointer<ColorWatcherImpl> d;
 };
 
-} // namespace ColorPicker
 } // namespace Internal
+} // namespace ColorPicker
 
 #endif // TEXTEDITORWATCHER_H

@@ -55,5 +55,5 @@ void ColorWatcher::onCursorPositionChanged()
     Q_ASSERT_X(d->editors.contains(editorWidget), Q_FUNC_INFO, "The editor is not watched.");
 }
 
-} // namespace ColorPicker
 } // namespace Internal
+} // namespace ColorPicker

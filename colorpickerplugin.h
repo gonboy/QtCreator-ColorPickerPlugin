@@ -31,7 +31,7 @@ private:
     ColorWatcher *m_colorWatcher;
 };
 
-} // namespace ColorPicker
 } // namespace Internal
+} // namespace ColorPicker
 
 #endif // COLORPICKERPLUGIN_H
