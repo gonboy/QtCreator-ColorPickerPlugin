@@ -1,5 +1,5 @@
-#ifndef TEXTEDITORWATCHER_H
-#define TEXTEDITORWATCHER_H
+#ifndef COLORWATCHER_H
+#define COLORWATCHER_H
 
 #include <QObject>
 
@@ -33,4 +33,4 @@ private:
 } // namespace Internal
 } // namespace ColorPicker
 
-#endif // TEXTEDITORWATCHER_H
+#endif // COLORWATCHER_H
