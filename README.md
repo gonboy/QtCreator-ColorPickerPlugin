@@ -14,6 +14,8 @@ Build QtCreator. That's it.
 
 Please note
 -----------------
+- This plugin is developed for QtCreator >= 3.5.0. I will not test it with earlier versions.
+
 - I use Qbs rather than QMake. It seems that there's currently no way to develop a plugin without having the whole QtCreator project opened.
 
 - WIP !
