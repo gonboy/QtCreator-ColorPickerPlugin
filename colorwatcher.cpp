@@ -73,7 +73,14 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
         QRegularExpressionMatch match = regexp.match(lineText);
 
         if (match.hasMatch()) {
-            //TODO Process the captured color
+            int cursorPosInLine = currentCursor.positionInBlock();
+
+            bool cursorIsUnderColor = (cursorPosInLine >= match.capturedStart()) &&
+                    (cursorPosInLine <= match.capturedEnd()) ;
+
+            if (cursorIsUnderColor) {
+                //TODO Process the captured color
+            }
         }
     }
 
