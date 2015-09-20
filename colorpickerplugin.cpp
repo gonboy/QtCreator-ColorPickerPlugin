@@ -1,7 +1,9 @@
 #include "colorpickerplugin.h"
 
+// Qt includes
 #include <QMenu>
 
+// QtCreator includes
 #include <extensionsystem/pluginmanager.h>
 
 #include <coreplugin/actionmanager/actioncontainer.h>
@@ -11,6 +13,8 @@
 
 #include <texteditor/texteditor.h>
 
+// Plugin includes
+#include "colorpickerconstants.h"
 #include "colorwatcher.h"
 
 using namespace Core;
@@ -18,6 +22,9 @@ using namespace TextEditor;
 
 namespace ColorPicker {
 namespace Internal {
+
+
+////////////////////////// ColorPickerPlugin //////////////////////////
 
 ColorPickerPlugin::ColorPickerPlugin() :
     m_colorWatcher(new ColorWatcher(this))
@@ -34,14 +41,17 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
     myMenu->setTitle(tr("&ColorPicker"));
     myMenu->setEnabled(true);
 
+    QAction *triggerColorEditAction = new QAction(tr("Trigger Color Edit"), this);
+    Command *command = ActionManager::registerAction(triggerColorEditAction,
+                                                     Constants::TRIGGER_COLOR_EDIT);
+    command->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+C")));
+
+    myContainer->addAction(command);
+
+    connect(triggerColorEditAction, &QAction::triggered,
+            this, &ColorPickerPlugin::onColorEditTriggered);
+
     toolsContainer->addMenu(myContainer);
-
-    // Connect to the core system
-    connect(EditorManager::instance(), &EditorManager::currentEditorChanged,
-            this, &ColorPickerPlugin::onCurrentEditorChanged);
-
-    connect(EditorManager::instance(), &EditorManager::editorAboutToClose,
-            this, &ColorPickerPlugin::onEditorAboutToClose);
 
     return true;
 }
@@ -50,28 +60,18 @@ void ColorPickerPlugin::extensionsInitialized()
 {
 }
 
-void ColorPickerPlugin::onCurrentEditorChanged(Core::IEditor *editor)
+void ColorPickerPlugin::onColorEditTriggered()
 {
-    if (!editor)
+    IEditor *currentEditor = EditorManager::instance()->currentEditor();
+    if (!currentEditor)
         return;
 
-    TextEditorWidget *currentTextEditorWidget = qobject_cast<TextEditorWidget *>(editor->widget());
-    Q_ASSERT_X(currentTextEditorWidget, Q_FUNC_INFO, "The current editor has no attached widget.");
+    TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
 
-    m_colorWatcher->addEditor(currentTextEditorWidget);
-
-    connect(currentTextEditorWidget, &TextEditorWidget::cursorPositionChanged,
-            m_colorWatcher, &ColorWatcher::onCursorPositionChanged);
+    if (editorWidget)
+        m_colorWatcher->processCurrentTextCursor(editorWidget);
 }
 
-void ColorPickerPlugin::onEditorAboutToClose(IEditor *editor)
-{
-    TextEditorWidget *currentTextEditorWidget = qobject_cast<TextEditorWidget *>(editor->widget());
-    Q_ASSERT_X(currentTextEditorWidget, Q_FUNC_INFO, "The about to be closed editor has no attached widget.");
-
-    disconnect(currentTextEditorWidget, &TextEditorWidget::cursorPositionChanged,
-               m_colorWatcher, &ColorWatcher::onCursorPositionChanged);
-}
 
 } // namespace Internal
 } // namespace ColorPicker

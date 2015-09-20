@@ -24,8 +24,7 @@ public:
     virtual void extensionsInitialized();
 
 private slots:
-    void onCurrentEditorChanged(Core::IEditor *editor);
-    void onEditorAboutToClose(Core::IEditor *editor);
+    void onColorEditTriggered();
 
 private:
     ColorWatcher *m_colorWatcher;

@@ -1,15 +1,22 @@
 #include "colorwatcher.h"
 
-#include <regex>
+// std includes
+#include <set>
 
+// Qt includes
 #include <QDebug> //REMOVEME
 #include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextCursor>
 
+// QtCreator includes
+#include <coreplugin/editormanager/editormanager.h>
+
 #include <texteditor/texteditor.h>
 
+// Plugin includes
 #include "colorpickerconstants.h"
+
 
 using namespace Core;
 using namespace TextEditor;
@@ -24,12 +31,22 @@ class ColorWatcherImpl
 {
 public:
     ColorWatcherImpl() :
-        editors()
+        colorRegexes()
     {
-
+        // Register regexes
+        colorRegexes.insert(Constants::REGEX_HSL);
+        colorRegexes.insert(Constants::REGEX_HSLA);
+        colorRegexes.insert(Constants::REGEX_HSV);
+        colorRegexes.insert(Constants::REGEX_HSVA);
+        colorRegexes.insert(Constants::REGEX_VEC3);
+        colorRegexes.insert(Constants::REGEX_VEC4);
+        colorRegexes.insert(Constants::REGEX_RGB);
+        colorRegexes.insert(Constants::REGEX_RGBA);
+        colorRegexes.insert(Constants::REGEX_HEXCOLOR);
+        colorRegexes.insert(Constants::REGEX_QCOLOR_INLINE_CTOR_RGB);
     }
 
-    QList<TextEditorWidget *> editors;
+    std::set<std::string> colorRegexes;
 };
 
 
@@ -42,17 +59,24 @@ ColorWatcher::ColorWatcher(QObject *parent) :
 
 }
 
-void ColorWatcher::addEditor(TextEditorWidget *editor)
+void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
 {
-    if (!d->editors.contains(editor))
-        d->editors.append(editor);
-}
+    Q_ASSERT_X(textEditor, Q_FUNC_INFO, "The current editor is invalid.");
 
-void ColorWatcher::onCursorPositionChanged()
-{
-    TextEditorWidget *editorWidget = (qobject_cast<TextEditorWidget *>(sender()));
-    Q_ASSERT_X(editorWidget, Q_FUNC_INFO, "The current editor is invalid.");
-    Q_ASSERT_X(d->editors.contains(editorWidget), Q_FUNC_INFO, "The editor is not watched.");
+    QTextCursor currentCursor = textEditor->textCursor();
+    QString lineText = currentCursor.block().text();
+
+    for(std::string rawRegex : d->colorRegexes) {
+        QRegularExpression regexp(QString::fromStdString(rawRegex),
+                                  QRegularExpression::CaseInsensitiveOption);
+
+        QRegularExpressionMatch match = regexp.match(lineText);
+
+        if (match.hasMatch()) {
+            //TODO Process the captured color
+        }
+    }
+
 }
 
 } // namespace Internal

@@ -17,12 +17,7 @@ class ColorWatcher : public QObject
 public:
     ColorWatcher(QObject *parent = 0);
 
-    void addEditor(TextEditor::TextEditorWidget *editor);
-
-signals:
-
-public slots:
-    void onCursorPositionChanged();
+    void processCurrentTextCursor(TextEditor::TextEditorWidget *textEditor);
 
 private:
     QScopedPointer<ColorWatcherImpl> d;
