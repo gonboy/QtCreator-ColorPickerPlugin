@@ -3,8 +3,6 @@
 
 #include <QObject>
 
-#include <texteditor/texteditor.h>
-
 namespace TextEditor {
 class TextEditorWidget;
 }
