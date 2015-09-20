@@ -3,6 +3,12 @@
 
 #include <QObject>
 
+#include <texteditor/texteditor.h>
+
+namespace TextEditor {
+class TextEditorWidget;
+}
+
 namespace ColorPicker {
 namespace Internal {
 
@@ -12,6 +18,8 @@ class ColorWatcher : public QObject
 {
 public:
     ColorWatcher(QObject *parent = 0);
+
+    void addEditor(TextEditor::TextEditorWidget *editor);
 
 signals:
 

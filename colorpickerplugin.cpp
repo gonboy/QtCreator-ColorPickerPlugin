@@ -58,6 +58,8 @@ void ColorPickerPlugin::onCurrentEditorChanged(Core::IEditor *editor)
     TextEditorWidget *currentTextEditorWidget = qobject_cast<TextEditorWidget *>(editor->widget());
     Q_ASSERT_X(currentTextEditorWidget, Q_FUNC_INFO, "The current editor has no attached widget.");
 
+    m_colorWatcher->addEditor(currentTextEditorWidget);
+
     connect(currentTextEditorWidget, &TextEditorWidget::cursorPositionChanged,
             m_colorWatcher, &ColorWatcher::onCursorPositionChanged);
 }
