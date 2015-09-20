@@ -6,7 +6,7 @@ A color picker plugin to easily insert and modify colors in QtCreator's text doc
 
 Build the plugin
 -----------------
-Put the folder in `<QtCreatorSourcesDir>/src/plugins`.
+Put all files in `<QtCreatorSourcesDir>/src/plugins/colorpicker`.
 
 Now open `<QtCreatorSourcesDir>/src/plugins.qbs` with your favorite text editor and add the project file to the reference list (something like `"colorpicker/colorpicker.qbs"`).
 
