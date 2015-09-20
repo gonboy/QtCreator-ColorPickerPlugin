@@ -7,6 +7,9 @@ QtcPlugin {
     Depends { name: "Core" }
     Depends { name: "TextEditor" }
 
+    cpp.cxxFlags: "-std=c++11"
+    cpp.cxxLanguageVersion: "c++11"
+
     files: [
         "colorpickerconstants.h",
         "colorpickerplugin.cpp",
