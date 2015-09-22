@@ -70,20 +70,22 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
         QRegularExpression regexp(QString::fromStdString(rawRegex),
                                   QRegularExpression::CaseInsensitiveOption);
 
-        QRegularExpressionMatch match = regexp.match(lineText);
+        QRegularExpressionMatchIterator it = regexp.globalMatch(lineText);
 
-        if (match.hasMatch()) {
+        while (it.hasNext()) {
+            QRegularExpressionMatch match = it.next();
+
             int cursorPosInLine = currentCursor.positionInBlock();
 
             bool cursorIsUnderColor = (cursorPosInLine >= match.capturedStart()) &&
-                    (cursorPosInLine <= match.capturedEnd()) ;
+                    (cursorPosInLine <= match.capturedEnd());
 
             if (cursorIsUnderColor) {
                 //TODO Process the captured color
+                break;
             }
         }
     }
-
 }
 
 } // namespace Internal
