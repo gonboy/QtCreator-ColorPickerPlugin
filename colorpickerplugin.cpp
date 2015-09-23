@@ -41,7 +41,7 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
     myMenu->setTitle(tr("&ColorPicker"));
     myMenu->setEnabled(true);
 
-    QAction *triggerColorEditAction = new QAction(tr("Trigger Color Edit"), this);
+    auto triggerColorEditAction = new QAction(tr("Trigger Color Edit"), this);
     Command *command = ActionManager::registerAction(triggerColorEditAction,
                                                      Constants::TRIGGER_COLOR_EDIT);
     command->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+C")));
