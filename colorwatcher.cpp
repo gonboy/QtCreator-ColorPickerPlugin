@@ -46,6 +46,8 @@ public:
         colorRegexes.insert(ColorType::QColorInlineCtorRgbType, Constants::REGEX_QCOLOR_INLINE_CTOR_RGB);
     }
 
+    ~ColorWatcherImpl() {}
+
     QMap<ColorType, std::string> colorRegexes;
 };
 
@@ -58,6 +60,9 @@ ColorWatcher::ColorWatcher(QObject *parent) :
 {
 
 }
+
+ColorWatcher::~ColorWatcher()
+{}
 
 void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
 {

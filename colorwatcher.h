@@ -14,8 +14,11 @@ class ColorWatcherImpl;
 
 class ColorWatcher : public QObject
 {
+    Q_OBJECT
+
 public:
     ColorWatcher(QObject *parent = 0);
+    ~ColorWatcher();
 
     void processCurrentTextCursor(TextEditor::TextEditorWidget *textEditor);
 
