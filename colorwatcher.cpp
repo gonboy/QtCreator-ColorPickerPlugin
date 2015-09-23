@@ -34,19 +34,19 @@ public:
         colorRegexes()
     {
         // Register regexes
-        colorRegexes.insert(Constants::REGEX_HSL);
-        colorRegexes.insert(Constants::REGEX_HSLA);
-        colorRegexes.insert(Constants::REGEX_HSV);
-        colorRegexes.insert(Constants::REGEX_HSVA);
-        colorRegexes.insert(Constants::REGEX_VEC3);
-        colorRegexes.insert(Constants::REGEX_VEC4);
-        colorRegexes.insert(Constants::REGEX_RGB);
-        colorRegexes.insert(Constants::REGEX_RGBA);
-        colorRegexes.insert(Constants::REGEX_HEXCOLOR);
-        colorRegexes.insert(Constants::REGEX_QCOLOR_INLINE_CTOR_RGB);
+        colorRegexes.insert(ColorType::RgbType, Constants::REGEX_RGB);
+        colorRegexes.insert(ColorType::RgbaType, Constants::REGEX_RGBA);
+        colorRegexes.insert(ColorType::HslType, Constants::REGEX_HSL);
+        colorRegexes.insert(ColorType::HslaType, Constants::REGEX_HSLA);
+        colorRegexes.insert(ColorType::HsvType, Constants::REGEX_HSV);
+        colorRegexes.insert(ColorType::HsvaType, Constants::REGEX_HSVA);
+        colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
+        colorRegexes.insert(ColorType::Vec3Type, Constants::REGEX_VEC3);
+        colorRegexes.insert(ColorType::Vec4Type, Constants::REGEX_VEC4);
+        colorRegexes.insert(ColorType::QColorInlineCtorRgbType, Constants::REGEX_QCOLOR_INLINE_CTOR_RGB);
     }
 
-    std::set<std::string> colorRegexes;
+    QMap<ColorType, std::string> colorRegexes;
 };
 
 
