@@ -48,6 +48,89 @@ public:
 
     ~ColorWatcherImpl() {}
 
+    QColor colorFromRegexp(ColorType type, const QRegularExpressionMatch &match) const
+    {
+        QColor ret;
+
+        if (type == ColorType::RgbType) {
+            int r = match.captured(1).toInt();
+            int g = match.captured(2).toInt();
+            int b = match.captured(3).toInt();
+
+            ret.setRgb(r, g, b);
+        }
+        else if (type == ColorType::RgbaType) {
+            ret.setRed(match.captured(1).toInt());
+            ret.setGreen(match.captured(2).toInt());
+            ret.setBlue(match.captured(3).toInt());
+            ret.setAlphaF(match.captured(4).toFloat());
+        }
+        else if (type == ColorType::HslType) {
+            int h = match.captured(1).toInt();
+            int s = match.captured(2).toInt();
+            int l = match.captured(3).toInt();
+
+            ret.setHsl(h, s, l);
+        }
+        else if (type == ColorType::HslaType) {
+            int h = match.captured(1).toInt();
+            int s = match.captured(2).toInt();
+            int l = match.captured(3).toInt();
+            int a = match.captured(4).toFloat();
+
+            ret.setHsl(h, s, l);
+            ret.setAlphaF(a);
+        }
+        else if (type == ColorType::HsvType) {
+            int h = match.captured(1).toInt();
+            int s = match.captured(2).toInt();
+            int v = match.captured(3).toInt();
+
+            ret.setHsv(h, s,v);
+        }
+        else if (type == ColorType::HsvaType) {
+            int h = match.captured(1).toInt();
+            int s = match.captured(2).toInt();
+            int v = match.captured(3).toInt();
+            int a = match.captured(4).toFloat();
+
+            ret.setHsv(h, s, v);
+            ret.setAlphaF(a);
+        }
+        else if (type == ColorType::HexType) {
+            ret.setNamedColor(match.captured());
+        }
+        else if (type == ColorType::Vec3Type) {
+            float r = match.captured(1).toFloat();
+            float g = match.captured(2).toFloat();
+            float b = match.captured(3).toFloat();
+
+            ret.setRgbF(r, g, b);
+        }
+        else if (type == ColorType::Vec4Type) {
+            float r = match.captured(1).toFloat();
+            float g = match.captured(2).toFloat();
+            float b = match.captured(3).toFloat();
+            float a = match.captured(4).toFloat();
+
+            ret.setRgbF(r, g, b, a);
+        }
+        else if (type == ColorType::QColorInlineCtorRgbType) {
+            int r = match.captured(1).toInt();
+            int g = match.captured(2).toInt();
+            int b = match.captured(3).toInt();
+
+            QString capturedAlpha = match.captured(6);
+            int a = (capturedAlpha.isNull()) ? 255 : capturedAlpha.toInt();
+
+            ret.setRgb(r, g, b, a);
+        }
+
+        Q_ASSERT_X(ret.isValid(), Q_FUNC_INFO, "The color cannot be invalid.");
+
+        return ret;
+    }
+
     QMap<ColorType, std::string> colorRegexes;
 };
 
@@ -71,14 +154,16 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
     QTextCursor currentCursor = textEditor->textCursor();
     QString lineText = currentCursor.block().text();
 
-    for(std::string rawRegex : d->colorRegexes) {
+    for (auto it = d->colorRegexes.begin(); it != d->colorRegexes.end(); ++it) {
+        std::string rawRegex = it.value();
+
         QRegularExpression regexp(QString::fromStdString(rawRegex),
                                   QRegularExpression::CaseInsensitiveOption);
 
-        QRegularExpressionMatchIterator it = regexp.globalMatch(lineText);
+        QRegularExpressionMatchIterator matchIt = regexp.globalMatch(lineText);
 
-        while (it.hasNext()) {
-            QRegularExpressionMatch match = it.next();
+        while (matchIt.hasNext()) {
+            QRegularExpressionMatch match = matchIt.next();
 
             int cursorPosInLine = currentCursor.positionInBlock();
 
