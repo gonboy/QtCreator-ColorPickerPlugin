@@ -23,7 +23,7 @@ public:
     void processCurrentTextCursor(TextEditor::TextEditorWidget *textEditor);
 
 signals:
-    void colorFound(const QColor &color);
+    void colorFound(const QColor &color, int start, int end);
 
 private:
     QScopedPointer<ColorWatcherImpl> d;

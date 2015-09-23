@@ -166,14 +166,16 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
             QRegularExpressionMatch match = matchIt.next();
 
             int cursorPosInLine = currentCursor.positionInBlock();
+            int capturedStart =  match.capturedStart();
+            int capturedEnd =  match.capturedEnd();
 
-            bool cursorIsUnderColor = (cursorPosInLine >= match.capturedStart()) &&
-                    (cursorPosInLine <= match.capturedEnd());
+            bool cursorIsUnderColor = (cursorPosInLine >= capturedStart) &&
+                    (cursorPosInLine <= capturedEnd);
 
             if (cursorIsUnderColor) {
                 QColor color = d->colorFromRegexp(it.key(), match);
 
-                emit colorFound(color);
+                emit colorFound(color, capturedStart, capturedEnd);
                 break;
             }
         }
