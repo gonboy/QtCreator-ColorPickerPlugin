@@ -171,7 +171,9 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                     (cursorPosInLine <= match.capturedEnd());
 
             if (cursorIsUnderColor) {
-                //TODO Process the captured color
+                QColor color = d->colorFromRegexp(it.key(), match);
+
+                emit colorFound(color);
                 break;
             }
         }
