@@ -14,9 +14,6 @@
 
 #include <texteditor/texteditor.h>
 
-// Plugin includes
-#include "colorpickerconstants.h"
-
 
 using namespace Core;
 using namespace TextEditor;
@@ -173,9 +170,10 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                     (cursorPosInLine <= capturedEnd);
 
             if (cursorIsUnderColor) {
-                QColor color = d->colorFromRegexp(it.key(), match);
+                ColorType type = it.key();
+                QColor color = d->colorFromRegexp(type, match);
 
-                emit colorFound(color, capturedStart, capturedEnd);
+                emit colorFound(type, color, capturedStart, capturedEnd);
                 break;
             }
         }

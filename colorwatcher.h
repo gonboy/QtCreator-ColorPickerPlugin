@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "colorpickerconstants.h"
+
 namespace TextEditor {
 class TextEditorWidget;
 }
@@ -23,7 +25,7 @@ public:
     void processCurrentTextCursor(TextEditor::TextEditorWidget *textEditor);
 
 signals:
-    void colorFound(const QColor &color, int start, int end);
+    void colorFound(ColorType colorType, const QColor &color, int start, int end);
 
 private:
     QScopedPointer<ColorWatcherImpl> d;
