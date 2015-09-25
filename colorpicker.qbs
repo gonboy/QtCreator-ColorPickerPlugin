@@ -11,6 +11,7 @@ QtcPlugin {
     cpp.cxxLanguageVersion: "c++11"
 
     files: [
+        "colorpicker_global.h",
         "colorpickerconstants.h",
         "colorpickerplugin.cpp",
         "colorpickerplugin.h",

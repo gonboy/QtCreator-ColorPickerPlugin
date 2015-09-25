@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "colorpickerconstants.h"
+#include "colorpicker_global.h"
 
 namespace TextEditor {
 class TextEditorWidget;

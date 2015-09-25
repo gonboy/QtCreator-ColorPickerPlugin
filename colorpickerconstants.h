@@ -5,22 +5,6 @@
 
 namespace ColorPicker {
 namespace Internal {
-
-enum ColorType
-{
-    RgbType,
-    RgbaType,
-    HslType,
-    HslaType,
-    HsvType,
-    HsvaType,
-    HexType,
-    Vec3Type,
-    Vec4Type,
-    QColorInlineCtorRgbType,
-};
-
-
 namespace Constants {
 
 
