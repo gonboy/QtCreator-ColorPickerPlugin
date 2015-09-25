@@ -48,6 +48,7 @@ public:
 
     ~ColorWatcherImpl() {}
 
+    /* functions */
     QColor colorFromRegexp(ColorType type, const QRegularExpressionMatch &match) const
     {
         QColor ret;
@@ -131,6 +132,7 @@ public:
         return ret;
     }
 
+    /* attributes */
     QMap<ColorType, std::string> colorRegexes;
 };
 

@@ -28,6 +28,7 @@ public:
 
     }
 
+    /* functions */
     QString colorTypePrefix(ColorType type) const
     {
         QString ret;
@@ -137,6 +138,7 @@ public:
         return ret;
     }
 
+    /* attributes */
     ColorExpr currentEdited;
 };
 
