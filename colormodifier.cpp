@@ -174,7 +174,6 @@ void ColorModifier::insertColor(const QColor &newValue, ColorType asType)
                                newText.size());
 
     editorWidget->setTextCursor(currentCursor);
-
 }
 
 void ColorModifier::setTarget(const ColorExpr &colorExpr)
