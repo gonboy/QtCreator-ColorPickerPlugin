@@ -186,14 +186,7 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                 ColorType type = it.key();
                 QColor color = d->colorFromRegexp(type, match);
 
-                ColorExpr cExpr;
-                cExpr.type = type;
-                cExpr.value = color;
-                cExpr.line = currentCursor.blockNumber();
-                cExpr.start = capturedStart;
-                cExpr.end = capturedEnd;
-
-                emit colorFound(cExpr);
+                emit colorFound(color, type);
                 break;
             }
         }

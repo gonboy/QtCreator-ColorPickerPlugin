@@ -14,6 +14,7 @@
 #include <texteditor/texteditor.h>
 
 // Plugin includes
+#include "colormodifier.h"
 #include "colorpickerconstants.h"
 #include "colorwatcher.h"
 
@@ -27,7 +28,8 @@ namespace Internal {
 ////////////////////////// ColorPickerPlugin //////////////////////////
 
 ColorPickerPlugin::ColorPickerPlugin() :
-    m_colorWatcher(new ColorWatcher(this))
+    m_colorWatcher(new ColorWatcher(this)),
+    m_colorModifier(new ColorModifier(this))
 {
 }
 
@@ -41,7 +43,7 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
     myMenu->setTitle(tr("&ColorPicker"));
     myMenu->setEnabled(true);
 
-    auto triggerColorEditAction = new QAction(tr("Trigger Color Edit"), this);
+    auto triggerColorEditAction = new QAction(tr(Constants::ACTION_NAME_TRIGGER_COLOR_EDIT), this);
     Command *command = ActionManager::registerAction(triggerColorEditAction,
                                                      Constants::TRIGGER_COLOR_EDIT);
     command->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+C")));

@@ -10,6 +10,8 @@ namespace Constants {
 
 ////////////////////////// Actions //////////////////////////
 
+const char ACTION_NAME_TRIGGER_COLOR_EDIT[] = "Trigger Color Edit";
+
 const char TRIGGER_COLOR_EDIT[] = "ColorPicker.TriggerColorEdit";
 
 
@@ -28,7 +30,7 @@ const std::string _RXPART_FLOAT_VALUE = "\\s*?(0|1|1.0|0*\\.\\d+)";
 const std::string REGEX_RGB = "rgb\\s*?\\(" + _RXPART_RGBA_INT + "\\s*?," + _RXPART_RGBA_INT + "\\s*?," + _RXPART_RGBA_INT + "\\s*?\\)";
 const std::string REGEX_RGBA = "rgba\\s*?\\(" + _RXPART_RGBA_INT + "\\s*?," + _RXPART_RGBA_INT + "\\s*?," + _RXPART_RGBA_INT + "\\s*?," + _RXPART_FLOAT_VALUE + "\\s*?\\)";
 const std::string REGEX_HSL = "hsl\\s*?\\(" + _RXPART_HUE + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?" + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?\\s*\\)";
-const std::string REGEX_HSLA = "hsla\\s*?\\(" + _RXPART_HUE + _RXPART_SATURATION_LUMINANCE_VALUE + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?" + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?\\s*?," + _RXPART_FLOAT_VALUE + "\\s*?\\)";
+const std::string REGEX_HSLA = "hsla\\s*?\\(" + _RXPART_HUE + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?" + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?\\s*?," + _RXPART_FLOAT_VALUE + "\\s*?\\)";
 const std::string REGEX_HSV = "hsv\\s*?\\(" + _RXPART_HUE + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?" + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?\\s*\\)";
 const std::string REGEX_HSVA = "hsva\\s*?\\(" + _RXPART_HUE + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?" + _RXPART_SATURATION_LUMINANCE_VALUE + "\\%?\\s*?," + _RXPART_FLOAT_VALUE + "\\s*?\\)";
 const std::string REGEX_HEXCOLOR = "(\\#[a-f0-9]{6}|\\#[a-f0-9]{3})";

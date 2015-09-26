@@ -10,6 +10,7 @@ class IEditor;
 namespace ColorPicker {
 namespace Internal {
 
+class ColorModifier;
 class ColorWatcher;
 
 class ColorPickerPlugin : public ExtensionSystem::IPlugin
@@ -26,8 +27,12 @@ public:
 private slots:
     void onColorEditTriggered();
 
+    // The following tests expect that no projects are loaded on start-up.
+    void test_addAndReplaceColor();
+
 private:
     ColorWatcher *m_colorWatcher;
+    ColorModifier *m_colorModifier;
 };
 
 } // namespace Internal
