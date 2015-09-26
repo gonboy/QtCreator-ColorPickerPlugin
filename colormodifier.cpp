@@ -107,7 +107,7 @@ public:
                     + QString::number(color.alphaF());
         }
         else if (type == ColorType::HexType) {
-            ret = color.name();
+            ret = color.name().toUpper();
         }
         else if (type == ColorType::Vec3Type) {
             ret = QString::number(color.redF()) + QLatin1String(", ")
