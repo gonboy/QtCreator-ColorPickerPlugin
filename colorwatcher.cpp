@@ -175,6 +175,15 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                     (cursorPosInLine <= capturedEnd);
 
             if (cursorIsUnderColor) {
+                // Select the expression
+                currentCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor,
+                                           cursorPosInLine - capturedStart);
+                currentCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor,
+                                           capturedEnd - capturedStart);
+
+                textEditor->setTextCursor(currentCursor);
+
+                //
                 ColorType type = it.key();
                 QColor color = d->colorFromRegexp(type, match);
 
