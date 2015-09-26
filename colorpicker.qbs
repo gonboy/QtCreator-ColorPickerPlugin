@@ -1,4 +1,5 @@
 import qbs 1.0
+import qbs.FileInfo
 
 QtcPlugin {
     name: "ColorPicker"
@@ -20,4 +21,15 @@ QtcPlugin {
         "colorwatcher.cpp",
         "colorwatcher.h",
     ]
+
+    Group {
+        name: "Tests"
+        condition: project.testsEnabled
+
+        files: [
+            "replacecolor_test.cpp"
+        ]
+
+        cpp.defines: outer.concat(['SRCDIR="' + FileInfo.path(filePath) + '"'])
+    }
 }
