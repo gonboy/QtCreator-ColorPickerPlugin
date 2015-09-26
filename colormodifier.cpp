@@ -66,7 +66,7 @@ public:
             break;
         }
 
-        Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string version of the color cannot be invalid.");
+        Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string prefix of the color is invalid.");
 
         return ret;
     }
@@ -133,7 +133,7 @@ public:
                 ret += QLatin1String(", ") + QString::number(cAlpha);
         }
 
-        Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string version of the color cannot be invalid.");
+        Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string version of the color is invalid");
 
         return ret;
     }
@@ -165,10 +165,6 @@ void ColorModifier::insertColor(const QColor &newValue, ColorType asType)
 
     QTextBlock block = editorWidget->document()->findBlockByLineNumber(d->currentEdited.line);
     Q_ASSERT_X(block.isValid(), Q_FUNC_INFO, "The line number is invalid.");
-
-    QTextCursor cursor(block);
-
-    // If the dest type is the same as the source type, we just modify the color components
 }
 
 void ColorModifier::setTarget(const ColorExpr &colorExpr)
