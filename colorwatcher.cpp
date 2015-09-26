@@ -17,7 +17,6 @@
 // Own includes
 #include "colorpickerconstants.h"
 
-
 using namespace Core;
 using namespace TextEditor;
 

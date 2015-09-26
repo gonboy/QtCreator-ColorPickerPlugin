@@ -9,7 +9,6 @@
 
 #include <texteditor/texteditor.h>
 
-
 using namespace Core;
 using namespace TextEditor;
 
