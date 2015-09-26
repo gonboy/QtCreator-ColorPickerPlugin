@@ -35,14 +35,9 @@ public:
         // Register regexes
         colorRegexes.insert(ColorType::RgbType, Constants::REGEX_RGB);
         colorRegexes.insert(ColorType::RgbaType, Constants::REGEX_RGBA);
-        colorRegexes.insert(ColorType::HslType, Constants::REGEX_HSL);
-        colorRegexes.insert(ColorType::HslaType, Constants::REGEX_HSLA);
         colorRegexes.insert(ColorType::HsvType, Constants::REGEX_HSV);
         colorRegexes.insert(ColorType::HsvaType, Constants::REGEX_HSVA);
         colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
-        colorRegexes.insert(ColorType::Vec3Type, Constants::REGEX_VEC3);
-        colorRegexes.insert(ColorType::Vec4Type, Constants::REGEX_VEC4);
-        colorRegexes.insert(ColorType::QColorInlineCtorRgbType, Constants::REGEX_QCOLOR_INLINE_CTOR_RGB);
     }
 
     ~ColorWatcherImpl() {}
@@ -65,22 +60,6 @@ public:
             ret.setBlue(match.captured(3).toInt());
             ret.setAlphaF(match.captured(4).toFloat());
         }
-        else if (type == ColorType::HslType) {
-            int h = match.captured(1).toInt();
-            int s = match.captured(2).toInt();
-            int l = match.captured(3).toInt();
-
-            ret.setHsl(h, s, l);
-        }
-        else if (type == ColorType::HslaType) {
-            int h = match.captured(1).toInt();
-            int s = match.captured(2).toInt();
-            int l = match.captured(3).toInt();
-            int a = match.captured(4).toFloat();
-
-            ret.setHsl(h, s, l);
-            ret.setAlphaF(a);
-        }
         else if (type == ColorType::HsvType) {
             int h = match.captured(1).toInt();
             int s = match.captured(2).toInt();
@@ -99,31 +78,6 @@ public:
         }
         else if (type == ColorType::HexType) {
             ret.setNamedColor(match.captured());
-        }
-        else if (type == ColorType::Vec3Type) {
-            float r = match.captured(1).toFloat();
-            float g = match.captured(2).toFloat();
-            float b = match.captured(3).toFloat();
-
-            ret.setRgbF(r, g, b);
-        }
-        else if (type == ColorType::Vec4Type) {
-            float r = match.captured(1).toFloat();
-            float g = match.captured(2).toFloat();
-            float b = match.captured(3).toFloat();
-            float a = match.captured(4).toFloat();
-
-            ret.setRgbF(r, g, b, a);
-        }
-        else if (type == ColorType::QColorInlineCtorRgbType) {
-            int r = match.captured(1).toInt();
-            int g = match.captured(2).toInt();
-            int b = match.captured(3).toInt();
-
-            QString capturedAlpha = match.captured(6);
-            int a = (capturedAlpha.isNull()) ? 255 : capturedAlpha.toInt();
-
-            ret.setRgb(r, g, b, a);
         }
 
         Q_ASSERT_X(ret.isValid(), Q_FUNC_INFO, "The color cannot be invalid.");

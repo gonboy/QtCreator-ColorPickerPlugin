@@ -40,14 +40,9 @@ void ColorPickerPlugin::test_addAndReplaceColor()
     QMap<ColorType, QColor> colors;
     colors.insert(ColorType::RgbType, QColor(32, 18, 26));
     colors.insert(ColorType::RgbaType, QColor(32, 18, 26, 127));
-    colors.insert(ColorType::HslType, QColor(32, 18, 26));
-    colors.insert(ColorType::HslaType, QColor(32, 18, 26, 127));
     colors.insert(ColorType::HsvType, QColor(32, 18, 26));
     colors.insert(ColorType::HsvaType, QColor(32, 18, 26, 127));
     colors.insert(ColorType::HexType, QColor(32, 18, 26));
-    colors.insert(ColorType::Vec3Type, QColor(32, 18, 26));
-    colors.insert(ColorType::Vec4Type, QColor(32, 18, 26, 127));
-    colors.insert(ColorType::QColorInlineCtorRgbType, QColor(32, 18, 26));
 
     connect(m_colorWatcher, &ColorWatcher::colorFound,
             [=](const QColor &value, ColorType type) {

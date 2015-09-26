@@ -11,14 +11,9 @@ enum ColorType
 {
     RgbType,
     RgbaType,
-    HslType,
-    HslaType,
     HsvType,
     HsvaType,
-    HexType,
-    Vec3Type,
-    Vec4Type,
-    QColorInlineCtorRgbType,
+    HexType
 };
 
 } // namespace Internal

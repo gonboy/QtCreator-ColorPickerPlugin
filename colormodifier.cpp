@@ -38,12 +38,6 @@ public:
         case ColorType::RgbaType:
             ret = QLatin1String("rgba(");
             break;
-        case ColorType::HslType:
-            ret = QLatin1String("hsl(");
-            break;
-        case ColorType::HslaType:
-            ret = QLatin1String("hsla(");
-            break;
         case ColorType::HsvType:
             ret = QLatin1String("hsv(");
             break;
@@ -51,15 +45,6 @@ public:
             ret = QLatin1String("hsva(");
             break;
         // No ColorType::HexType because of the QColor::name() function
-        case ColorType::Vec3Type:
-            ret = QLatin1String("vec3(");
-            break;
-        case ColorType::Vec4Type:
-            ret = QLatin1String("vec4(");
-            break;
-        case ColorType::QColorInlineCtorRgbType:
-            ret = QLatin1String("QColor(");
-            break;
         default:
             break;
         }
@@ -82,17 +67,6 @@ public:
                     + QString::number(color.blue()) + QLatin1String(", ")
                     + QString::number(color.alphaF());
         }
-        else if (type == ColorType::HslType) {
-            ret = QString::number(color.hue()) + QLatin1String(", ")
-                    + QString::number(color.saturation()) + QLatin1String(", ")
-                    + QString::number(color.lightness());
-        }
-        else if (type == ColorType::HslaType) {
-            ret = QString::number(color.hue()) + QLatin1String(", ")
-                    + QString::number(color.saturation()) + QLatin1String(", ")
-                    + QString::number(color.lightness()) + QLatin1String(", ")
-                    + QString::number(color.alphaF());
-        }
         else if (type == ColorType::HsvType) {
             ret = QString::number(color.hue()) + QLatin1String(", ")
                     + QString::number(color.saturation()) + QLatin1String(", ")
@@ -106,27 +80,6 @@ public:
         }
         else if (type == ColorType::HexType) {
             ret = color.name().toUpper();
-        }
-        else if (type == ColorType::Vec3Type) {
-            ret = QString::number(color.redF()) + QLatin1String(", ")
-                    + QString::number(color.greenF()) + QLatin1String(", ")
-                    + QString::number(color.blueF());
-        }
-        else if (type == ColorType::Vec4Type) {
-            ret = QString::number(color.redF()) + QLatin1String(", ")
-                    + QString::number(color.greenF()) + QLatin1String(", ")
-                    + QString::number(color.blueF()) + QLatin1String(", ")
-                    + QString::number(color.alphaF());
-        }
-        else if (type == ColorType::QColorInlineCtorRgbType) {
-            ret = QString::number(color.red()) + QLatin1String(", ")
-                    + QString::number(color.green()) + QLatin1String(", ")
-                    + QString::number(color.blue());
-
-            int cAlpha = color.alpha();
-
-            if (cAlpha != 255)
-                ret += QLatin1String(", ") + QString::number(cAlpha);
         }
 
         Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string version of the color is invalid");
