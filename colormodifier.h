@@ -20,9 +20,6 @@ public:
 
     void insertColor(const QColor &newValue, ColorType asType);
 
-public slots:
-    void setTarget(const ColorExpr &colorExpr);
-
 private:
     QScopedPointer<ColorModifierImpl> d;
 };

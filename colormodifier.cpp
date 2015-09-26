@@ -22,8 +22,7 @@ namespace Internal {
 class ColorModifierImpl
 {
 public:
-    ColorModifierImpl() :
-        currentEdited()
+    ColorModifierImpl()
     {
 
     }
@@ -135,9 +134,6 @@ public:
 
         return ret;
     }
-
-    /* attributes */
-    ColorExpr currentEdited;
 };
 
 
@@ -174,12 +170,6 @@ void ColorModifier::insertColor(const QColor &newValue, ColorType asType)
                                newText.size());
 
     editorWidget->setTextCursor(currentCursor);
-}
-
-void ColorModifier::setTarget(const ColorExpr &colorExpr)
-{
-    if (d->currentEdited != colorExpr)
-        d->currentEdited = colorExpr;
 }
 
 } // namespace Internal
