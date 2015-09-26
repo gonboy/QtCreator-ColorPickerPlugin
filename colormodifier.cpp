@@ -66,8 +66,6 @@ public:
             break;
         }
 
-        Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string prefix of the color is invalid.");
-
         return ret;
     }
 
@@ -162,6 +160,21 @@ void ColorModifier::insertColor(const QColor &newValue, ColorType asType)
         return;
 
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
+    QTextCursor currentCursor = editorWidget->textCursor();
+
+    QString newText = d->colorTypePrefix(asType) + d->colorComponents(newValue, asType);
+
+    if (asType != ColorType::HexType)
+        newText += QChar::fromLatin1(')');
+
+    currentCursor.insertText(newText);
+    currentCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor,
+                               newText.size());
+    currentCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor,
+                               newText.size());
+
+    editorWidget->setTextCursor(currentCursor);
+
 }
 
 void ColorModifier::setTarget(const ColorExpr &colorExpr)
