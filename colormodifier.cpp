@@ -162,9 +162,6 @@ void ColorModifier::insertColor(const QColor &newValue, ColorType asType)
         return;
 
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
-
-    QTextBlock block = editorWidget->document()->findBlockByLineNumber(d->currentEdited.line);
-    Q_ASSERT_X(block.isValid(), Q_FUNC_INFO, "The line number is invalid.");
 }
 
 void ColorModifier::setTarget(const ColorExpr &colorExpr)
