@@ -75,7 +75,7 @@ public:
             int h = match.captured(1).toInt();
             int s = match.captured(2).toInt();
             int v = match.captured(3).toInt();
-            int a = match.captured(4).toFloat();
+            float a = match.captured(4).toFloat();
 
             ret.setHsv(h, s, v);
             ret.setAlphaF(a);
