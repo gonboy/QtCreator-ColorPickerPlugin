@@ -13,6 +13,8 @@ enum ColorType
     RgbaType,
     HsvType,
     HsvaType,
+    HslType,
+    HslaType,
     HexType,
     QmlRgbaType,
     QmlHslaType,

@@ -37,6 +37,8 @@ public:
         colorRegexes.insert(ColorType::RgbaType, Constants::REGEX_RGBA);
         colorRegexes.insert(ColorType::HsvType, Constants::REGEX_HSV);
         colorRegexes.insert(ColorType::HsvaType, Constants::REGEX_HSVA);
+        colorRegexes.insert(ColorType::HslType, Constants::REGEX_HSL);
+        colorRegexes.insert(ColorType::HslaType, Constants::REGEX_HSLA);
         colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
         colorRegexes.insert(ColorType::QmlRgbaType, Constants::REGEX_QML_RGBA);
         colorRegexes.insert(ColorType::QmlHslaType, Constants::REGEX_QML_HSLA);
@@ -78,6 +80,22 @@ public:
             float a = match.captured(4).toFloat();
 
             ret.setHsv(h, s, v);
+            ret.setAlphaF(a);
+        }
+        else if (type == ColorType::HslType) {
+            int h = match.captured(1).toInt();
+            int s = match.captured(2).toInt();
+            int l = match.captured(3).toInt();
+
+            ret.setHsl(h, s, l);
+        }
+        else if (type == ColorType::HslaType) {
+            int h = match.captured(1).toInt();
+            int s = match.captured(2).toInt();
+            int l = match.captured(3).toInt();
+            float a = match.captured(4).toFloat();
+
+            ret.setHsl(h, s, l);
             ret.setAlphaF(a);
         }
         else if (type == ColorType::HexType) {

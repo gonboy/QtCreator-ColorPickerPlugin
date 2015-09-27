@@ -44,6 +44,12 @@ public:
         case ColorType::HsvaType:
             ret = QLatin1String("hsva(");
             break;
+        case ColorType::HslType:
+            ret = QLatin1String("hsl(");
+            break;
+        case ColorType::HslaType:
+            ret = QLatin1String("hsla(");
+            break;
         // No ColorType::HexType because of the QColor::name() function
         case ColorType::QmlRgbaType:
             ret = QLatin1String("Qt.rgba(");
@@ -88,6 +94,17 @@ public:
             ret = QString::number(color.hue()) + QLatin1String(", ")
                     + QString::number(color.saturation()) + QLatin1String(", ")
                     + QString::number(color.value()) + QLatin1String(", ")
+                    + QString::number(color.alphaF());
+        }
+        else if (type == ColorType::HslType) {
+            ret = QString::number(color.hue()) + QLatin1String(", ")
+                    + QString::number(color.saturation()) + QLatin1String(", ")
+                    + QString::number(color.lightness());
+        }
+        else if (type == ColorType::HslaType) {
+            ret = QString::number(color.hue()) + QLatin1String(", ")
+                    + QString::number(color.saturation()) + QLatin1String(", ")
+                    + QString::number(color.lightness()) + QLatin1String(", ")
                     + QString::number(color.alphaF());
         }
         else if (type == ColorType::HexType) {
