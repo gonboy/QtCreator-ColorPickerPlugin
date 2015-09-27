@@ -128,6 +128,10 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                     (cursorPosInLine <= capturedEnd);
 
             if (cursorIsUnderColor) {
+                // If a part of the selectionis already selected, deselect it
+                if (currentCursor.hasSelection())
+                    currentCursor.clearSelection();
+
                 // Select the expression
                 currentCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor,
                                            cursorPosInLine - capturedStart);
