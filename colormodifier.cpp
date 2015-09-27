@@ -51,6 +51,12 @@ public:
         case ColorType::QmlHslaType:
             ret = QLatin1String("Qt.hsla(");
             break;
+        case ColorType::Vec3Type:
+            ret = QLatin1String("vec3(");
+            break;
+        case ColorType::Vec4Type:
+            ret = QLatin1String("vec4(");
+            break;
         default:
             break;
         }
@@ -97,6 +103,17 @@ public:
             ret = QString::number(color.hueF()) + QLatin1String(", ")
                     + QString::number(color.saturationF()) + QLatin1String(", ")
                     + QString::number(color.lightnessF()) + QLatin1String(", ")
+                    + QString::number(color.alphaF());
+        }
+        else if (type == ColorType::Vec3Type) {
+            ret = QString::number(color.redF()) + QLatin1String(", ")
+                    + QString::number(color.greenF()) + QLatin1String(", ")
+                    + QString::number(color.blueF());
+        }
+        else if (type == ColorType::Vec4Type) {
+            ret = QString::number(color.redF()) + QLatin1String(", ")
+                    + QString::number(color.greenF()) + QLatin1String(", ")
+                    + QString::number(color.blueF()) + QLatin1String(", ")
                     + QString::number(color.alphaF());
         }
 

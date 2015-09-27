@@ -82,6 +82,23 @@ const std::string REGEX_QML_HSLA =
         + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE + _RXPART_BLANK_SPACE
         + "\\)";
 
+const std::string REGEX_VEC3 =
+        "vec3" + _RXPART_BLANK_SPACE
+        + "\\(" + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE + "," + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE + "," + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE
+        + "\\)";
+
+const std::string REGEX_VEC4 =
+        "vec4" + _RXPART_BLANK_SPACE
+        + "\\(" + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE + "," + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE + "," + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE + "," + _RXPART_BLANK_SPACE
+        + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE
+        + "\\)";
+
 } // namespace Constants
 } // namespace Internal
 } // namespace ColorPicker

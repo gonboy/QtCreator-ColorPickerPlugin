@@ -15,7 +15,9 @@ enum ColorType
     HsvaType,
     HexType,
     QmlRgbaType,
-    QmlHslaType
+    QmlHslaType,
+    Vec3Type,
+    Vec4Type
 };
 
 } // namespace Internal

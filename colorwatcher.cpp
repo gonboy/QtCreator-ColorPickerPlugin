@@ -40,6 +40,8 @@ public:
         colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
         colorRegexes.insert(ColorType::QmlRgbaType, Constants::REGEX_QML_RGBA);
         colorRegexes.insert(ColorType::QmlHslaType, Constants::REGEX_QML_HSLA);
+        colorRegexes.insert(ColorType::Vec3Type, Constants::REGEX_VEC3);
+        colorRegexes.insert(ColorType::Vec4Type, Constants::REGEX_VEC4);
     }
 
     ~ColorWatcherImpl() {}
@@ -96,6 +98,21 @@ public:
             qreal a = match.captured(4).toDouble();
 
             ret.setHslF(h, s, l, a);
+        }
+        else if (type == ColorType::Vec3Type) {
+            float r = match.captured(1).toFloat();
+            float g = match.captured(2).toFloat();
+            float b = match.captured(3).toFloat();
+
+            ret.setRgbF(r, g, b);
+        }
+        else if (type == ColorType::Vec4Type) {
+            float r = match.captured(1).toFloat();
+            float g = match.captured(2).toFloat();
+            float b = match.captured(3).toFloat();
+            float a = match.captured(4).toFloat();
+
+            ret.setRgbF(r, g, b, a);
         }
 
         Q_ASSERT_X(ret.isValid(), Q_FUNC_INFO, "The color cannot be invalid.");
