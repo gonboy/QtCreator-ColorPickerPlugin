@@ -62,7 +62,7 @@ const std::string REGEX_HSVA =
         + _RXPART_FLOAT_VALUE + _RXPART_BLANK_SPACE
         + "\\)";
 
-const std::string REGEX_HEXCOLOR = "(\\#[a-f0-9]{6}|\\#[a-f0-9]{3})";
+const std::string REGEX_HEXCOLOR = "(\\#[a-f0-9]{12}|\\#[a-f0-9]{9}|\\#[a-f0-9]{8}|\\#[a-f0-9]{6}|\\#[a-f0-9]{3})";
 
 } // namespace Constants
 } // namespace Internal
