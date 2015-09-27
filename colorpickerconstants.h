@@ -10,7 +10,7 @@ namespace Constants {
 
 ////////////////////////// Actions //////////////////////////
 
-const char ACTION_NAME_TRIGGER_COLOR_EDIT[] = "Trigger Color Edit";
+const char ACTION_NAME_TRIGGER_COLOR_EDIT[] = "Edit color under cursor";
 
 const char TRIGGER_COLOR_EDIT[] = "ColorPicker.TriggerColorEdit";
 
