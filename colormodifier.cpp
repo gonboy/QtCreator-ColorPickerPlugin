@@ -45,6 +45,12 @@ public:
             ret = QLatin1String("hsva(");
             break;
         // No ColorType::HexType because of the QColor::name() function
+        case ColorType::QmlRgbaType:
+            ret = QLatin1String("Qt.rgba(");
+            break;
+        case ColorType::QmlHslaType:
+            ret = QLatin1String("Qt.hsla(");
+            break;
         default:
             break;
         }
@@ -80,6 +86,18 @@ public:
         }
         else if (type == ColorType::HexType) {
             ret = color.name().toUpper();
+        }
+        else if (type == ColorType::QmlRgbaType) {
+            ret = QString::number(color.redF()) + QLatin1String(", ")
+                    + QString::number(color.greenF()) + QLatin1String(", ")
+                    + QString::number(color.blueF()) + QLatin1String(", ")
+                    + QString::number(color.alphaF());
+        }
+        else if (type == ColorType::QmlHslaType) {
+            ret = QString::number(color.hueF()) + QLatin1String(", ")
+                    + QString::number(color.saturationF()) + QLatin1String(", ")
+                    + QString::number(color.lightnessF()) + QLatin1String(", ")
+                    + QString::number(color.alphaF());
         }
 
         Q_ASSERT_X(!ret.isNull(), Q_FUNC_INFO, "The string version of the color is invalid");
