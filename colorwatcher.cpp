@@ -33,12 +33,14 @@ public:
         colorRegexes()
     {
         // Register regexes
-        colorRegexes.insert(ColorType::RgbType, Constants::REGEX_RGB);
-        colorRegexes.insert(ColorType::RgbaType, Constants::REGEX_RGBA);
-        colorRegexes.insert(ColorType::HsvType, Constants::REGEX_HSV);
-        colorRegexes.insert(ColorType::HsvaType, Constants::REGEX_HSVA);
-        colorRegexes.insert(ColorType::HslType, Constants::REGEX_HSL);
-        colorRegexes.insert(ColorType::HslaType, Constants::REGEX_HSLA);
+        colorRegexes.insert(ColorType::QCssRgbType, Constants::REGEX_QCSS_RGB_01);
+        colorRegexes.insert(ColorType::QCssRgbPercentType, Constants::REGEX_QCSS_RGB_02);
+        colorRegexes.insert(ColorType::QCssRgbaAlphaPercentType, Constants::REGEX_QCSS_RGBA_01);
+        colorRegexes.insert(ColorType::QCssRgbaAlphaFloatType, Constants::REGEX_QCSS_RGBA_02);
+        colorRegexes.insert(ColorType::QssHsvType, Constants::REGEX_QSS_HSV);
+        colorRegexes.insert(ColorType::QssHsvaType, Constants::REGEX_QSS_HSVA);
+        colorRegexes.insert(ColorType::CssHslType, Constants::REGEX_CSS_HSL);
+        colorRegexes.insert(ColorType::CssHslaType, Constants::REGEX_CSS_HSLA);
         colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
         colorRegexes.insert(ColorType::QmlRgbaType, Constants::REGEX_QML_RGBA);
         colorRegexes.insert(ColorType::QmlHslaType, Constants::REGEX_QML_HSLA);
@@ -53,53 +55,64 @@ public:
     {
         QColor ret;
 
-        if (type == ColorType::RgbType) {
+        if (type == ColorType::QCssRgbType) {
             int r = match.captured(1).toInt();
             int g = match.captured(2).toInt();
             int b = match.captured(3).toInt();
 
             ret.setRgb(r, g, b);
         }
-        else if (type == ColorType::RgbaType) {
+        if (type == ColorType::QCssRgbPercentType) {
+            int r = match.captured(1).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
+            int g = match.captured(2).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
+            int b = match.captured(3).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
+
+            ret.setRgb(r, g, b);
+        }
+        else if (type == ColorType::QCssRgbaAlphaPercentType) {
+            ret.setRed(match.captured(1).toInt());
+            ret.setGreen(match.captured(2).toInt());
+            ret.setBlue(match.captured(3).toInt());
+            ret.setAlphaF(match.captured(4).remove(QChar::fromLatin1('%')).toFloat() / 100);
+        }
+        else if (type == ColorType::QCssRgbaAlphaFloatType) {
             ret.setRed(match.captured(1).toInt());
             ret.setGreen(match.captured(2).toInt());
             ret.setBlue(match.captured(3).toInt());
             ret.setAlphaF(match.captured(4).toFloat());
         }
-        else if (type == ColorType::HsvType) {
+        else if (type == ColorType::QssHsvType) {
             int h = match.captured(1).toInt();
             int s = match.captured(2).toInt();
             int v = match.captured(3).toInt();
 
             ret.setHsv(h, s,v);
         }
-        else if (type == ColorType::HsvaType) {
+        else if (type == ColorType::QssHsvaType) {
             int h = match.captured(1).toInt();
             int s = match.captured(2).toInt();
             int v = match.captured(3).toInt();
-            float a = match.captured(4).toFloat();
+
+            QString alphaString = match.captured(4).remove(QChar::fromLatin1('%'));
+            float a = alphaString.toInt() / 100;
 
             ret.setHsv(h, s, v);
             ret.setAlphaF(a);
         }
-        else if (type == ColorType::HslType) {
+        else if (type == ColorType::CssHslType) {
             int h = match.captured(1).toInt();
-            int s = match.captured(2).toInt();
-            int l = match.captured(3).toInt();
+            float s = match.captured(2).remove(QChar::fromLatin1('%')).toFloat() / 100;
+            float l = match.captured(3).remove(QChar::fromLatin1('%')).toFloat() / 100;
 
-            ret.setHsl(h, s, l);
+            ret.setHsl(h, s * 255, l * 255);
         }
-        else if (type == ColorType::HslaType) {
+        else if (type == ColorType::CssHslaType) {
             int h = match.captured(1).toInt();
-            int s = match.captured(2).toInt();
-            int l = match.captured(3).toInt();
+            float s = match.captured(2).remove(QChar::fromLatin1('%')).toFloat() / 100;
+            float l = match.captured(3).remove(QChar::fromLatin1('%')).toFloat() / 100;
             float a = match.captured(4).toFloat();
 
-            ret.setHsl(h, s, l);
-            ret.setAlphaF(a);
-        }
-        else if (type == ColorType::HexType) {
-            ret.setNamedColor(match.captured());
+            ret.setHsl(h, s * 255, l * 255, a);
         }
         else if (type == ColorType::QmlRgbaType) {
             qreal r = match.captured(1).toDouble();
@@ -131,6 +144,9 @@ public:
             float a = match.captured(4).toFloat();
 
             ret.setRgbF(r, g, b, a);
+        }
+        else if (type == ColorType::HexType) {
+            ret.setNamedColor(match.captured());
         }
 
         Q_ASSERT_X(ret.isValid(), Q_FUNC_INFO, "The color cannot be invalid.");

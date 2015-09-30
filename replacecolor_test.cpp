@@ -38,10 +38,10 @@ void ColorPickerPlugin::test_addAndReplaceColor()
     editorWidget->appendPlainText(color);
 
     QMap<ColorType, QColor> colors;
-    colors.insert(ColorType::RgbType, QColor(32, 18, 26));
-    colors.insert(ColorType::RgbaType, QColor(32, 18, 26, 127));
-    colors.insert(ColorType::HsvType, QColor(32, 18, 26));
-    colors.insert(ColorType::HsvaType, QColor(32, 18, 26, 127));
+    colors.insert(ColorType::QCssRgbType, QColor(32, 18, 26));
+    colors.insert(ColorType::QCssRgbaAlphaFloatType, QColor(32, 18, 26, 127));
+    colors.insert(ColorType::QssHsvType, QColor(32, 18, 26));
+    colors.insert(ColorType::QssHsvaType, QColor(32, 18, 26, 127));
     colors.insert(ColorType::HexType, QColor(32, 18, 26));
 
     connect(m_colorWatcher, &ColorWatcher::colorFound,
