@@ -24,7 +24,7 @@ const char TRIGGER_COLOR_EDIT[] = "ColorPicker.TriggerColorEdit";
 ////////////////////////// Regex parts //////////////////////////
 
 const std::string _RXPART_0_TO_255 = "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
-const std::string _RXPART_0_TO_360 = "([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9]|360)";
+const std::string _RXPART_0_TO_359 = "([0-9]|[1-9][0-9]|[1|2][0-9][0-9]|3[0-5][0-9])";
 const std::string _RXPART_PERCENTAGE = "([0-9]|[1-9][0-9]|100)\\%?";
 const std::string _RXPART_FLOAT_LITERAL = "([0]?\\.[0-9]*|1\\.0|1|0)[f]";
 const std::string _RXPART_FLOAT_VALUE = "(0|1|1.0|0*\\.\\d+)";
@@ -72,7 +72,7 @@ DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_02,
 DECL_QREGEX_CONSTANT(REGEX_QSS_HSV,
                     "hsv" + _RXPART_BLANK
                     + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_360  + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_359  + _RXPART_BLANK + "," + _RXPART_BLANK
                     + _RXPART_0_TO_255  + _RXPART_BLANK + "," + _RXPART_BLANK
                     + _RXPART_0_TO_255 + _RXPART_BLANK
                     + "\\)");
@@ -80,7 +80,7 @@ DECL_QREGEX_CONSTANT(REGEX_QSS_HSV,
 DECL_QREGEX_CONSTANT(REGEX_QSS_HSVA,
                     "hsva" + _RXPART_BLANK
                     + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_360 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_359 + _RXPART_BLANK + "," + _RXPART_BLANK
                     + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
                     + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
                     + _RXPART_PERCENTAGE + _RXPART_BLANK
@@ -90,7 +90,7 @@ DECL_QREGEX_CONSTANT(REGEX_QSS_HSVA,
 DECL_QREGEX_CONSTANT(REGEX_CSS_HSL,
                     "hsl" + _RXPART_BLANK
                     + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_360  + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_359  + _RXPART_BLANK + "," + _RXPART_BLANK
                     + _RXPART_PERCENTAGE  + _RXPART_BLANK + "," + _RXPART_BLANK
                     + _RXPART_PERCENTAGE + _RXPART_BLANK
                     + "\\)");
@@ -98,7 +98,7 @@ DECL_QREGEX_CONSTANT(REGEX_CSS_HSL,
 DECL_QREGEX_CONSTANT(REGEX_CSS_HSLA,
                     "hsla" + _RXPART_BLANK
                     + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_360 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_359 + _RXPART_BLANK + "," + _RXPART_BLANK
                     + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
                     + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK

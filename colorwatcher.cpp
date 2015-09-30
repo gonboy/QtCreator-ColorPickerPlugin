@@ -82,37 +82,36 @@ public:
             ret.setAlphaF(match.captured(4).toFloat());
         }
         else if (type == ColorType::QssHsvType) {
-            int h = match.captured(1).toInt();
-            int s = match.captured(2).toInt();
-            int v = match.captured(3).toInt();
+            qreal h = match.captured(1).toDouble();
+            qreal s = match.captured(2).toDouble();
+            qreal v = match.captured(3).toDouble();
 
-            ret.setHsv(h, s,v);
+            ret.setHsvF(h / 359, s / 255, v / 255);
         }
         else if (type == ColorType::QssHsvaType) {
-            int h = match.captured(1).toInt();
-            int s = match.captured(2).toInt();
-            int v = match.captured(3).toInt();
+            qreal h = match.captured(1).toDouble();
+            qreal s = match.captured(2).toDouble();
+            qreal v = match.captured(3).toDouble();
 
             QString alphaString = match.captured(4).remove(QChar::fromLatin1('%'));
-            float a = alphaString.toInt() / 100;
+            qreal a = alphaString.toDouble() / 100;
 
-            ret.setHsv(h, s, v);
-            ret.setAlphaF(a);
+            ret.setHsvF(h / 359, s / 255, v / 255, a);
         }
         else if (type == ColorType::CssHslType) {
-            int h = match.captured(1).toInt();
-            float s = match.captured(2).remove(QChar::fromLatin1('%')).toFloat() / 100;
-            float l = match.captured(3).remove(QChar::fromLatin1('%')).toFloat() / 100;
+            qreal h = match.captured(1).toDouble() / 359;
+            qreal s = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
+            qreal l = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
 
-            ret.setHsl(h, s * 255, l * 255);
+            ret.setHslF(h, s, l);
         }
         else if (type == ColorType::CssHslaType) {
-            int h = match.captured(1).toInt();
-            float s = match.captured(2).remove(QChar::fromLatin1('%')).toFloat() / 100;
-            float l = match.captured(3).remove(QChar::fromLatin1('%')).toFloat() / 100;
-            float a = match.captured(4).toFloat();
+            qreal h = match.captured(1).toDouble() / 359;
+            float s = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
+            qreal l = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
+            qreal a = match.captured(4).toDouble();
 
-            ret.setHsl(h, s * 255, l * 255, a);
+            ret.setHslF(h, s, l, a);
         }
         else if (type == ColorType::QmlRgbaType) {
             qreal r = match.captured(1).toDouble();
@@ -131,17 +130,17 @@ public:
             ret.setHslF(h, s, l, a);
         }
         else if (type == ColorType::Vec3Type) {
-            float r = match.captured(1).toFloat();
-            float g = match.captured(2).toFloat();
-            float b = match.captured(3).toFloat();
+            qreal r = match.captured(1).toDouble();
+            qreal g = match.captured(2).toDouble();
+            qreal b = match.captured(3).toDouble();
 
             ret.setRgbF(r, g, b);
         }
         else if (type == ColorType::Vec4Type) {
-            float r = match.captured(1).toFloat();
-            float g = match.captured(2).toFloat();
-            float b = match.captured(3).toFloat();
-            float a = match.captured(4).toFloat();
+            qreal r = match.captured(1).toDouble();
+            qreal g = match.captured(2).toDouble();
+            qreal b = match.captured(3).toDouble();
+            qreal a = match.captured(4).toDouble();
 
             ret.setRgbF(r, g, b, a);
         }
