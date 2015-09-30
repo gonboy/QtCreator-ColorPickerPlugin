@@ -3,6 +3,12 @@
 
 #include <string>
 
+#include <QRegularExpression>
+
+#define DECL_QREGEX_CONSTANT(name, regex) \
+    const QRegularExpression name(QString::fromStdString(regex), \
+    QRegularExpression::CaseInsensitiveOption)
+
 namespace ColorPicker {
 namespace Internal {
 namespace Constants {
@@ -28,115 +34,116 @@ const std::string _RXPART_BLANK = "\\s*?";
 ////////////////////////// Regex //////////////////////////
 
 // Qss-Css colors
-const std::string REGEX_QCSS_RGB_01 =
-        "rgb" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_01,
+                    "rgb" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_QCSS_RGB_02 =
-        "rgb" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_PERCENTAGE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_02,
+                    "rgb" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_QCSS_RGBA_01 =
-        "rgba" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_PERCENTAGE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_01,
+                    "rgba" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_QCSS_RGBA_02 =
-        "rgba" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_02,
+                    "rgba" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                    + "\\)");
 
 // Qss colors
-const std::string REGEX_QSS_HSV =
-        "hsv" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_360  + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255  + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255 + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QSS_HSV,
+                    "hsv" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_360  + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255  + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255 + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_QSS_HSVA =
-        "hsva" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_360 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
-        + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
-        + _RXPART_PERCENTAGE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QSS_HSVA,
+                    "hsva" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_360 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                    + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE + _RXPART_BLANK
+                    + "\\)");
 
 // Css colors
-const std::string REGEX_CSS_HSL =
-        "hsl" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_360  + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_PERCENTAGE  + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_PERCENTAGE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_CSS_HSL,
+                    "hsl" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_360  + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE  + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_CSS_HSLA =
-        "hsla" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_0_TO_360 + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
-        + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_CSS_HSLA,
+                    "hsla" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_0_TO_360 + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                    + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                    + "\\)");
 
 // Qml colors
-const std::string REGEX_QML_RGBA =
-        "Qt.rgba" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QML_RGBA,
+                    "Qt.rgba" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_QML_HSLA =
-        "Qt.hsla" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_QML_HSLA,
+                    "Qt.hsla" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
+                    + "\\)");
 
 // OpenGL colors
-const std::string REGEX_VEC3 =
-        "vec3" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_VEC3,
+                    "vec3" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                    + "\\)");
 
-const std::string REGEX_VEC4 =
-        "vec4" + _RXPART_BLANK
-        + "\\(" + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-        + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-        + "\\)";
+DECL_QREGEX_CONSTANT(REGEX_VEC4,
+                    "vec4" + _RXPART_BLANK
+                    + "\\(" + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                    + "\\)");
 
 // Other colors
-const std::string REGEX_HEXCOLOR = "(\\#[a-f0-9]{12}|\\#[a-f0-9]{9}|\\#[a-f0-9]{8}|\\#[a-f0-9]{6}|\\#[a-f0-9]{3})";
+DECL_QREGEX_CONSTANT(REGEX_HEXCOLOR,
+                    "(\\#[a-f0-9]{12}|\\#[a-f0-9]{9}|\\#[a-f0-9]{8}|\\#[a-f0-9]{6}|\\#[a-f0-9]{3})");
 
 } // namespace Constants
 } // namespace Internal

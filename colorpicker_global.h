@@ -25,7 +25,7 @@ enum ColorType
     QmlHslaType,                // Qt.hsla(1.0, 1.0, 1.0, 1.0)
     // OpenGL
     Vec3Type,                   // vec3(1.0, 1.0, 1.0)
-    Vec4Type,                   // vec4(1.0, 1.0, 1.0)
+    Vec4Type,                   // vec4(1.0, 1.0, 1.0, 1.0)
     // Others
     HexType                     // #RRRRGGGGBBBB | #RRRGGGBBB | #AARRGGBB | #ARGB | #RGB
 };

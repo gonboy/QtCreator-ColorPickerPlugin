@@ -41,17 +41,17 @@ public:
         colorRegexes.insert(ColorType::QssHsvaType, Constants::REGEX_QSS_HSVA);
         colorRegexes.insert(ColorType::CssHslType, Constants::REGEX_CSS_HSL);
         colorRegexes.insert(ColorType::CssHslaType, Constants::REGEX_CSS_HSLA);
-        colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
         colorRegexes.insert(ColorType::QmlRgbaType, Constants::REGEX_QML_RGBA);
         colorRegexes.insert(ColorType::QmlHslaType, Constants::REGEX_QML_HSLA);
         colorRegexes.insert(ColorType::Vec3Type, Constants::REGEX_VEC3);
         colorRegexes.insert(ColorType::Vec4Type, Constants::REGEX_VEC4);
+        colorRegexes.insert(ColorType::HexType, Constants::REGEX_HEXCOLOR);
     }
 
     ~ColorWatcherImpl() {}
 
     /* functions */
-    QColor colorFromRegexp(ColorType type, const QRegularExpressionMatch &match) const
+    QColor parseColor(ColorType type, const QRegularExpressionMatch &match) const
     {
         QColor ret;
 
@@ -155,7 +155,7 @@ public:
     }
 
     /* attributes */
-    QMap<ColorType, std::string> colorRegexes;
+    QMap<ColorType, QRegularExpression> colorRegexes;
 };
 
 
@@ -179,12 +179,7 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
     QString lineText = currentCursor.block().text();
 
     for (auto it = d->colorRegexes.begin(); it != d->colorRegexes.end(); ++it) {
-        std::string rawRegex = it.value();
-
-        QRegularExpression regexp(QString::fromStdString(rawRegex),
-                                  QRegularExpression::CaseInsensitiveOption);
-
-        QRegularExpressionMatchIterator matchIt = regexp.globalMatch(lineText);
+        QRegularExpressionMatchIterator matchIt = it.value().globalMatch(lineText);
 
         while (matchIt.hasNext()) {
             QRegularExpressionMatch match = matchIt.next();
@@ -197,7 +192,7 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                     (cursorPosInLine <= capturedEnd);
 
             if (cursorIsUnderColor) {
-                // If a part of the selectionis already selected, deselect it
+                // If a part of the selection is already selected, deselect it
                 if (currentCursor.hasSelection())
                     currentCursor.clearSelection();
 
@@ -211,7 +206,7 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
 
                 //
                 ColorType type = it.key();
-                QColor color = d->colorFromRegexp(type, match);
+                QColor color = d->parseColor(type, match);
 
                 emit colorFound(color, type);
                 break;
