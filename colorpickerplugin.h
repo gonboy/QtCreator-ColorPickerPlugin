@@ -10,6 +10,7 @@ class IEditor;
 namespace ColorPicker {
 namespace Internal {
 
+class ColorDialog;
 class ColorModifier;
 class ColorWatcher;
 
@@ -33,6 +34,7 @@ private slots:
 private:
     ColorWatcher *m_colorWatcher;
     ColorModifier *m_colorModifier;
+    ColorDialog *m_colorDialog;
 };
 
 } // namespace Internal

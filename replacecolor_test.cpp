@@ -8,7 +8,7 @@
 
 #include <texteditor/texteditor.h>
 
-// Own includes
+// Plugin includes
 #include "colormodifier.h"
 #include "colorpickerconstants.h"
 #include "colorpickerplugin.h"
@@ -43,11 +43,6 @@ void ColorPickerPlugin::test_addAndReplaceColor()
     colors.insert(ColorType::QssHsvType, QColor(32, 18, 26));
     colors.insert(ColorType::QssHsvaType, QColor(32, 18, 26, 127));
     colors.insert(ColorType::HexType, QColor(32, 18, 26));
-
-    connect(m_colorWatcher, &ColorWatcher::colorFound,
-            [=](const QColor &value, ColorType type) {
-        qDebug() << type << value;
-    });
 
     for (auto it = colors.begin(); it != colors.end();  ++it) {
         m_colorModifier->insertColor(it.value(), it.key());

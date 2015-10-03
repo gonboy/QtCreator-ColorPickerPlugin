@@ -14,7 +14,7 @@
 
 #include <texteditor/texteditor.h>
 
-// Own includes
+// Plugin includes
 #include "colorpickerconstants.h"
 
 using namespace Core;
@@ -170,9 +170,11 @@ ColorWatcher::ColorWatcher(QObject *parent) :
 ColorWatcher::~ColorWatcher()
 {}
 
-void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
+ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
 {
     Q_ASSERT_X(textEditor, Q_FUNC_INFO, "The current editor is invalid.");
+
+    ColorExpr ret;
 
     QTextCursor currentCursor = textEditor->textCursor();
     QString lineText = currentCursor.block().text();
@@ -207,11 +209,22 @@ void ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                 ColorType type = it.key();
                 QColor color = d->parseColor(type, match);
 
-                emit colorFound(color, type);
+                ret.type = type;
+                ret.value = color;
+
+                // Compute the cursor pos in textEditor coordinates
+                QRect cursorRect = textEditor->cursorRect();
+                QPoint cursorPos(cursorRect.center().x(),
+                                 cursorRect.bottom());
+
+                ret.pos = textEditor->mapToParent(cursorPos);
+
                 break;
             }
         }
     }
+
+    return ret;
 }
 
 } // namespace Internal

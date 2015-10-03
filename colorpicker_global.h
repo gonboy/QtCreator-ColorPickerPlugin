@@ -3,6 +3,7 @@
 
 #include <QColor>
 #include <QMetaType>
+#include <QPoint>
 
 namespace ColorPicker {
 namespace Internal {
@@ -28,6 +29,13 @@ enum ColorType
     Vec4Type,                   // vec4(1.0, 1.0, 1.0, 1.0)
     // Others
     HexType                     // #FFFFFFFFFFFF | #FFFFFFFFF | #FFFFFFFF | #FFFFFF | #FFF
+};
+
+struct ColorExpr
+{
+    ColorType type;
+    QColor value;
+    QPoint pos;
 };
 
 } // namespace Internal

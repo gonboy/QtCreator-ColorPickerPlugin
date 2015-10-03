@@ -22,10 +22,7 @@ public:
     ColorWatcher(QObject *parent = 0);
     ~ColorWatcher();
 
-    void processCurrentTextCursor(TextEditor::TextEditorWidget *textEditor);
-
-signals:
-    void colorFound(const QColor &value, ColorType type);
+    ColorExpr processCurrentTextCursor(TextEditor::TextEditorWidget *textEditor);
 
 private:
     QScopedPointer<ColorWatcherImpl> d;

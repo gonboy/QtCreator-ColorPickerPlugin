@@ -20,6 +20,14 @@ QtcPlugin {
         "colorpickerplugin.h",
         "colorwatcher.cpp",
         "colorwatcher.h",
+        "widgets/colorpicker.cpp",
+        "widgets/colorpicker.h",
+        "widgets/hueslider.cpp",
+        "widgets/hueslider.h",
+        "widgets/opacityslider.cpp",
+        "widgets/opacityslider.h",
+        "widgets/colordialog.cpp",
+        "widgets/colordialog.h"
     ]
 
     Group {
@@ -27,7 +35,8 @@ QtcPlugin {
         condition: project.testsEnabled
 
         files: [
-            "replacecolor_test.cpp"
+            "replacecolor_test.cpp",
+            "widgets_test.cpp"
         ]
 
         cpp.defines: outer.concat(['SRCDIR="' + FileInfo.path(filePath) + '"'])

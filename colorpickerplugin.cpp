@@ -4,12 +4,12 @@
 #include <QMenu>
 
 // QtCreator includes
-#include <extensionsystem/pluginmanager.h>
-
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/editormanager/editormanager.h>
 #include <coreplugin/editormanager/ieditor.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <texteditor/texteditor.h>
 
@@ -17,6 +17,8 @@
 #include "colormodifier.h"
 #include "colorpickerconstants.h"
 #include "colorwatcher.h"
+
+#include "widgets/colordialog.h"
 
 using namespace Core;
 using namespace TextEditor;
@@ -29,7 +31,8 @@ namespace Internal {
 
 ColorPickerPlugin::ColorPickerPlugin() :
     m_colorWatcher(new ColorWatcher(this)),
-    m_colorModifier(new ColorModifier(this))
+    m_colorModifier(new ColorModifier(this)),
+    m_colorDialog(new ColorDialog) // no parent for the moment
 {
 }
 
@@ -70,10 +73,16 @@ void ColorPickerPlugin::onColorEditTriggered()
 
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
 
-    if (editorWidget)
-        m_colorWatcher->processCurrentTextCursor(editorWidget);
-}
+    if (editorWidget) {
+        ColorExpr toEdit = m_colorWatcher->processCurrentTextCursor(editorWidget);
 
+        if (toEdit.value.isValid()) {
+            m_colorDialog->setParent(editorWidget);
+            m_colorDialog->move(toEdit.pos);
+            m_colorDialog->show();
+        }
+    }
+}
 
 } // namespace Internal
 } // namespace ColorPicker
