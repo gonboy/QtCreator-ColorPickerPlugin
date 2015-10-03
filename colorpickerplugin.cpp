@@ -77,10 +77,12 @@ void ColorPickerPlugin::onColorEditTriggered()
         ColorExpr toEdit = m_colorWatcher->processCurrentTextCursor(editorWidget);
 
         if (toEdit.value.isValid()) {
-            m_colorDialog->setParent(editorWidget);
-            m_colorDialog->move(toEdit.pos);
-            m_colorDialog->show();
+            m_colorDialog->setColor(toEdit.value);
         }
+
+        m_colorDialog->setParent(editorWidget);
+        m_colorDialog->move(toEdit.pos);
+        m_colorDialog->show();
     }
 }
 
