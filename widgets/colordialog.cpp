@@ -60,8 +60,10 @@ public:
 
         }
 
-        if (whichUpdate & ColorDialogImpl::UpdateProgrammatically)
+        if (whichUpdate & ColorDialogImpl::UpdateProgrammatically) {
+            hueSlider->setValue(color.hsvHue());
             opacitySlider->setValue(color.alpha());
+        }
 
         outputColor = color;
 
