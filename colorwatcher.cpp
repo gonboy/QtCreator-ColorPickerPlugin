@@ -191,7 +191,7 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
     for (auto it = d->colorRegexes.begin(); it != d->colorRegexes.end(); ++it) {
         QRegularExpressionMatchIterator matchIt = it.value().globalMatch(lineText);
 
-        while (matchIt.hasNext()) {
+        if (matchIt.hasNext()) {
             QRegularExpressionMatch match = matchIt.next();
 
             int cursorPosInLine = currentCursor.positionInBlock();
