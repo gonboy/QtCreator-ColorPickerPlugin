@@ -7,8 +7,8 @@
 
 AdvancedSlider::AdvancedSlider(QWidget *parent) :
     QSlider(parent),
-    m_backgroundBrush(Qt::NoBrush),
-    m_gradientBrush(Qt::NoBrush)
+    m_backgroundBrush(),
+    m_gradientBrush()
 {}
 
 QBrush AdvancedSlider::backgroundBrush() const
