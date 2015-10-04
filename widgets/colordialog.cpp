@@ -125,7 +125,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
                          ColorDialogImpl::UpdateFromOpacitySlider);
     });
 
-    setColor(Qt::blue);
+    setColor(Qt::red);
 }
 
 ColorDialog::~ColorDialog()
