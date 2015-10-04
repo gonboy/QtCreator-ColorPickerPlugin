@@ -76,9 +76,10 @@ void ColorPickerPlugin::onColorEditTriggered()
     if (editorWidget) {
         ColorExpr toEdit = m_colorWatcher->processCurrentTextCursor(editorWidget);
 
-        if (toEdit.value.isValid()) {
+        if (toEdit.value.isValid())
             m_colorDialog->setColor(toEdit.value);
-        }
+        else
+            m_colorDialog->setColor(Qt::red);
 
         m_colorDialog->setParent(editorWidget);
         m_colorDialog->move(toEdit.pos);
