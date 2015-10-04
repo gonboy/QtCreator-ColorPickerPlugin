@@ -20,6 +20,8 @@ QtcPlugin {
         "colorpickerplugin.h",
         "colorwatcher.cpp",
         "colorwatcher.h",
+        "widgets/advancedslider.cpp",
+        "widgets/advancedslider.h",
         "widgets/colorpicker.cpp",
         "widgets/colorpicker.h",
         "widgets/hueslider.cpp",

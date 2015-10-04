@@ -2,8 +2,6 @@
 
 #include <QDebug>
 #include <QPainter>
-#include <QStyle>
-#include <QStyleOptionSlider>
 
 namespace ColorPicker {
 namespace Internal {
@@ -14,12 +12,10 @@ namespace Internal {
 class OpacitySliderImpl
 {
 public:
-    OpacitySliderImpl(OpacitySlider *qq) :
-        q_ptr(qq),
+    OpacitySliderImpl() :
         h(0),
         s(0),
-        v(0),
-        gradientImage()
+        v(0)
     {}
 
     /* functions */
@@ -65,48 +61,16 @@ public:
         return pix.toImage();
     }
 
-    void createGradientImage()
-    {
-        QPixmap pix(q_ptr->size());
-
-        QPainter painter(&pix);
-        painter.setPen(QPen(Qt::NoPen));
-
-        QRect qqRect = q_ptr->rect();
-
-        // draw opacity pattern
-        painter.setBrush(opacityCheckerboard(qqRect));
-        painter.drawRect(qqRect);
-
-        // draw color gradient
-        QLinearGradient colorGradient(QPoint(0.0, 0.0), QPoint(q_ptr->width(), q_ptr->height()));
-        QColor gradientColor = QColor::fromHsv(h, s, v);
-
-        gradientColor.setAlphaF(1.0);
-        colorGradient.setColorAt(0.0, gradientColor);
-
-        gradientColor.setAlphaF(0.0);
-        colorGradient.setColorAt(1.0, gradientColor);
-
-        painter.setBrush(colorGradient);
-        painter.drawRect(qqRect);
-
-        gradientImage = pix.toImage();
-    }
-
     /* variables */
-    OpacitySlider *q_ptr;
-
     int h, s, v;
-    QImage gradientImage;
 };
 
 
 //////////////////////////// OpacitySlider /////////////////////////////
 
 OpacitySlider::OpacitySlider(QWidget *parent)
-    : QSlider(parent),
-      d(new OpacitySliderImpl(this))
+    : AdvancedSlider(parent),
+      d(new OpacitySliderImpl)
 {
     setRange(0, 255);
     setValue(255);
@@ -142,37 +106,29 @@ void OpacitySlider::setHsv(int h, int s, int v)
     }
 
     if (updateImage) {
-        d->createGradientImage();
+        updateBrushes();
 
         update();
     }
 }
 
-void OpacitySlider::paintEvent(QPaintEvent *)
+QBrush OpacitySlider::backgroundBrush() const
 {
-    if (rect() != d->gradientImage.rect())
-        d->gradientImage = QImage(size(), QImage::Format_RGB32);
-
-    QPainter painter(this);
-    painter.drawImage(rect(), d->gradientImage);
-
-    QStyleOptionSlider opt;
-    initStyleOption(&opt);
-
-    QRect handleRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle);
-    handleRect.setTopLeft(QPoint(0, handleRect.topLeft().y()));
-    handleRect.setWidth(width());
-
-    QPen pen(Qt::white);
-    pen.setWidth(4);
-
-    painter.setPen(pen);
-    painter.drawRect(handleRect);
+    return d->opacityCheckerboard(rect());
 }
 
-void OpacitySlider::resizeEvent(QResizeEvent *)
+QBrush OpacitySlider::gradientBrush() const
 {
-    d->createGradientImage();
+    QLinearGradient colorGradient(QPoint(0.0, 0.0), QPoint(width(), height()));
+    QColor gradientColor = QColor::fromHsv(d->h, d->s, d->v);
+
+    gradientColor.setAlphaF(1.0);
+    colorGradient.setColorAt(0.0, gradientColor);
+
+    gradientColor.setAlphaF(0.0);
+    colorGradient.setColorAt(1.0, gradientColor);
+
+    return colorGradient;
 }
 
 } // namespace Internal

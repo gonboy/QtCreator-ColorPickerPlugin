@@ -1,14 +1,14 @@
 #ifndef OPACITYSLIDER_H
 #define OPACITYSLIDER_H
 
-#include <QSlider>
+#include "advancedslider.h"
 
 namespace ColorPicker {
 namespace Internal {
 
 class OpacitySliderImpl;
 
-class OpacitySlider : public QSlider
+class OpacitySlider : public AdvancedSlider
 {
     Q_OBJECT
 
@@ -19,9 +19,8 @@ public:
     void hsv(int *h, int *s, int *v) const;
     void setHsv(int h, int s, int v);
 
-protected:
-    void resizeEvent(QResizeEvent *);
-    void paintEvent(QPaintEvent *);
+    QBrush backgroundBrush() const override;
+    QBrush gradientBrush() const override;
 
 private:
     QScopedPointer<OpacitySliderImpl> d;
