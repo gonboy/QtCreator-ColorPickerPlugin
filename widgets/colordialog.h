@@ -17,6 +17,7 @@ class ColorDialog : public QWidget
 {
     Q_OBJECT
 
+    Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(int hue READ hue WRITE setHue NOTIFY hueChanged)
     Q_PROPERTY(int opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
 
