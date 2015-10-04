@@ -1,5 +1,5 @@
-#ifndef QUICKJUMPSLIDER_H
-#define QUICKJUMPSLIDER_H
+#ifndef ADVANDEDSLIDER_H
+#define ADVANDEDSLIDER_H
 
 #include <QSlider>
 
@@ -26,4 +26,4 @@ private:
     QBrush m_gradientBrush;
 };
 
-#endif // QUICKJUMPSLIDER_H
+#endif // ADVANDEDSLIDER_H
