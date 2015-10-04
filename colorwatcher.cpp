@@ -153,7 +153,7 @@ public:
         return ret;
     }
 
-    /* attributes */
+    /* variables */
     QMap<ColorType, QRegularExpression> colorRegexes;
 };
 
