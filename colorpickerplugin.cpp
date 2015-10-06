@@ -15,6 +15,7 @@
 
 // Plugin includes
 #include "colormodifier.h"
+#include "colorpickeroptionspage.h"
 #include "colorpickerconstants.h"
 #include "colorwatcher.h"
 
@@ -57,6 +58,9 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
             this, &ColorPickerPlugin::onColorEditTriggered);
 
     toolsContainer->addMenu(myContainer);
+
+    // Register objects
+    addAutoReleasedObject(new ColorPickerOptionsPage);
 
     return true;
 }

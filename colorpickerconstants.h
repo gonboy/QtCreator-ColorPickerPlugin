@@ -16,6 +16,12 @@ namespace Constants {
 
 ////////////////////////// Actions //////////////////////////
 
+const char COLORPICKER_SETTINGS_ID[] = "ColorPicker.Settings";
+const char COLORPICKER_SETTINGS_DISPLAY_NAME[] = "General";
+const char COLORPICKER_SETTINGS_CATEGORY[] = "YW.ColorPicker";
+const char COLORPICKER_SETTINGS_TR_CATEGORY[] = QT_TRANSLATE_NOOP("ColorPicker", "ColorPicker");
+const char COLORPICKER_SETTINGS_CATEGORY_ICON[]  = ":/colorpicker/images/icon.png";
+
 const char ACTION_NAME_TRIGGER_COLOR_EDIT[] = "Trigger Color Edit";
 
 const char TRIGGER_COLOR_EDIT[] = "ColorPicker.TriggerColorEdit";
