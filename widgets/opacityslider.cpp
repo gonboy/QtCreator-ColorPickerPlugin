@@ -1,6 +1,5 @@
 #include "opacityslider.h"
 
-#include <QDebug>
 #include <QPainter>
 
 namespace ColorPicker {

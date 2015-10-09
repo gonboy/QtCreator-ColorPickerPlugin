@@ -44,17 +44,8 @@ public:
     {}
 
     /* functions */
-    void blockSignals(bool block)
-    {
-        colorPicker->blockSignals(block);
-        hueSlider->blockSignals(block);
-        opacitySlider->blockSignals(block);
-    }
-
     void updateWidgets(const QColor &color, UpdateReasons whichUpdate)
     {
-        blockSignals(true);
-
         if (whichUpdate & ColorDialogImpl::UpdateFromColorPicker)
             opacitySlider->setHsv(color.hsvHue(), color.hsvSaturation(), color.value());
 
@@ -68,13 +59,11 @@ public:
         }
 
         if (whichUpdate & ColorDialogImpl::UpdateProgrammatically) {
-            hueSlider->setValue(color.hsvHue());
-            opacitySlider->setValue(color.alpha());
+            hueSlider->setValueAtomic(color.hsvHue());
+            opacitySlider->setValueAtomic(color.alpha());
         }
 
         outputColor = color;
-
-        blockSignals(false);
     }
 
     void addLangContext(ILangContext *lc)

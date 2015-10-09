@@ -10,6 +10,8 @@ class AdvancedSlider : public QSlider
 public:
     AdvancedSlider(QWidget *parent = 0);
 
+    void setValueAtomic(int newValue);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;

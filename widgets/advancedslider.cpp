@@ -11,6 +11,13 @@ AdvancedSlider::AdvancedSlider(QWidget *parent) :
     m_gradientBrush()
 {}
 
+void AdvancedSlider::setValueAtomic(int newValue)
+{
+    const QSignalBlocker blocker(this);
+
+    setValue(newValue);
+}
+
 QBrush AdvancedSlider::backgroundBrush() const
 {
     return Qt::NoBrush;
