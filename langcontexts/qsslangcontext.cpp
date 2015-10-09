@@ -79,8 +79,11 @@ QString QssLangContext::displayName() const
 
 void QssLangContext::uncheck()
 {
+    m_btnGroup->setExclusive(false);
     m_rgbBtn->setChecked(false);
     m_hsvBtn->setChecked(false);
+    m_hexBtn->setChecked(false);
+    m_btnGroup->setExclusive(true);
 }
 
 void QssLangContext::translateToColorFormat(QAbstractButton *checkedBtn)

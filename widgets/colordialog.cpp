@@ -208,8 +208,6 @@ void ColorDialog::onColorFormatChoosed(ColorFormat colorFormat)
         if (lc != senderContext)
             lc->uncheck();
     }
-
-    qDebug() << colorFormat;
 }
 
 } // namespace Internal
