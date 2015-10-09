@@ -37,12 +37,12 @@ void ColorPickerPlugin::test_addAndReplaceColor()
     QString color = QString::fromLatin1("rgb(12, 20, 40)");
     editorWidget->appendPlainText(color);
 
-    QMap<ColorType, QColor> colors;
-    colors.insert(ColorType::QCssRgbType, QColor(32, 18, 26));
-    colors.insert(ColorType::QCssRgbaAlphaFloatType, QColor(32, 18, 26, 127));
-    colors.insert(ColorType::QssHsvType, QColor(32, 18, 26));
-    colors.insert(ColorType::QssHsvaType, QColor(32, 18, 26, 127));
-    colors.insert(ColorType::HexType, QColor(32, 18, 26));
+    QMap<ColorFormat, QColor> colors;
+    colors.insert(ColorFormat::QCssRgbType, QColor(32, 18, 26));
+    colors.insert(ColorFormat::QCssRgbaAlphaFloatType, QColor(32, 18, 26, 127));
+    colors.insert(ColorFormat::QssHsvType, QColor(32, 18, 26));
+    colors.insert(ColorFormat::QssHsvaType, QColor(32, 18, 26, 127));
+    colors.insert(ColorFormat::HexType, QColor(32, 18, 26));
 
     for (auto it = colors.begin(); it != colors.end();  ++it) {
         m_colorModifier->insertColor(it.value(), it.key());

@@ -22,6 +22,8 @@ QtcPlugin {
         "colorpickerplugin.h",
         "colorwatcher.cpp",
         "colorwatcher.h",
+        "langcontexts/ilangcontext.cpp",
+        "langcontexts/ilangcontext.h",
         "widgets/advancedslider.cpp",
         "widgets/advancedslider.h",
         "widgets/colorpicker.cpp",
@@ -30,10 +32,12 @@ QtcPlugin {
         "widgets/colorpickersettingswidget.h",
         "widgets/hueslider.cpp",
         "widgets/hueslider.h",
+        "langcontexts/qsslangcontext.cpp",
+        "langcontexts/qsslangcontext.h",
         "widgets/opacityslider.cpp",
         "widgets/opacityslider.h",
         "widgets/colordialog.cpp",
-        "widgets/colordialog.h"
+        "widgets/colordialog.h",
     ]
 
     Group {

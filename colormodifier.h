@@ -18,7 +18,7 @@ public:
     explicit ColorModifier(QObject *parent = 0);
     ~ColorModifier();
 
-    void insertColor(const QColor &newValue, ColorType asType);
+    void insertColor(const QColor &newValue, ColorFormat asType);
 
 private:
     QScopedPointer<ColorModifierImpl> d;

@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-class QFrame;
+#include "../colorpicker_global.h"
 
 namespace ColorPicker {
 namespace Internal {
@@ -25,6 +25,8 @@ public:
     explicit ColorDialog(QWidget *parent = 0);
     ~ColorDialog();
 
+    ColorFormat outputColorFormat() const;
+
     QColor color() const;
     int hue() const;
     int opacity() const;
@@ -39,7 +41,11 @@ signals:
     void hueChanged(int);
     void opacityChanged(int);
 
+private slots:
+    void onColorFormatChoosed(ColorFormat colorFormat);
+
 private:
+    friend class ColorDialogImpl;
     QScopedPointer<ColorDialogImpl> d;
 };
 

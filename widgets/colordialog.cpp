@@ -3,10 +3,14 @@
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QTabWidget>
 
 #include "colorpicker.h"
 #include "hueslider.h"
 #include "opacityslider.h"
+
+#include "../langcontexts/ilangcontext.h"
+#include "../langcontexts/qsslangcontext.h"
 
 namespace ColorPicker {
 namespace Internal {
@@ -29,7 +33,10 @@ public:
 
     ColorDialogImpl(ColorDialog *qq) :
         q_ptr(qq),
+        outputColorFormat(),
+        langContexts(),
         outputColor(QColor::Hsv),
+        langTabs(new QTabWidget(q_ptr)),
         colorPicker(new ColorPickerWidget(q_ptr)),
         hueSlider(new HueSlider(q_ptr)),
         opacitySlider(new OpacitySlider(q_ptr))/*,*/
@@ -70,11 +77,25 @@ public:
         blockSignals(false);
     }
 
+    void addLangContext(ILangContext *lc)
+    {
+        if (!langContexts.contains(lc))
+            langContexts << lc;
+
+        langTabs->addTab(lc, lc->displayName());
+
+        QObject::connect(lc, &ILangContext::formatChoosed,
+                         q_ptr, &ColorDialog::onColorFormatChoosed);
+    }
+
     /* variables */
     ColorDialog *q_ptr;
 
+    ColorFormat outputColorFormat;
+    QList<ILangContext *> langContexts;
     QColor outputColor;
 
+    QTabWidget *langTabs;
     ColorPickerWidget *colorPicker;
     HueSlider *hueSlider;
     OpacitySlider *opacitySlider;
@@ -92,10 +113,14 @@ ColorDialog::ColorDialog(QWidget *parent) :
 {
     //    d->colorFrame->setFixedSize(50, 50);
 
+    // Build UI
+    d->addLangContext(new QssLangContext);
+
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(d->colorPicker);
     layout->addWidget(d->opacitySlider);
     layout->addWidget(d->hueSlider);
+    layout->addWidget(d->langTabs);
     //    layout->addWidget(d->colorFrame);
 
     connect(d->colorPicker, &ColorPickerWidget::colorChanged,
@@ -130,6 +155,11 @@ ColorDialog::ColorDialog(QWidget *parent) :
 
 ColorDialog::~ColorDialog()
 {}
+
+ColorFormat ColorDialog::outputColorFormat() const
+{
+    return d->outputColorFormat;
+}
 
 QColor ColorDialog::color() const
 {
@@ -175,6 +205,21 @@ void ColorDialog::setOpacity(int opacity)
 
         emit opacityChanged(opacity);
     }
+}
+
+void ColorDialog::onColorFormatChoosed(ColorFormat colorFormat)
+{
+    d->outputColorFormat = colorFormat;
+
+    ILangContext *senderContext = qobject_cast<ILangContext *>(sender());
+    Q_ASSERT(senderContext);
+
+    for (ILangContext *lc : d->langContexts) {
+        if (lc != senderContext)
+            lc->uncheck();
+    }
+
+    qDebug() << colorFormat;
 }
 
 } // namespace Internal

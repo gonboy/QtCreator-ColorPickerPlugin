@@ -8,7 +8,7 @@
 namespace ColorPicker {
 namespace Internal {
 
-enum ColorType
+enum ColorFormat
 {
     // Qss-Css common
     QCssRgbType,                // rgb(255, 255, 255)
@@ -33,7 +33,7 @@ enum ColorType
 
 struct ColorExpr
 {
-    ColorType type;
+    ColorFormat type;
     QColor value;
     QPoint pos;
 };
@@ -41,7 +41,7 @@ struct ColorExpr
 } // namespace Internal
 } // namespace ColorPicker
 
-Q_DECLARE_METATYPE(ColorPicker::Internal::ColorType)
+Q_DECLARE_METATYPE(ColorPicker::Internal::ColorFormat)
 
 #endif // COLORPICKER_GLOBAL
 
