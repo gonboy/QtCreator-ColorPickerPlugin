@@ -22,6 +22,8 @@ QtcPlugin {
         "colorpickerplugin.h",
         "colorwatcher.cpp",
         "colorwatcher.h",
+        "langcontexts/csslangcontext.cpp",
+        "langcontexts/csslangcontext.h",
         "langcontexts/ilangcontext.cpp",
         "langcontexts/ilangcontext.h",
         "widgets/advancedslider.cpp",

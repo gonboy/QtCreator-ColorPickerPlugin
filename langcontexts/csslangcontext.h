@@ -1,5 +1,5 @@
-#ifndef QSSLANGCONTEXT_H
-#define QSSLANGCONTEXT_H
+#ifndef CSSLANGCONTEXT_H
+#define CSSLANGCONTEXT_H
 
 #include "ilangcontext.h"
 
@@ -10,12 +10,12 @@ class QPushButton;
 namespace ColorPicker {
 namespace Internal {
 
-class QssLangContext : public ILangContext
+class CssLangContext : public ILangContext
 {
     Q_OBJECT
 
 public:
-    explicit QssLangContext(QWidget *parent = 0);
+    explicit CssLangContext(QWidget *parent = 0);
 
     QString displayName() const override;
     void uncheck() override;
@@ -28,12 +28,12 @@ private:
     QPushButton *m_rgbBtn;
     QPushButton *m_rgbAlphaBtn;
     QPushButton *m_rgbPercentBtn;
-    QPushButton *m_hsvBtn;
-    QPushButton *m_hsvAlphaBtn;
+    QPushButton *m_hslBtn;
+    QPushButton *m_hslAlphaBtn;
     QPushButton *m_hexBtn;
 };
 
 } // namespace Internal
 } // namespace ColorPicker
 
-#endif // QSSLANGCONTEXT_H
+#endif // CSSLANGCONTEXT_H

@@ -9,7 +9,7 @@
 #include "hueslider.h"
 #include "opacityslider.h"
 
-#include "../langcontexts/ilangcontext.h"
+#include "../langcontexts/csslangcontext.h"
 #include "../langcontexts/qsslangcontext.h"
 
 namespace ColorPicker {
@@ -104,6 +104,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
 
     // Build UI
     d->addLangContext(new QssLangContext);
+    d->addLangContext(new CssLangContext);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->addWidget(d->colorPicker);
