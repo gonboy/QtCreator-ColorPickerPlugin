@@ -1,16 +1,14 @@
 #include "colordialog.h"
 
+#include <QButtonGroup>
+#include <QPushButton>
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
-#include <QTabWidget>
 
 #include "colorpicker.h"
 #include "hueslider.h"
 #include "opacityslider.h"
-
-#include "../langcontexts/csslangcontext.h"
-#include "../langcontexts/qsslangcontext.h"
 
 namespace ColorPicker {
 namespace Internal {
@@ -34,17 +32,23 @@ public:
     ColorDialogImpl(ColorDialog *qq) :
         q_ptr(qq),
         outputColorFormat(),
-        langContexts(),
         outputColor(QColor::Hsv),
-        langTabs(new QTabWidget(q_ptr)),
         colorPicker(new ColorPickerWidget(q_ptr)),
         hueSlider(new HueSlider(q_ptr)),
-        opacitySlider(new OpacitySlider(q_ptr))/*,*/
-      //        d->colorFrame(new QFrame(q_ptr))
+        opacitySlider(new OpacitySlider(q_ptr)),/*,*/
+        //        d->colorFrame(new QFrame(q_ptr))
+        rgbBtn(new QPushButton(q_ptr)),
+        rgbAlphaBtn(new QPushButton(q_ptr)),
+        rgbPercentBtn(new QPushButton(q_ptr)),
+        hslBtn(new QPushButton(q_ptr)),
+        hslAlphaBtn(new QPushButton(q_ptr)),
+        hsvBtn(new QPushButton(q_ptr)),
+        hsvAlphaBtn(new QPushButton(q_ptr)),
+        hexBtn(new QPushButton(q_ptr))
     {}
 
     /* functions */
-    void updateWidgets(const QColor &color, UpdateReasons whichUpdate)
+    void updateColorWidgets(const QColor &color, UpdateReasons whichUpdate)
     {
         if (whichUpdate & ColorDialogImpl::UpdateFromColorPicker)
             opacitySlider->setHsv(color.hsvHue(), color.hsvSaturation(), color.value());
@@ -66,29 +70,25 @@ public:
         outputColor = color;
     }
 
-    void addLangContext(ILangContext *lc)
-    {
-        if (!langContexts.contains(lc))
-            langContexts << lc;
-
-        langTabs->addTab(lc, lc->displayName());
-
-        QObject::connect(lc, &ILangContext::formatChoosed,
-                         q_ptr, &ColorDialog::onColorFormatChoosed);
-    }
-
     /* variables */
     ColorDialog *q_ptr;
 
     ColorFormat outputColorFormat;
-    QList<ILangContext *> langContexts;
     QColor outputColor;
 
-    QTabWidget *langTabs;
     ColorPickerWidget *colorPicker;
     HueSlider *hueSlider;
     OpacitySlider *opacitySlider;
     //    QFrame *d->colorFrame;
+
+    QPushButton *rgbBtn;
+    QPushButton *rgbAlphaBtn;
+    QPushButton *rgbPercentBtn;
+    QPushButton *hslBtn;
+    QPushButton *hslAlphaBtn;
+    QPushButton *hsvBtn;
+    QPushButton *hsvAlphaBtn;
+    QPushButton *hexBtn;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ColorDialogImpl::UpdateReasons)
@@ -103,19 +103,82 @@ ColorDialog::ColorDialog(QWidget *parent) :
     //    d->colorFrame->setFixedSize(50, 50);
 
     // Build UI
-    d->addLangContext(new QssLangContext);
-    d->addLangContext(new CssLangContext);
+    d->rgbBtn->setText(QLatin1String("RGB"));
+    d->rgbAlphaBtn->setText(QLatin1String("A"));
+    d->rgbPercentBtn->setText(QLatin1String("%"));
 
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->addWidget(d->colorPicker);
-    layout->addWidget(d->opacitySlider);
-    layout->addWidget(d->hueSlider);
-    layout->addWidget(d->langTabs);
+    d->hslBtn->setText(QLatin1String("HSL"));
+    d->hslAlphaBtn->setText(QLatin1String("A"));
+
+    d->hsvBtn->setText(QLatin1String("HSV"));
+    d->hsvAlphaBtn->setText(QLatin1String("A"));
+
+    d->hexBtn->setText(QLatin1String("Hex"));
+
+    d->rgbBtn->setCheckable(true);
+    d->rgbAlphaBtn->setCheckable(true);
+    d->rgbPercentBtn->setCheckable(true);
+    d->hslBtn->setCheckable(true);
+    d->hslAlphaBtn->setCheckable(true);
+    d->hsvBtn->setCheckable(true);
+    d->hsvAlphaBtn->setCheckable(true);
+    d->hexBtn->setCheckable(true);
+
+    QGridLayout *formatsLayout = new QGridLayout;
+    formatsLayout->addWidget(d->rgbBtn, 0, 0);
+    formatsLayout->addWidget(d->rgbAlphaBtn, 0, 1);
+    formatsLayout->addWidget(d->rgbPercentBtn, 0, 2);
+
+    formatsLayout->addWidget(d->hslBtn, 1, 0);
+    formatsLayout->addWidget(d->hslAlphaBtn, 1, 1);
+
+    formatsLayout->addWidget(d->hsvBtn, 2, 0);
+    formatsLayout->addWidget(d->hsvAlphaBtn, 2, 1);
+
+    formatsLayout->addWidget(d->hexBtn, 3, 0);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    mainLayout->addWidget(d->colorPicker);
+    mainLayout->addWidget(d->opacitySlider);
+    mainLayout->addWidget(d->hueSlider);
+    mainLayout->addLayout(formatsLayout);
+
     //    layout->addWidget(d->colorFrame);
 
+    // Color format selection logic
+    QButtonGroup *btnGroup = new QButtonGroup(this);
+    btnGroup->addButton(d->rgbBtn);
+    btnGroup->addButton(d->hslBtn);
+    btnGroup->addButton(d->hsvBtn);
+    btnGroup->addButton(d->hexBtn);
+
+    connect(btnGroup, static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
+            this, &ColorDialog::onFormatButtonChecked);
+
+    connect(d->rgbAlphaBtn, &QPushButton::toggled,
+            [=](bool) {
+        d->rgbBtn->click();
+    });
+
+    connect(d->rgbPercentBtn, &QPushButton::toggled,
+            [=](bool) {
+        d->rgbBtn->click();
+    });
+
+    connect(d->hslAlphaBtn, &QPushButton::toggled,
+            [=](bool) {
+        d->hslBtn->click();
+    });
+
+    connect(d->hsvAlphaBtn, &QPushButton::toggled,
+            [=](bool) {
+        d->hsvBtn->click();
+    });
+
+    // Color changes logic
     connect(d->colorPicker, &ColorPickerWidget::colorChanged,
             [=](const QColor &color) {
-        d->updateWidgets(color, ColorDialogImpl::UpdateFromColorPicker);
+        d->updateColorWidgets(color, ColorDialogImpl::UpdateFromColorPicker);
     });
 
     connect(d->hueSlider, &HueSlider::valueChanged,
@@ -125,7 +188,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
                                           d->outputColor.value(),
                                           d->opacitySlider->value());
 
-        d->updateWidgets(newColor,
+        d->updateColorWidgets(newColor,
                          ColorDialogImpl::UpdateFromHueSlider);
     });
 
@@ -136,7 +199,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
                                           d->outputColor.value(),
                                           opacity);
 
-        d->updateWidgets(newColor,
+        d->updateColorWidgets(newColor,
                          ColorDialogImpl::UpdateFromOpacitySlider);
     });
 
@@ -159,7 +222,7 @@ QColor ColorDialog::color() const
 void ColorDialog::setColor(const QColor &color)
 {
     if (d->outputColor != color) {
-        d->updateWidgets(color, ColorDialogImpl::UpdateAll);
+        d->updateColorWidgets(color, ColorDialogImpl::UpdateAll);
 
         emit colorChanged(color);
     }
@@ -197,17 +260,47 @@ void ColorDialog::setOpacity(int opacity)
     }
 }
 
-void ColorDialog::onColorFormatChoosed(ColorFormat colorFormat)
+void ColorDialog::onFormatButtonChecked(QAbstractButton *checkedBtn)
 {
-    d->outputColorFormat = colorFormat;
+    ColorFormat format;
 
-    ILangContext *senderContext = qobject_cast<ILangContext *>(sender());
-    Q_ASSERT(senderContext);
+    if (checkedBtn == d->rgbBtn) {
+        bool useAlpha = d->rgbAlphaBtn->isChecked();
+        bool usePercents = d->rgbPercentBtn->isChecked();
 
-    for (ILangContext *lc : d->langContexts) {
-        if (lc != senderContext)
-            lc->uncheck();
+        if (useAlpha) {
+            if (usePercents)
+                format = ColorFormat::QCssRgbaAlphaPercentType;
+            else
+                format = ColorFormat::QCssRgbaAlphaFloatType;
+        }
+        else {
+            if (usePercents)
+                format = ColorFormat::QCssRgbPercentType;
+            else
+                format = ColorFormat::QCssRgbType;
+        }
     }
+    else if (checkedBtn == d->hslBtn) {
+        bool useAlpha = d->hslAlphaBtn->isChecked();
+
+        if (useAlpha)
+            format = ColorFormat::CssHslaType;
+        else
+            format = ColorFormat::CssHslType;
+    }
+    else if (checkedBtn == d->hsvBtn) {
+        bool useAlpha = d->hsvAlphaBtn->isChecked();
+
+        if (useAlpha)
+            format = ColorFormat::QssHsvaType;
+        else
+            format = ColorFormat::QssHsvType;
+    }
+    else if (checkedBtn == d->hexBtn)
+        format = ColorFormat::HexType;
+
+    d->outputColorFormat = format;
 }
 
 } // namespace Internal

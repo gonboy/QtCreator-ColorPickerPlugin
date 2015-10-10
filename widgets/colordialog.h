@@ -2,16 +2,17 @@
 #define COLORDIALOG_H
 
 #include <QWidget>
-
 #include "../colorpicker_global.h"
+
+class QAbstractButton;
 
 namespace ColorPicker {
 namespace Internal {
 
+class ColorDialogImpl;
 class ColorPickerWidget;
 class HueSlider;
 class OpacitySlider;
-class ColorDialogImpl;
 
 class ColorDialog : public QWidget
 {
@@ -42,10 +43,9 @@ signals:
     void opacityChanged(int);
 
 private slots:
-    void onColorFormatChoosed(ColorFormat colorFormat);
+    void onFormatButtonChecked(QAbstractButton *checkedBtn);
 
 private:
-    friend class ColorDialogImpl;
     QScopedPointer<ColorDialogImpl> d;
 };
 

@@ -118,7 +118,9 @@ void ColorPickerWidget::setColor(const QColor &color)
 {
     if (d->color != color) {
         d->color = color;
+
         d->createGradientImage();
+        d->updateCursorPos();
 
         update();
 
