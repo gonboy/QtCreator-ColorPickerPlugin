@@ -115,14 +115,14 @@ ColorDialog::ColorDialog(QWidget *parent) :
     //    d->colorFrame->setFixedSize(50, 50);
 
     // Build UI
-    d->rgbBtn->setText(QLatin1String("RGB"));
+    d->rgbBtn->setText(QLatin1String("rgb"));
     d->rgbAlphaBtn->setText(QLatin1String("A"));
     d->rgbPercentBtn->setText(QLatin1String("%"));
 
-    d->hslBtn->setText(QLatin1String("HSL"));
+    d->hslBtn->setText(QLatin1String("hsl"));
     d->hslAlphaBtn->setText(QLatin1String("A"));
 
-    d->hsvBtn->setText(QLatin1String("HSV"));
+    d->hsvBtn->setText(QLatin1String("hsv"));
     d->hsvAlphaBtn->setText(QLatin1String("A"));
 
     d->qmlRgbaBtn->setText(QLatin1String("Qt.rgba"));
@@ -131,7 +131,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
     d->vec3Btn->setText(QLatin1String("vec3"));
     d->vec4Btn->setText(QLatin1String("vec4"));
 
-    d->hexBtn->setText(QLatin1String("Hex"));
+    d->hexBtn->setText(QLatin1String("hex"));
 
     d->rgbBtn->setCheckable(true);
     d->rgbAlphaBtn->setCheckable(true);
