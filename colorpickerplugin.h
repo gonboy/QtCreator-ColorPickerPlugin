@@ -32,6 +32,8 @@ private slots:
     void test_addAndReplaceColor();
 
 private:
+    QPoint clampColorDialogPosition(const QPoint &cursorPos, const QRect &rect) const;
+
     ColorWatcher *m_colorWatcher;
     ColorModifier *m_colorModifier;
     ColorDialog *m_colorDialog;

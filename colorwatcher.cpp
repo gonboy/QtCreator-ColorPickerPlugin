@@ -177,13 +177,8 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
     ColorExpr ret;
 
     QTextCursor currentCursor = textEditor->textCursor();
-
-    // Compute the cursor pos in textEditor coordinates
     QRect cursorRect = textEditor->cursorRect();
-    QPoint cursorPos(cursorRect.center().x(),
-                     cursorRect.bottom());
-
-    ret.pos = textEditor->mapToParent(cursorPos);
+    QPoint cursorPos;
 
     // Search for a color pattern
     QString lineText = currentCursor.block().text();
@@ -209,8 +204,10 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                 // Select the expression
                 currentCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor,
                                            cursorPosInLine - capturedStart);
+                cursorRect.setLeft(textEditor->cursorRect(currentCursor).left());
                 currentCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor,
                                            capturedEnd - capturedStart);
+                cursorRect.setRight(textEditor->cursorRect(currentCursor).right());
 
                 textEditor->setTextCursor(currentCursor);
 
@@ -225,6 +222,9 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
             }
         }
     }
+
+    ret.pos = QPoint(cursorRect.center().x(),
+                     cursorRect.bottom());
 
     return ret;
 }

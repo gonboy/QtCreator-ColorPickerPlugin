@@ -69,6 +69,25 @@ void ColorPickerPlugin::extensionsInitialized()
 {
 }
 
+QPoint ColorPickerPlugin::clampColorDialogPosition(const QPoint &cursorPos, const QRect &rect) const
+{
+    QPoint ret;
+    ret.ry() = cursorPos.y();
+
+    int colorDialogHalfWidth = (m_colorDialog->width() / 2);
+    int posX = cursorPos.x() - colorDialogHalfWidth;
+    int widgetRight = rect.right();
+
+    if (posX < 0)
+        posX = 0;
+    else if ( (cursorPos.x() + colorDialogHalfWidth) > (widgetRight) )
+        posX = widgetRight - m_colorDialog->width();
+
+    ret.rx() = posX;
+
+    return ret;
+}
+
 void ColorPickerPlugin::onColorEditTriggered()
 {
     IEditor *currentEditor = EditorManager::instance()->currentEditor();
@@ -85,8 +104,8 @@ void ColorPickerPlugin::onColorEditTriggered()
         else
             m_colorDialog->setColor(Qt::red);
 
-        m_colorDialog->setParent(editorWidget);
-        m_colorDialog->move(toEdit.pos);
+        m_colorDialog->setParent(editorWidget->viewport());
+        m_colorDialog->move(clampColorDialogPosition(toEdit.pos, editorWidget->viewport()->rect()));
         m_colorDialog->show();
     }
 }
