@@ -1,10 +1,10 @@
 #include "colordialog.h"
 
 #include <QButtonGroup>
-#include <QPushButton>
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QPushButton>
 
 #include "colorpicker.h"
 #include "hueslider.h"
@@ -142,10 +142,21 @@ ColorDialog::ColorDialog(QWidget *parent) :
     d->vec4Btn->setCheckable(true);
     d->hexBtn->setCheckable(true);
 
+    const int alphaAndPercentButtonWidth = 40;
+
+    d->rgbAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
+    d->rgbPercentBtn->setFixedWidth(alphaAndPercentButtonWidth);
+    d->hslAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
+    d->hsvAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
+
+    QHBoxLayout *rgbOptsLayout = new QHBoxLayout;
+    rgbOptsLayout->setSpacing(0);
+    rgbOptsLayout->addWidget(d->rgbAlphaBtn);
+    rgbOptsLayout->addWidget(d->rgbPercentBtn);
+
     QGridLayout *formatsLayout = new QGridLayout;
     formatsLayout->addWidget(d->rgbBtn, 0, 0);
-    formatsLayout->addWidget(d->rgbAlphaBtn, 0, 1);
-    formatsLayout->addWidget(d->rgbPercentBtn, 0, 2);
+    formatsLayout->addLayout(rgbOptsLayout, 0, 1);
 
     formatsLayout->addWidget(d->hslBtn, 1, 0);
     formatsLayout->addWidget(d->hslAlphaBtn, 1, 1);
