@@ -58,6 +58,8 @@ public:
             opacitySlider->setHsv(color.hsvHue(), color.hsvSaturation(), color.value());
 
         if (whichUpdate & ColorDialogImpl::UpdateFromHueSlider) {
+            const QSignalBlocker blocker(colorPicker);
+
             colorPicker->setColor(color);
             opacitySlider->setHsv(color.hsvHue(), color.hsvSaturation(), color.value());
         }
@@ -72,6 +74,8 @@ public:
         }
 
         outputColor = color;
+
+        emit q_ptr->colorChanged(color);
     }
 
     /* variables */
@@ -228,7 +232,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
                                           d->opacitySlider->value());
 
         d->updateColorWidgets(newColor,
-                         ColorDialogImpl::UpdateFromHueSlider);
+                              ColorDialogImpl::UpdateFromHueSlider);
     });
 
     connect(d->opacitySlider, &OpacitySlider::valueChanged,
@@ -239,7 +243,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
                                           opacity);
 
         d->updateColorWidgets(newColor,
-                         ColorDialogImpl::UpdateFromOpacitySlider);
+                              ColorDialogImpl::UpdateFromOpacitySlider);
     });
 
     setColor(Qt::red);
