@@ -46,6 +46,8 @@ public:
         hsvAlphaBtn(new QPushButton(q_ptr)),
         qmlRgbaBtn(new QPushButton(q_ptr)),
         qmlHslaBtn(new QPushButton(q_ptr)),
+        vec3Btn(new QPushButton(q_ptr)),
+        vec4Btn(new QPushButton(q_ptr)),
         hexBtn(new QPushButton(q_ptr))
     {}
 
@@ -92,6 +94,8 @@ public:
     QPushButton *hsvAlphaBtn;
     QPushButton *qmlRgbaBtn;
     QPushButton *qmlHslaBtn;
+    QPushButton *vec3Btn;
+    QPushButton *vec4Btn;
     QPushButton *hexBtn;
 };
 
@@ -120,6 +124,9 @@ ColorDialog::ColorDialog(QWidget *parent) :
     d->qmlRgbaBtn->setText(QLatin1String("Qt.rgba"));
     d->qmlHslaBtn->setText(QLatin1String("Qt.hsla"));
 
+    d->vec3Btn->setText(QLatin1String("vec3"));
+    d->vec4Btn->setText(QLatin1String("vec4"));
+
     d->hexBtn->setText(QLatin1String("Hex"));
 
     d->rgbBtn->setCheckable(true);
@@ -131,6 +138,8 @@ ColorDialog::ColorDialog(QWidget *parent) :
     d->hsvAlphaBtn->setCheckable(true);
     d->qmlRgbaBtn->setCheckable(true);
     d->qmlHslaBtn->setCheckable(true);
+    d->vec3Btn->setCheckable(true);
+    d->vec4Btn->setCheckable(true);
     d->hexBtn->setCheckable(true);
 
     QGridLayout *formatsLayout = new QGridLayout;
@@ -147,7 +156,10 @@ ColorDialog::ColorDialog(QWidget *parent) :
     formatsLayout->addWidget(d->qmlRgbaBtn, 3, 0);
     formatsLayout->addWidget(d->qmlHslaBtn, 3, 1);
 
-    formatsLayout->addWidget(d->hexBtn, 4, 0);
+    formatsLayout->addWidget(d->vec3Btn, 4, 0);
+    formatsLayout->addWidget(d->vec4Btn, 4, 1);
+
+    formatsLayout->addWidget(d->hexBtn, 5, 0);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(d->colorPicker);
@@ -164,6 +176,8 @@ ColorDialog::ColorDialog(QWidget *parent) :
     btnGroup->addButton(d->hsvBtn);
     btnGroup->addButton(d->qmlRgbaBtn);
     btnGroup->addButton(d->qmlHslaBtn);
+    btnGroup->addButton(d->vec3Btn);
+    btnGroup->addButton(d->vec4Btn);
     btnGroup->addButton(d->hexBtn);
 
     connect(btnGroup, static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
@@ -315,6 +329,10 @@ void ColorDialog::onFormatButtonChecked(QAbstractButton *checkedBtn)
         format = ColorFormat::QmlRgbaType;
     else if (checkedBtn == d->qmlHslaBtn)
         format = ColorFormat::QmlHslaType;
+    else if (checkedBtn == d->vec3Btn)
+        format = ColorFormat::Vec3Type;
+    else if (checkedBtn == d->vec4Btn)
+        format = ColorFormat::Vec4Type;
     else if (checkedBtn == d->hexBtn)
         format = ColorFormat::HexType;
 
