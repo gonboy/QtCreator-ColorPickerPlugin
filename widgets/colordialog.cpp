@@ -146,6 +146,9 @@ ColorDialog::ColorDialog(QWidget *parent) :
     d->vec4Btn->setCheckable(true);
     d->hexBtn->setCheckable(true);
 
+    // Default checked button
+    d->rgbBtn->setChecked(true);
+
     const int alphaAndPercentButtonWidth = 40;
 
     d->rgbAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
