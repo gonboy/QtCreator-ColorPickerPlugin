@@ -38,7 +38,7 @@ public slots:
     void setOpacity(int opacity);
 
 signals:
-    void colorChanged(const QColor &);
+    void colorChanged(const QColor &, ColorFormat);
     void hueChanged(int);
     void opacityChanged(int);
 

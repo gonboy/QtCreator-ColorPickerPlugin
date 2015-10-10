@@ -75,7 +75,7 @@ public:
 
         outputColor = color;
 
-        emit q_ptr->colorChanged(color);
+        emit q_ptr->colorChanged(color, outputColorFormat);
     }
 
     /* variables */
@@ -270,7 +270,7 @@ void ColorDialog::setColor(const QColor &color)
     if (d->outputColor != color) {
         d->updateColorWidgets(color, ColorDialogImpl::UpdateAll);
 
-        emit colorChanged(color);
+        emit colorChanged(color, d->outputColorFormat);
     }
 }
 
@@ -355,6 +355,8 @@ void ColorDialog::onFormatButtonChecked(QAbstractButton *checkedBtn)
         format = ColorFormat::HexType;
 
     d->outputColorFormat = format;
+
+    emit colorChanged(d->outputColor, d->outputColorFormat);
 }
 
 } // namespace Internal

@@ -61,8 +61,8 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
 
     // Create connections between internal objects
     connect(m_colorDialog, &ColorDialog::colorChanged,
-            [=](const QColor &color) {
-        m_colorModifier->insertColor(color, m_colorDialog->outputColorFormat());
+            [=](const QColor &color, ColorFormat format) {
+        m_colorModifier->insertColor(color, format);
     });
 
     // Register objects
