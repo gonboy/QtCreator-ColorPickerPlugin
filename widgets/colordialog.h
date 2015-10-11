@@ -1,7 +1,8 @@
 #ifndef COLORDIALOG_H
 #define COLORDIALOG_H
 
-#include <QWidget>
+#include <QFrame>
+
 #include "../colorpicker_global.h"
 
 class QAbstractButton;
@@ -14,7 +15,7 @@ class ColorPickerWidget;
 class HueSlider;
 class OpacitySlider;
 
-class ColorDialog : public QWidget
+class ColorDialog : public QFrame
 {
     Q_OBJECT
 

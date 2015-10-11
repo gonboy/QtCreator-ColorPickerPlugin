@@ -109,9 +109,12 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ColorDialogImpl::UpdateReasons)
 ////////////////////////// ColorDialog //////////////////////////
 
 ColorDialog::ColorDialog(QWidget *parent) :
-    QWidget(parent),
+    QFrame(parent),
     d(new ColorDialogImpl(this))
 {
+    setAutoFillBackground(true);
+    setFrameShape(QFrame::StyledPanel);
+
     //    d->colorFrame->setFixedSize(50, 50);
 
     // Build UI

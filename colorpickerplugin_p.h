@@ -19,11 +19,34 @@ public:
         q_ptr(qq),
         colorWatcher(new ColorWatcher(qq)),
         colorModifier(new ColorModifier(qq)),
-        colorDialog(new ColorDialog), // no parent for the moment
+        colorDialog(new ColorDialog), // no parent
         generalSettings()
     {}
 
+    ~ColorPickerPluginImpl()
+    {}
+
     /* functions */
+    QPoint clampColorDialogPosition(const QPoint &cursorPos, const QRect &rect) const
+    {
+        QPoint ret;
+        ret.ry() = cursorPos.y();
+
+        int colorDialogWidth = colorDialog->width();
+        int colorDialogHalfWidth = (colorDialogWidth / 2);
+
+        int posX = cursorPos.x() - colorDialogHalfWidth;
+        int widgetRight = rect.right();
+
+        if (posX < 0)
+            posX = 0;
+        else if ( (cursorPos.x() + colorDialogHalfWidth) > (widgetRight) )
+            posX = widgetRight - colorDialogWidth;
+
+        ret.rx() = posX;
+
+        return ret;
+    }
 
     /* variables */
     ColorPickerPlugin *q_ptr;

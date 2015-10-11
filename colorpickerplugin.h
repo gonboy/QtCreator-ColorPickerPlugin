@@ -33,8 +33,6 @@ private slots:
     void test_addAndReplaceColor();
 
 private:
-    QPoint clampColorDialogPosition(const QPoint &cursorPos, const QRect &rect) const;
-
     QScopedPointer<ColorPickerPluginImpl> d;
 };
 
