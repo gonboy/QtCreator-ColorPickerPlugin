@@ -10,9 +10,8 @@ class IEditor;
 namespace ColorPicker {
 namespace Internal {
 
-class ColorDialog;
-class ColorModifier;
-class ColorWatcher;
+class ColorPickerPluginImpl;
+class GeneralSettings;
 
 class ColorPickerPlugin : public ExtensionSystem::IPlugin
 {
@@ -21,12 +20,14 @@ class ColorPickerPlugin : public ExtensionSystem::IPlugin
 
 public:
     ColorPickerPlugin();
+    ~ColorPickerPlugin();
 
     virtual bool initialize(const QStringList &arguments, QString *errorMessage);
     virtual void extensionsInitialized();
 
 private slots:
     void onColorEditTriggered();
+    void onGeneralSettingsChanged(const GeneralSettings &gs);
 
     // The following tests expect that no projects are loaded on start-up.
     void test_addAndReplaceColor();
@@ -34,9 +35,7 @@ private slots:
 private:
     QPoint clampColorDialogPosition(const QPoint &cursorPos, const QRect &rect) const;
 
-    ColorWatcher *m_colorWatcher;
-    ColorModifier *m_colorModifier;
-    ColorDialog *m_colorDialog;
+    QScopedPointer<ColorPickerPluginImpl> d;
 };
 
 } // namespace Internal

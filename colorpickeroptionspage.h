@@ -8,7 +8,9 @@
 namespace ColorPicker {
 namespace Internal {
 
+class ColorPickerOptionsPageImpl;
 class ColorPickerSettingsWidget;
+class GeneralSettings;
 
 class ColorPickerOptionsPage : public Core::IOptionsPage
 {
@@ -16,13 +18,19 @@ class ColorPickerOptionsPage : public Core::IOptionsPage
 
 public:
     explicit ColorPickerOptionsPage(QObject *parent = 0);
+    ~ColorPickerOptionsPage();
+
+    const GeneralSettings &generalSettings() const;
 
     QWidget *widget() override;
     void apply() override;
     void finish() override;
 
+signals:
+    void generalSettingsChanged(const GeneralSettings &);
+
 private:
-    QPointer<ColorPickerSettingsWidget> m_widget;
+    QScopedPointer<ColorPickerOptionsPageImpl> d;
 };
 
 } // namespace Internal

@@ -17,6 +17,7 @@ namespace Constants {
 ////////////////////////// Actions //////////////////////////
 
 const char COLORPICKER_SETTINGS_ID[] = "ColorPicker.Settings";
+const char COLORPICKER_SETTINGS_PREFIX[] = "colorpickerplugin";
 const char COLORPICKER_SETTINGS_DISPLAY_NAME[] = "General";
 const char COLORPICKER_SETTINGS_CATEGORY[] = "YW.ColorPicker";
 const char COLORPICKER_SETTINGS_TR_CATEGORY[] = QT_TRANSLATE_NOOP("ColorPicker", "ColorPicker");

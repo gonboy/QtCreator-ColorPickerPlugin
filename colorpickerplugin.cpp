@@ -1,4 +1,5 @@
 #include "colorpickerplugin.h"
+#include "colorpickerplugin_p.h"
 
 // Qt includes
 #include <QMenu>
@@ -14,10 +15,8 @@
 #include <texteditor/texteditor.h>
 
 // Plugin includes
-#include "colormodifier.h"
 #include "colorpickeroptionspage.h"
 #include "colorpickerconstants.h"
-#include "colorwatcher.h"
 
 #include "widgets/colordialog.h"
 
@@ -31,14 +30,21 @@ namespace Internal {
 ////////////////////////// ColorPickerPlugin //////////////////////////
 
 ColorPickerPlugin::ColorPickerPlugin() :
-    m_colorWatcher(new ColorWatcher(this)),
-    m_colorModifier(new ColorModifier(this)),
-    m_colorDialog(new ColorDialog) // no parent for the moment
+    d(new ColorPickerPluginImpl(this))
 {
 }
 
+ColorPickerPlugin::~ColorPickerPlugin()
+{}
+
 bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString * /* errorMessage */)
 {
+    ColorPickerOptionsPage *optionsPage = new ColorPickerOptionsPage;
+    d->generalSettings = optionsPage->generalSettings();
+
+    connect(optionsPage, &ColorPickerOptionsPage::generalSettingsChanged,
+            this, &ColorPickerPlugin::onGeneralSettingsChanged);
+
     // Register the plugin actions
     ActionContainer *toolsContainer = ActionManager::actionContainer(Core::Constants::M_TOOLS);
 
@@ -60,13 +66,13 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
     toolsContainer->addMenu(myContainer);
 
     // Create connections between internal objects
-    connect(m_colorDialog, &ColorDialog::colorChanged,
+    connect(d->colorDialog, &ColorDialog::colorChanged,
             [=](const QColor &color, ColorFormat format) {
-        m_colorModifier->insertColor(color, format);
+        d->colorModifier->insertColor(color, format);
     });
 
     // Register objects
-    addAutoReleasedObject(new ColorPickerOptionsPage);
+    addAutoReleasedObject(optionsPage);
 
     return true;
 }
@@ -80,14 +86,14 @@ QPoint ColorPickerPlugin::clampColorDialogPosition(const QPoint &cursorPos, cons
     QPoint ret;
     ret.ry() = cursorPos.y();
 
-    int colorDialogHalfWidth = (m_colorDialog->width() / 2);
+    int colorDialogHalfWidth = (d->colorDialog->width() / 2);
     int posX = cursorPos.x() - colorDialogHalfWidth;
     int widgetRight = rect.right();
 
     if (posX < 0)
         posX = 0;
     else if ( (cursorPos.x() + colorDialogHalfWidth) > (widgetRight) )
-        posX = widgetRight - m_colorDialog->width();
+        posX = widgetRight - d->colorDialog->width();
 
     ret.rx() = posX;
 
@@ -103,17 +109,22 @@ void ColorPickerPlugin::onColorEditTriggered()
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
 
     if (editorWidget) {
-        ColorExpr toEdit = m_colorWatcher->processCurrentTextCursor(editorWidget);
+        ColorExpr toEdit = d->colorWatcher->processCurrentTextCursor(editorWidget);
 
         if (toEdit.value.isValid())
-            m_colorDialog->setColor(toEdit.value);
+            d->colorDialog->setColor(toEdit.value);
         else
-            m_colorDialog->setColor(Qt::red);
+            d->colorDialog->setColor(Qt::red);
 
-        m_colorDialog->setParent(editorWidget->viewport());
-        m_colorDialog->move(clampColorDialogPosition(toEdit.pos, editorWidget->viewport()->rect()));
-        m_colorDialog->show();
+        d->colorDialog->setParent(editorWidget->viewport());
+        d->colorDialog->move(clampColorDialogPosition(toEdit.pos, editorWidget->viewport()->rect()));
+        d->colorDialog->show();
     }
+}
+
+void ColorPickerPlugin::onGeneralSettingsChanged(const GeneralSettings &gs)
+{
+    d->generalSettings = gs;
 }
 
 } // namespace Internal

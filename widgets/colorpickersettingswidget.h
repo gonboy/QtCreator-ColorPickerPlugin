@@ -6,6 +6,8 @@
 namespace ColorPicker {
 namespace Internal {
 
+class GeneralSettings;
+
 class ColorPickerSettingsWidget : public QWidget
 {
     Q_OBJECT
@@ -14,9 +16,10 @@ public:
     explicit ColorPickerSettingsWidget(QWidget *parent = 0);
     ~ColorPickerSettingsWidget();
 
-signals:
+    void settingsFromUI(GeneralSettings *settings);
+    void settingsToUI(const GeneralSettings settings);
 
-public slots:
+private:
 };
 
 } // namespace Internal

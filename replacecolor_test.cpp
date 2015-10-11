@@ -1,3 +1,6 @@
+#include "colorpickerplugin.h"
+#include "colorpickerplugin_p.h"
+
 // Qt includes
 #include <QAction>
 #include <QtTest>
@@ -11,7 +14,6 @@
 // Plugin includes
 #include "colormodifier.h"
 #include "colorpickerconstants.h"
-#include "colorpickerplugin.h"
 #include "colorwatcher.h"
 
 using namespace Core;
@@ -45,7 +47,7 @@ void ColorPickerPlugin::test_addAndReplaceColor()
     colors.insert(ColorFormat::HexType, QColor(32, 18, 26));
 
     for (auto it = colors.begin(); it != colors.end();  ++it) {
-        m_colorModifier->insertColor(it.value(), it.key());
+        d->colorModifier->insertColor(it.value(), it.key());
         colorEditCommand->action()->trigger();
     }
 
