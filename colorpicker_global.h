@@ -13,8 +13,8 @@ enum ColorFormat
     // Qss-Css common
     QCssRgbType,                // rgb(255, 255, 255)
     QCssRgbPercentType,         // rgb(100%, 100%, 100%)
-    QCssRgbaAlphaPercentType,   // rgba(255, 255, 255, 100%)
     QCssRgbaAlphaFloatType,     // rgba(255, 255, 255, 1.0)
+    QCssRgbaAlphaPercentType,   // rgba(255, 255, 255, 100%)
     // Qss specific
     QssHsvType,                 // hsv(359, 255, 255)
     QssHsvaType,                // hsva(359, 255, 255, 100%)
@@ -33,7 +33,7 @@ enum ColorFormat
 
 struct ColorExpr
 {
-    ColorFormat type;
+    ColorFormat format;
     QColor value;
     QPoint pos;
 };

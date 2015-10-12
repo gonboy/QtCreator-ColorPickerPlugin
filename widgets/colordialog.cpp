@@ -33,22 +33,18 @@ public:
         q_ptr(qq),
         outputColorFormat(),
         outputColor(QColor::Hsv),
-        colorPicker(new ColorPickerWidget(q_ptr)),
-        hueSlider(new HueSlider(q_ptr)),
-        opacitySlider(new OpacitySlider(q_ptr)),/*,*/
+        colorPicker(new ColorPickerWidget(qq)),
+        hueSlider(new HueSlider(qq)),
+        opacitySlider(new OpacitySlider(qq)),/*,*/
         //        d->colorFrame(new QFrame(q_ptr))
-        rgbBtn(new QPushButton(q_ptr)),
-        rgbAlphaBtn(new QPushButton(q_ptr)),
-        rgbPercentBtn(new QPushButton(q_ptr)),
-        hslBtn(new QPushButton(q_ptr)),
-        hslAlphaBtn(new QPushButton(q_ptr)),
-        hsvBtn(new QPushButton(q_ptr)),
-        hsvAlphaBtn(new QPushButton(q_ptr)),
-        qmlRgbaBtn(new QPushButton(q_ptr)),
-        qmlHslaBtn(new QPushButton(q_ptr)),
-        vec3Btn(new QPushButton(q_ptr)),
-        vec4Btn(new QPushButton(q_ptr)),
-        hexBtn(new QPushButton(q_ptr))
+        btnGroup(new QButtonGroup(qq)),
+        rgbBtn(new QPushButton(qq)),
+        hslBtn(new QPushButton(qq)),
+        hsvBtn(new QPushButton(qq)),
+        qmlRgbaBtn(new QPushButton(qq)),
+        qmlHslaBtn(new QPushButton(qq)),
+        vecBtn(new QPushButton(qq)),
+        hexBtn(new QPushButton(qq))
     {}
 
     /* functions */
@@ -78,6 +74,40 @@ public:
         emit q_ptr->colorChanged(color, outputColorFormat);
     }
 
+    QAbstractButton *colorFormatToButton(ColorFormat format) const
+    {
+        QAbstractButton *ret = 0;
+
+        switch (format) {
+        case QCssRgbType:
+            ret = rgbBtn;
+            break;
+        case QssHsvType:
+            ret = hsvBtn;
+            break;
+        case CssHslType:
+            ret = hslBtn;
+            break;
+        case QmlRgbaType:
+            ret = qmlRgbaBtn;
+            break;
+        case QmlHslaType:
+            ret = qmlHslaBtn;
+            break;
+        case Vec3Type:
+            ret = vecBtn;
+            break;
+        case HexType:
+            ret = hexBtn;
+            break;
+        default:
+            break;
+        }
+
+        Q_ASSERT(ret);
+        return ret;
+    }
+
     /* variables */
     ColorDialog *q_ptr;
 
@@ -89,17 +119,13 @@ public:
     OpacitySlider *opacitySlider;
     //    QFrame *d->colorFrame;
 
+    QButtonGroup *btnGroup;
     QPushButton *rgbBtn;
-    QPushButton *rgbAlphaBtn;
-    QPushButton *rgbPercentBtn;
     QPushButton *hslBtn;
-    QPushButton *hslAlphaBtn;
     QPushButton *hsvBtn;
-    QPushButton *hsvAlphaBtn;
     QPushButton *qmlRgbaBtn;
     QPushButton *qmlHslaBtn;
-    QPushButton *vec3Btn;
-    QPushButton *vec4Btn;
+    QPushButton *vecBtn;
     QPushButton *hexBtn;
 };
 
@@ -119,68 +145,32 @@ ColorDialog::ColorDialog(QWidget *parent) :
 
     // Build UI
     d->rgbBtn->setText(QLatin1String("rgb"));
-    d->rgbAlphaBtn->setText(QLatin1String("A"));
-    d->rgbPercentBtn->setText(QLatin1String("%"));
-
     d->hslBtn->setText(QLatin1String("hsl"));
-    d->hslAlphaBtn->setText(QLatin1String("A"));
-
     d->hsvBtn->setText(QLatin1String("hsv"));
-    d->hsvAlphaBtn->setText(QLatin1String("A"));
-
     d->qmlRgbaBtn->setText(QLatin1String("Qt.rgba"));
     d->qmlHslaBtn->setText(QLatin1String("Qt.hsla"));
-
-    d->vec3Btn->setText(QLatin1String("vec3"));
-    d->vec4Btn->setText(QLatin1String("vec4"));
-
+    d->vecBtn->setText(QLatin1String("vec"));
     d->hexBtn->setText(QLatin1String("hex"));
 
     d->rgbBtn->setCheckable(true);
-    d->rgbAlphaBtn->setCheckable(true);
-    d->rgbPercentBtn->setCheckable(true);
     d->hslBtn->setCheckable(true);
-    d->hslAlphaBtn->setCheckable(true);
     d->hsvBtn->setCheckable(true);
-    d->hsvAlphaBtn->setCheckable(true);
     d->qmlRgbaBtn->setCheckable(true);
     d->qmlHslaBtn->setCheckable(true);
-    d->vec3Btn->setCheckable(true);
-    d->vec4Btn->setCheckable(true);
+    d->vecBtn->setCheckable(true);
     d->hexBtn->setCheckable(true);
 
     // Default checked button
     d->rgbBtn->setChecked(true);
 
-    const int alphaAndPercentButtonWidth = 40;
-
-    d->rgbAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
-    d->rgbPercentBtn->setFixedWidth(alphaAndPercentButtonWidth);
-    d->hslAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
-    d->hsvAlphaBtn->setFixedWidth(alphaAndPercentButtonWidth);
-
-    QHBoxLayout *rgbOptsLayout = new QHBoxLayout;
-    rgbOptsLayout->setSpacing(0);
-    rgbOptsLayout->addWidget(d->rgbAlphaBtn);
-    rgbOptsLayout->addWidget(d->rgbPercentBtn);
-
     QGridLayout *formatsLayout = new QGridLayout;
     formatsLayout->addWidget(d->rgbBtn, 0, 0);
-    formatsLayout->addLayout(rgbOptsLayout, 0, 1);
-
     formatsLayout->addWidget(d->hslBtn, 1, 0);
-    formatsLayout->addWidget(d->hslAlphaBtn, 1, 1);
-
     formatsLayout->addWidget(d->hsvBtn, 2, 0);
-    formatsLayout->addWidget(d->hsvAlphaBtn, 2, 1);
-
     formatsLayout->addWidget(d->qmlRgbaBtn, 3, 0);
-    formatsLayout->addWidget(d->qmlHslaBtn, 3, 1);
-
-    formatsLayout->addWidget(d->vec3Btn, 4, 0);
-    formatsLayout->addWidget(d->vec4Btn, 4, 1);
-
-    formatsLayout->addWidget(d->hexBtn, 5, 0);
+    formatsLayout->addWidget(d->qmlHslaBtn, 4, 0);
+    formatsLayout->addWidget(d->vecBtn, 5, 0);
+    formatsLayout->addWidget(d->hexBtn, 6, 0);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addWidget(d->colorPicker);
@@ -191,38 +181,16 @@ ColorDialog::ColorDialog(QWidget *parent) :
     //    layout->addWidget(d->colorFrame);
 
     // Color format selection logic
-    QButtonGroup *btnGroup = new QButtonGroup(this);
-    btnGroup->addButton(d->rgbBtn);
-    btnGroup->addButton(d->hslBtn);
-    btnGroup->addButton(d->hsvBtn);
-    btnGroup->addButton(d->qmlRgbaBtn);
-    btnGroup->addButton(d->qmlHslaBtn);
-    btnGroup->addButton(d->vec3Btn);
-    btnGroup->addButton(d->vec4Btn);
-    btnGroup->addButton(d->hexBtn);
+    d->btnGroup->addButton(d->rgbBtn);
+    d->btnGroup->addButton(d->hslBtn);
+    d->btnGroup->addButton(d->hsvBtn);
+    d->btnGroup->addButton(d->qmlRgbaBtn);
+    d->btnGroup->addButton(d->qmlHslaBtn);
+    d->btnGroup->addButton(d->vecBtn);
+    d->btnGroup->addButton(d->hexBtn);
 
-    connect(btnGroup, static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
+    connect(d->btnGroup, static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
             this, &ColorDialog::onFormatButtonChecked);
-
-    connect(d->rgbAlphaBtn, &QPushButton::toggled,
-            [=](bool) {
-        d->rgbBtn->click();
-    });
-
-    connect(d->rgbPercentBtn, &QPushButton::toggled,
-            [=](bool) {
-        d->rgbBtn->click();
-    });
-
-    connect(d->hslAlphaBtn, &QPushButton::toggled,
-            [=](bool) {
-        d->hslBtn->click();
-    });
-
-    connect(d->hsvAlphaBtn, &QPushButton::toggled,
-            [=](bool) {
-        d->hsvBtn->click();
-    });
 
     // Color changes logic
     connect(d->colorPicker, &ColorPickerWidget::colorChanged,
@@ -261,6 +229,19 @@ ColorDialog::~ColorDialog()
 ColorFormat ColorDialog::outputColorFormat() const
 {
     return d->outputColorFormat;
+}
+
+void ColorDialog::setOutputColorFormat(ColorFormat format)
+{
+    if (d->outputColorFormat != format) {
+        d->outputColorFormat = format;
+
+        QAbstractButton *btn = d->colorFormatToButton(format);
+
+        const QSignalBlocker blocker(d->btnGroup);
+
+        btn->click();
+    }
 }
 
 QColor ColorDialog::color() const
@@ -313,47 +294,30 @@ void ColorDialog::onFormatButtonChecked(QAbstractButton *checkedBtn)
 {
     ColorFormat format;
 
-    if (checkedBtn == d->rgbBtn) {
-        bool useAlpha = d->rgbAlphaBtn->isChecked();
-        bool usePercents = d->rgbPercentBtn->isChecked();
+    bool useAlpha = d->outputColor.alphaF();
 
-        if (useAlpha) {
-            if (usePercents)
-                format = ColorFormat::QCssRgbaAlphaPercentType;
-            else
-                format = ColorFormat::QCssRgbaAlphaFloatType;
-        }
-        else {
-            if (usePercents)
-                format = ColorFormat::QCssRgbPercentType;
-            else
-                format = ColorFormat::QCssRgbType;
-        }
+    if (checkedBtn == d->rgbBtn) {
+        format = (useAlpha) ? ColorFormat::QCssRgbaAlphaFloatType
+                            : ColorFormat::QCssRgbType;
     }
     else if (checkedBtn == d->hslBtn) {
-        bool useAlpha = d->hslAlphaBtn->isChecked();
-
-        if (useAlpha)
-            format = ColorFormat::CssHslaType;
-        else
-            format = ColorFormat::CssHslType;
+        format = (useAlpha) ? ColorFormat::CssHslaType
+                            : ColorFormat::CssHslType;
     }
     else if (checkedBtn == d->hsvBtn) {
-        bool useAlpha = d->hsvAlphaBtn->isChecked();
-
-        if (useAlpha)
-            format = ColorFormat::QssHsvaType;
-        else
-            format = ColorFormat::QssHsvType;
+        format = (useAlpha) ? ColorFormat::QssHsvaType
+                            : ColorFormat::QssHsvType;
     }
-    else if (checkedBtn == d->qmlRgbaBtn)
+    else if (checkedBtn == d->qmlRgbaBtn) {
         format = ColorFormat::QmlRgbaType;
-    else if (checkedBtn == d->qmlHslaBtn)
+    }
+    else if (checkedBtn == d->qmlHslaBtn) {
         format = ColorFormat::QmlHslaType;
-    else if (checkedBtn == d->vec3Btn)
-        format = ColorFormat::Vec3Type;
-    else if (checkedBtn == d->vec4Btn)
-        format = ColorFormat::Vec4Type;
+    }
+    else if (checkedBtn == d->vecBtn) {
+        format = (useAlpha) ? ColorFormat::Vec3Type
+                            : ColorFormat::Vec4Type;
+    }
     else if (checkedBtn == d->hexBtn)
         format = ColorFormat::HexType;
 

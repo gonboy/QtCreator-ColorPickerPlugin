@@ -215,7 +215,7 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                 ColorFormat type = it.key();
                 QColor color = d->parseColor(type, match);
 
-                ret.type = type;
+                ret.format = type;
                 ret.value = color;
 
                 break;

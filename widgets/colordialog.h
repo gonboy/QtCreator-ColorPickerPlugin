@@ -34,6 +34,8 @@ public:
     int opacity() const;
 
 public slots:
+    void setOutputColorFormat(ColorFormat format);
+
     void setColor(const QColor &color);
     void setHue(int hue);
     void setOpacity(int opacity);
