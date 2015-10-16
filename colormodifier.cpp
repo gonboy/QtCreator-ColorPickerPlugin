@@ -65,7 +65,7 @@ public:
         case ColorFormat::Vec4Type:
             ret = QLatin1String("vec4(");
             break;
-        // No ColorType::HexType because of the QColor::name() function
+            // No ColorType::HexType because of the QColor::name() function
         default:
             break;
         }
@@ -73,7 +73,7 @@ public:
         return ret;
     }
 
-    QString colorComponents(const QColor &color, ColorFormat type) const
+    QString colorToString(const QColor &color, ColorFormat type) const
     {
         QString ret;
 
@@ -106,31 +106,31 @@ public:
                     + QString::number(color.alphaF());
         }
         else if (type == ColorFormat::QssHsvType) {
-            ret = QString::number(color.hue()) + QLatin1String(", ")
-                    + QString::number(color.saturation()) + QLatin1String(", ")
+            ret = QString::number(color.hsvHue()) + QLatin1String(", ")
+                    + QString::number(color.hsvSaturation()) + QLatin1String(", ")
                     + QString::number(color.value());
         }
         else if (type == ColorFormat::QssHsvaType) {
             int aP = color.alphaF() * 100;
 
-            ret = QString::number(color.hue()) + QLatin1String(", ")
-                    + QString::number(color.saturation()) + QLatin1String(", ")
+            ret = QString::number(color.hsvHue()) + QLatin1String(", ")
+                    + QString::number(color.hsvSaturation()) + QLatin1String(", ")
                     + QString::number(color.value()) + QLatin1String(", ")
                     + QString::number(aP);
         }
         else if (type == ColorFormat::CssHslType) {
-            int sP = color.saturation() / 255 * 100;
+            int sP = color.hslSaturation() / 255 * 100;
             int lP = color.lightness() / 255 * 100;
 
-            ret = QString::number(color.hue()) + QLatin1String(", ")
+            ret = QString::number(color.hslHue()) + QLatin1String(", ")
                     + QString::number(sP) + QChar::fromLatin1('%') + QLatin1String(", ")
                     + QString::number(lP) + QChar::fromLatin1('%');
         }
         else if (type == ColorFormat::CssHslaType) {
-            int sP = color.saturation() / 255 * 100;
+            int sP = color.hslSaturation() / 255 * 100;
             int lP = color.lightness() / 255 * 100;
 
-            ret = QString::number(color.hue()) + QLatin1String(", ")
+            ret = QString::number(color.hslHue()) + QLatin1String(", ")
                     + QString::number(sP) + QChar::fromLatin1('%') + QLatin1String(", ")
                     + QString::number(lP) + QChar::fromLatin1('%') + QLatin1String(", ")
                     + QString::number(color.alphaF());
@@ -190,7 +190,7 @@ void ColorModifier::insertColor(const QColor &newValue, ColorFormat asFormat)
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
     QTextCursor currentCursor = editorWidget->textCursor();
 
-    QString newText = d->colorTypePrefix(asFormat) + d->colorComponents(newValue, asFormat);
+    QString newText = d->colorTypePrefix(asFormat) + d->colorToString(newValue, asFormat);
 
     if (asFormat != ColorFormat::HexType)
         newText += QChar::fromLatin1(')');
