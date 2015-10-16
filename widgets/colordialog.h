@@ -19,6 +19,7 @@ class ColorDialog : public QFrame
 {
     Q_OBJECT
 
+    Q_PROPERTY(ColorFormat outputFormat READ outputFormat WRITE setOutputFormat NOTIFY outputFormatChanged)
     Q_PROPERTY(QColor color READ color WRITE setColor NOTIFY colorChanged)
     Q_PROPERTY(int hue READ hue WRITE setHue NOTIFY hueChanged)
     Q_PROPERTY(int opacity READ opacity WRITE setOpacity NOTIFY opacityChanged)
@@ -27,21 +28,22 @@ public:
     explicit ColorDialog(QWidget *parent = 0);
     ~ColorDialog();
 
-    ColorFormat outputColorFormat() const;
+    ColorFormat outputFormat() const;
 
     QColor color() const;
     int hue() const;
     int opacity() const;
 
 public slots:
-    void setOutputColorFormat(ColorFormat format);
+    void setOutputFormat(ColorFormat format);
 
     void setColor(const QColor &color);
     void setHue(int hue);
     void setOpacity(int opacity);
 
 signals:
-    void colorChanged(const QColor &, ColorFormat);
+    void outputFormatChanged(ColorFormat);
+    void colorChanged(const QColor &);
     void hueChanged(int);
     void opacityChanged(int);
 

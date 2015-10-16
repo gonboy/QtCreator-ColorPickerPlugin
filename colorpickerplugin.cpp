@@ -67,8 +67,13 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
 
     // Create connections between internal objects
     connect(d->colorDialog, &ColorDialog::colorChanged,
-            [=](const QColor &color, ColorFormat format) {
-        d->colorModifier->insertColor(color, format);
+            [=](const QColor &color) {
+        d->colorModifier->insertColor(color, d->colorDialog->outputFormat());
+    });
+
+    connect(d->colorDialog, &ColorDialog::outputFormatChanged,
+            [=](ColorFormat format) {
+        d->colorModifier->insertColor(d->colorDialog->color(), format);
     });
 
     // Register objects
@@ -93,7 +98,7 @@ void ColorPickerPlugin::onColorEditTriggered()
         ColorExpr toEdit = d->colorWatcher->processCurrentTextCursor(editorWidget);
 
         if (toEdit.value.isValid()) {
-            d->colorDialog->setOutputColorFormat(toEdit.format);
+            d->colorDialog->setOutputFormat(toEdit.format);
             d->colorDialog->setColor(toEdit.value);
         } else {
             d->colorDialog->setColor(d->colorDialog->color());
