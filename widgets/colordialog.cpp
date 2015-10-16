@@ -156,6 +156,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
 {
     setAutoFillBackground(true);
     setFrameShape(QFrame::StyledPanel);
+    setStyleSheet(QLatin1String("QFrame { background-color: grey; }"));
 
     //    d->colorFrame->setFixedSize(50, 50);
 
