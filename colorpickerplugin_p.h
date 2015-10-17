@@ -15,38 +15,11 @@ namespace Internal {
 class ColorPickerPluginImpl
 {
 public:
-    ColorPickerPluginImpl(ColorPickerPlugin *qq) :
-        q(qq),
-        colorWatcher(new ColorWatcher(qq)),
-        colorModifier(new ColorModifier(qq)),
-        colorEditor(0),
-        generalSettings()
-    {}
-
-    ~ColorPickerPluginImpl()
-    {}
+    ColorPickerPluginImpl(ColorPickerPlugin *qq);
+    ~ColorPickerPluginImpl();
 
     /* functions */
-    QPoint clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const
-    {
-        QPoint ret;
-        ret.ry() = cursorPos.y();
-
-        int colorEditorWidth = colorEditor->width();
-        int colorEditorHalfWidth = (colorEditorWidth / 2);
-
-        int posX = cursorPos.x() - colorEditorHalfWidth;
-        int widgetRight = rect.right();
-
-        if (posX < 0)
-            posX = 0;
-        else if ( (cursorPos.x() + colorEditorHalfWidth) > (widgetRight) )
-            posX = widgetRight - colorEditorWidth;
-
-        ret.rx() = posX;
-
-        return ret;
-    }
+    QPoint clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const;
 
     /* variables */
     ColorPickerPlugin *q;

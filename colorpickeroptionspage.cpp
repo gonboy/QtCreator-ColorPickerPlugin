@@ -21,21 +21,11 @@ namespace Internal {
 class ColorPickerOptionsPageImpl
 {
 public:
-    ColorPickerOptionsPageImpl() :
-        settingsPrefix(QLatin1String(Constants::COLORPICKER_SETTINGS_PREFIX)),
-        generalSettings()
-    {}
-
-    ~ColorPickerOptionsPageImpl()
-    {}
+    ColorPickerOptionsPageImpl();
+    ~ColorPickerOptionsPageImpl();
 
     /* functions */
-    void init()
-    {
-        const QSettings *s = Core::ICore::settings();
-
-        generalSettings.fromSettings(settingsPrefix, s);
-    }
+    void init();
 
     /* variables */
     QString settingsPrefix;
@@ -43,6 +33,20 @@ public:
     QPointer<ColorPickerSettingsWidget> widget;
 };
 
+ColorPickerOptionsPageImpl::ColorPickerOptionsPageImpl() :
+    settingsPrefix(QLatin1String(Constants::COLORPICKER_SETTINGS_PREFIX)),
+    generalSettings()
+{}
+
+ColorPickerOptionsPageImpl::~ColorPickerOptionsPageImpl()
+{}
+
+void ColorPickerOptionsPageImpl::init()
+{
+    const QSettings *s = Core::ICore::settings();
+
+    generalSettings.fromSettings(settingsPrefix, s);
+}
 
 ////////////////////////// ColorPickerOptionsPage //////////////////////////
 

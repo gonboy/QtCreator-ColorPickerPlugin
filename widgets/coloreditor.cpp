@@ -39,99 +39,16 @@ public:
     };
     Q_DECLARE_FLAGS(UpdateReasons, UpdateReason)
 
-    ColorEditorImpl(ColorEditor *qq) :
-        q(qq),
-        outputFormat(),
-        color(QColor::Hsv),
-        colorPicker(new ColorPickerWidget(qq)),
-        hueSlider(new HueSlider(qq)),
-        opacitySlider(new OpacitySlider(qq)),/*,*/
-        btnGroup(new QButtonGroup(qq)),
-        rgbBtn(new QPushButton(qq)),
-        hslBtn(new QPushButton(qq)),
-        hsvBtn(new QPushButton(qq)),
-        qmlRgbaBtn(new QPushButton(qq)),
-        qmlHslaBtn(new QPushButton(qq)),
-        vecBtn(new QPushButton(qq)),
-        hexBtn(new QPushButton(qq))
-    {}
+    ColorEditorImpl(ColorEditor *qq);
 
     /* functions */
-    void updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate)
-    {
-        if (whichUpdate & ColorEditorImpl::UpdateFromColorPicker)
-            opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+    void updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate);
 
-        if (whichUpdate & ColorEditorImpl::UpdateFromHueSlider) {
-            const QSignalBlocker blocker(colorPicker);
+    void setCurrentFormat(ColorFormat f);
 
-            colorPicker->setColor(cl);
-            opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
-        }
+    void setCurrentColor(const QColor &cl);
 
-        if (whichUpdate & ColorEditorImpl::UpdateFromOpacitySlider) {
-
-        }
-
-        if (whichUpdate & ColorEditorImpl::UpdateProgrammatically) {
-            hueSlider->setValueAtomic(cl.hsvHue());
-            opacitySlider->setValueAtomic(cl.alpha());
-        }
-    }
-
-    void setCurrentFormat(ColorFormat f)
-    {
-        outputFormat = f;
-
-        emit q->outputFormatChanged(f);
-    }
-
-    void setCurrentColor(const QColor &cl)
-    {
-        color = cl;
-
-        emit q->colorChanged(cl);
-    }
-
-    QAbstractButton *colorFormatToButton(ColorFormat format) const
-    {
-        QAbstractButton *ret = 0;
-
-        switch (format) {
-        case QCssRgbType:
-        case QCssRgbPercentType:
-        case QCssRgbaAlphaFloatType:
-        case QCssRgbaAlphaPercentType:
-            ret = rgbBtn;
-            break;
-        case QssHsvType:
-        case QssHsvaType:
-            ret = hsvBtn;
-            break;
-        case CssHslType:
-        case CssHslaType:
-            ret = hslBtn;
-            break;
-        case QmlRgbaType:
-            ret = qmlRgbaBtn;
-            break;
-        case QmlHslaType:
-            ret = qmlHslaBtn;
-            break;
-        case Vec3Type:
-        case Vec4Type:
-            ret = vecBtn;
-            break;
-        case HexType:
-            ret = hexBtn;
-            break;
-        default:
-            break;
-        }
-
-        Q_ASSERT(ret);
-        return ret;
-    }
+    QAbstractButton *colorFormatToButton(ColorFormat format) const;
 
     /* variables */
     ColorEditor *q;
@@ -154,6 +71,99 @@ public:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ColorEditorImpl::UpdateReasons)
+
+ColorEditorImpl::ColorEditorImpl(ColorEditor *qq) :
+    q(qq),
+    outputFormat(),
+    color(QColor::Hsv),
+    colorPicker(new ColorPickerWidget(qq)),
+    hueSlider(new HueSlider(qq)),
+    opacitySlider(new OpacitySlider(qq)),/*,*/
+    btnGroup(new QButtonGroup(qq)),
+    rgbBtn(new QPushButton(qq)),
+    hslBtn(new QPushButton(qq)),
+    hsvBtn(new QPushButton(qq)),
+    qmlRgbaBtn(new QPushButton(qq)),
+    qmlHslaBtn(new QPushButton(qq)),
+    vecBtn(new QPushButton(qq)),
+    hexBtn(new QPushButton(qq))
+{}
+
+void ColorEditorImpl::updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate)
+{
+    if (whichUpdate & ColorEditorImpl::UpdateFromColorPicker)
+        opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+
+    if (whichUpdate & ColorEditorImpl::UpdateFromHueSlider) {
+        const QSignalBlocker blocker(colorPicker);
+
+        colorPicker->setColor(cl);
+        opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+    }
+
+    if (whichUpdate & ColorEditorImpl::UpdateFromOpacitySlider) {
+
+    }
+
+    if (whichUpdate & ColorEditorImpl::UpdateProgrammatically) {
+        hueSlider->setValueAtomic(cl.hsvHue());
+        opacitySlider->setValueAtomic(cl.alpha());
+    }
+}
+
+void ColorEditorImpl::setCurrentFormat(ColorFormat f)
+{
+    outputFormat = f;
+
+    emit q->outputFormatChanged(f);
+}
+
+void ColorEditorImpl::setCurrentColor(const QColor &cl)
+{
+    color = cl;
+
+    emit q->colorChanged(cl);
+}
+
+QAbstractButton *ColorEditorImpl::colorFormatToButton(ColorFormat format) const
+{
+    QAbstractButton *ret = 0;
+
+    switch (format) {
+    case QCssRgbType:
+    case QCssRgbPercentType:
+    case QCssRgbaAlphaFloatType:
+    case QCssRgbaAlphaPercentType:
+        ret = rgbBtn;
+        break;
+    case QssHsvType:
+    case QssHsvaType:
+        ret = hsvBtn;
+        break;
+    case CssHslType:
+    case CssHslaType:
+        ret = hslBtn;
+        break;
+    case QmlRgbaType:
+        ret = qmlRgbaBtn;
+        break;
+    case QmlHslaType:
+        ret = qmlHslaBtn;
+        break;
+    case Vec3Type:
+    case Vec4Type:
+        ret = vecBtn;
+        break;
+    case HexType:
+        ret = hexBtn;
+        break;
+    default:
+        break;
+    }
+
+    Q_ASSERT(ret);
+    return ret;
+}
 
 
 ////////////////////////// ColorEditor //////////////////////////
