@@ -5,9 +5,14 @@
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QPainter>
 #include <QPushButton>
+#include <QToolButton>
+#include <QStyleOption>
 
 // QtCreator includes
+#include <coreplugin/coreconstants.h>
+
 #include <utils/theme/theme.h>
 
 // Plugin includes
@@ -157,13 +162,23 @@ ColorDialog::ColorDialog(QWidget *parent) :
     QFrame(parent),
     d(new ColorDialogImpl(this))
 {
-    setAutoFillBackground(true);
+    //    setAutoFillBackground(true);
     setFrameShape(QFrame::StyledPanel);
-    setStyleSheet(QLatin1String("QFrame { background-color: ")
-                  + Utils::creatorTheme()->color(Utils::Theme::BackgroundColorNormal).name()
-                  + QLatin1String("; }"));
 
     // Build UI
+    // Close button
+    auto closeBtn = new QToolButton(this);
+    closeBtn->setFixedSize(24, 24);
+    closeBtn->setIcon(QIcon(QLatin1String(Core::Constants::ICON_BUTTON_CLOSE)));
+
+    connect(closeBtn, &QToolButton::clicked,
+            this, &ColorDialog::close);
+
+    auto leftPanelLayout = new QVBoxLayout;
+    leftPanelLayout->addWidget(closeBtn);
+    leftPanelLayout->addStretch();
+
+    // Color format selection
     d->rgbBtn->setText(QLatin1String("rgb"));
     d->hslBtn->setText(QLatin1String("hsl"));
     d->hsvBtn->setText(QLatin1String("hsv"));
@@ -193,6 +208,8 @@ ColorDialog::ColorDialog(QWidget *parent) :
     formatsLayout->addWidget(d->hexBtn, 6, 0);
 
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    mainLayout->addLayout(leftPanelLayout);
+    mainLayout->addSpacing(0);
     mainLayout->addWidget(d->colorPicker);
     mainLayout->addWidget(d->opacitySlider);
     mainLayout->addWidget(d->hueSlider);
@@ -307,6 +324,20 @@ void ColorDialog::setOpacity(int opacity)
 
         emit opacityChanged(opacity);
     }
+}
+
+void ColorDialog::paintEvent(QPaintEvent *)
+{
+    QPainter painter(this);
+
+    QStyleOptionFrame opt;
+    initStyleOption(&opt);
+
+    Utils::Theme *creatorTheme = Utils::creatorTheme();
+
+    painter.setPen(creatorTheme->color(Utils::Theme::TextColorNormal));
+    painter.setBrush(creatorTheme->color(Utils::Theme::BackgroundColorNormal));
+    painter.drawRoundedRect(opt.rect.adjusted(0, 0, -1, -1), 3, 3);
 }
 
 void ColorDialog::onFormatButtonChecked(QAbstractButton *checkedBtn)

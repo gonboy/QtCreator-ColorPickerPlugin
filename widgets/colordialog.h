@@ -47,6 +47,9 @@ signals:
     void hueChanged(int);
     void opacityChanged(int);
 
+protected:
+    void paintEvent(QPaintEvent *) override;
+
 private slots:
     void onFormatButtonChecked(QAbstractButton *checkedBtn);
 
