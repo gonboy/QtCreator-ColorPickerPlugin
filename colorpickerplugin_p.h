@@ -16,7 +16,7 @@ class ColorPickerPluginImpl
 {
 public:
     ColorPickerPluginImpl(ColorPickerPlugin *qq) :
-        q_ptr(qq),
+        q(qq),
         colorWatcher(new ColorWatcher(qq)),
         colorModifier(new ColorModifier(qq)),
         colorEditor(0),
@@ -49,7 +49,7 @@ public:
     }
 
     /* variables */
-    ColorPickerPlugin *q_ptr;
+    ColorPickerPlugin *q;
 
     ColorWatcher *colorWatcher;
     ColorModifier *colorModifier;

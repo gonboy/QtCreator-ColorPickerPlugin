@@ -14,7 +14,7 @@ class ColorPickerWidgetImpl
 {
 public:
     ColorPickerWidgetImpl(ColorPickerWidget *qq) :
-        q_ptr(qq),
+        q(qq),
         gradientImage(),
         color(QColor::Hsv),
         cursorPos(-1, -1)
@@ -25,13 +25,13 @@ public:
     // Many thanks to gbdivers > http://blog.developpez.com/gpu/?p=353
     void createGradientImage()
     {
-        if (q_ptr->rect() != gradientImage.rect())
-            gradientImage = QImage(q_ptr->size(), QImage::Format_RGB32);
+        if (q->rect() != gradientImage.rect())
+            gradientImage = QImage(q->size(), QImage::Format_RGB32);
 
         float h = color.hsvHueF();
 
-        int qqWidth = q_ptr->width();
-        int qqHeight = q_ptr->height();
+        int qqWidth = q->width();
+        int qqHeight = q->height();
 
         for (int s = 0; s < qqWidth; ++s) {
             for (int v = 0; v < qqHeight; ++v) {
@@ -78,13 +78,13 @@ public:
 
         color = colorUnderCursor(cursorPos);
 
-        q_ptr->update();
+        q->update();
 
-        emit q_ptr->colorChanged(color);
+        emit q->colorChanged(color);
     }
 
     /* variables */
-    ColorPickerWidget *q_ptr;
+    ColorPickerWidget *q;
 
     QImage gradientImage;
     QColor color;

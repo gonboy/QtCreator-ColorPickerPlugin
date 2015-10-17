@@ -40,7 +40,7 @@ public:
     Q_DECLARE_FLAGS(UpdateReasons, UpdateReason)
 
     ColorEditorImpl(ColorEditor *qq) :
-        q_ptr(qq),
+        q(qq),
         outputFormat(),
         color(QColor::Hsv),
         colorPicker(new ColorPickerWidget(qq)),
@@ -83,14 +83,14 @@ public:
     {
         outputFormat = f;
 
-        emit q_ptr->outputFormatChanged(f);
+        emit q->outputFormatChanged(f);
     }
 
     void setCurrentColor(const QColor &cl)
     {
         color = cl;
 
-        emit q_ptr->colorChanged(cl);
+        emit q->colorChanged(cl);
     }
 
     QAbstractButton *colorFormatToButton(ColorFormat format) const
@@ -134,7 +134,7 @@ public:
     }
 
     /* variables */
-    ColorEditor *q_ptr;
+    ColorEditor *q;
 
     ColorFormat outputFormat;
     QColor color;
