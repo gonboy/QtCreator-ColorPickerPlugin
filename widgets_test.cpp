@@ -4,7 +4,7 @@
 // Plugin includes
 #include "colorpickerplugin.h"
 
-#include "widgets/colordialog.h"
+#include "widgets/coloreditor.h"
 #include "widgets/colorpicker.h"
 #include "widgets/hueslider.h"
 #include "widgets/opacityslider.h"

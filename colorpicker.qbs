@@ -27,6 +27,8 @@ QtcPlugin {
         "generalsettings.h",
         "widgets/advancedslider.cpp",
         "widgets/advancedslider.h",
+        "widgets/coloreditor.cpp",
+        "widgets/coloreditor.h",
         "widgets/colorpicker.cpp",
         "widgets/colorpicker.h",
         "widgets/colorpickersettingswidget.cpp",
@@ -35,8 +37,6 @@ QtcPlugin {
         "widgets/hueslider.h",
         "widgets/opacityslider.cpp",
         "widgets/opacityslider.h",
-        "widgets/colordialog.cpp",
-        "widgets/colordialog.h",
     ]
 
     Group {

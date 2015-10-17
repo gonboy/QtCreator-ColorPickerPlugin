@@ -73,17 +73,17 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
 
 void ColorPickerPlugin::extensionsInitialized()
 {
-    d->colorDialog = new ColorDialog; // no parent
+    d->colorEditor = new ColorEditor; // no parent
 
     // Create connections between internal objects
-    connect(d->colorDialog, &ColorDialog::colorChanged,
+    connect(d->colorEditor, &ColorEditor::colorChanged,
             [=](const QColor &color) {
-        d->colorModifier->insertColor(color, d->colorDialog->outputFormat());
+        d->colorModifier->insertColor(color, d->colorEditor->outputFormat());
     });
 
-    connect(d->colorDialog, &ColorDialog::outputFormatChanged,
+    connect(d->colorEditor, &ColorEditor::outputFormatChanged,
             [=](ColorFormat format) {
-        d->colorModifier->insertColor(d->colorDialog->color(), format);
+        d->colorModifier->insertColor(d->colorEditor->color(), format);
     });
 }
 
@@ -99,18 +99,18 @@ void ColorPickerPlugin::onColorEditTriggered()
         ColorExpr toEdit = d->colorWatcher->processCurrentTextCursor(editorWidget);
 
         if (toEdit.value.isValid()) {
-            d->colorDialog->setOutputFormat(toEdit.format);
-            d->colorDialog->setColor(toEdit.value);
+            d->colorEditor->setOutputFormat(toEdit.format);
+            d->colorEditor->setColor(toEdit.value);
         } else {
-            d->colorDialog->setColor(d->colorDialog->color());
+            d->colorEditor->setColor(d->colorEditor->color());
         }
 
         QWidget *editorViewport = editorWidget->viewport();
 
-        d->colorDialog->setParent(editorViewport);
-        d->colorDialog->move(d->clampColorDialogPosition(toEdit.pos, editorViewport->rect()));
+        d->colorEditor->setParent(editorViewport);
+        d->colorEditor->move(d->clampColorEditorPosition(toEdit.pos, editorViewport->rect()));
 
-        d->colorDialog->show();
+        d->colorEditor->show();
     }
 }
 

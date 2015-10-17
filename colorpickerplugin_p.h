@@ -5,7 +5,7 @@
 #include "colorwatcher.h"
 #include "generalsettings.h"
 
-#include "widgets/colordialog.h"
+#include "widgets/coloreditor.h"
 
 namespace ColorPicker {
 namespace Internal {
@@ -19,7 +19,7 @@ public:
         q_ptr(qq),
         colorWatcher(new ColorWatcher(qq)),
         colorModifier(new ColorModifier(qq)),
-        colorDialog(0),
+        colorEditor(0),
         generalSettings()
     {}
 
@@ -27,21 +27,21 @@ public:
     {}
 
     /* functions */
-    QPoint clampColorDialogPosition(const QPoint &cursorPos, const QRect &rect) const
+    QPoint clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const
     {
         QPoint ret;
         ret.ry() = cursorPos.y();
 
-        int colorDialogWidth = colorDialog->width();
-        int colorDialogHalfWidth = (colorDialogWidth / 2);
+        int colorEditorWidth = colorEditor->width();
+        int colorEditorHalfWidth = (colorEditorWidth / 2);
 
-        int posX = cursorPos.x() - colorDialogHalfWidth;
+        int posX = cursorPos.x() - colorEditorHalfWidth;
         int widgetRight = rect.right();
 
         if (posX < 0)
             posX = 0;
-        else if ( (cursorPos.x() + colorDialogHalfWidth) > (widgetRight) )
-            posX = widgetRight - colorDialogWidth;
+        else if ( (cursorPos.x() + colorEditorHalfWidth) > (widgetRight) )
+            posX = widgetRight - colorEditorWidth;
 
         ret.rx() = posX;
 
@@ -53,7 +53,7 @@ public:
 
     ColorWatcher *colorWatcher;
     ColorModifier *colorModifier;
-    ColorDialog *colorDialog;
+    ColorEditor *colorEditor;
 
     GeneralSettings generalSettings;
 };

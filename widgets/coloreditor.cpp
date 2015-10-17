@@ -1,4 +1,4 @@
-#include "colordialog.h"
+#include "coloreditor.h"
 
 // Qt includes
 #include <QButtonGroup>
@@ -24,9 +24,9 @@ namespace ColorPicker {
 namespace Internal {
 
 
-////////////////////////// ColorDialogImpl //////////////////////////
+////////////////////////// ColorEditorImpl //////////////////////////
 
-class ColorDialogImpl
+class ColorEditorImpl
 {
 public:
     enum UpdateReason
@@ -39,7 +39,7 @@ public:
     };
     Q_DECLARE_FLAGS(UpdateReasons, UpdateReason)
 
-    ColorDialogImpl(ColorDialog *qq) :
+    ColorEditorImpl(ColorEditor *qq) :
         q_ptr(qq),
         outputFormat(),
         color(QColor::Hsv),
@@ -59,21 +59,21 @@ public:
     /* functions */
     void updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate)
     {
-        if (whichUpdate & ColorDialogImpl::UpdateFromColorPicker)
+        if (whichUpdate & ColorEditorImpl::UpdateFromColorPicker)
             opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
 
-        if (whichUpdate & ColorDialogImpl::UpdateFromHueSlider) {
+        if (whichUpdate & ColorEditorImpl::UpdateFromHueSlider) {
             const QSignalBlocker blocker(colorPicker);
 
             colorPicker->setColor(cl);
             opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
         }
 
-        if (whichUpdate & ColorDialogImpl::UpdateFromOpacitySlider) {
+        if (whichUpdate & ColorEditorImpl::UpdateFromOpacitySlider) {
 
         }
 
-        if (whichUpdate & ColorDialogImpl::UpdateProgrammatically) {
+        if (whichUpdate & ColorEditorImpl::UpdateProgrammatically) {
             hueSlider->setValueAtomic(cl.hsvHue());
             opacitySlider->setValueAtomic(cl.alpha());
         }
@@ -134,7 +134,7 @@ public:
     }
 
     /* variables */
-    ColorDialog *q_ptr;
+    ColorEditor *q_ptr;
 
     ColorFormat outputFormat;
     QColor color;
@@ -153,14 +153,14 @@ public:
     QPushButton *hexBtn;
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(ColorDialogImpl::UpdateReasons)
+Q_DECLARE_OPERATORS_FOR_FLAGS(ColorEditorImpl::UpdateReasons)
 
 
-////////////////////////// ColorDialog //////////////////////////
+////////////////////////// ColorEditor //////////////////////////
 
-ColorDialog::ColorDialog(QWidget *parent) :
+ColorEditor::ColorEditor(QWidget *parent) :
     QFrame(parent),
-    d(new ColorDialogImpl(this))
+    d(new ColorEditorImpl(this))
 {
     //    setAutoFillBackground(true);
     setFrameShape(QFrame::StyledPanel);
@@ -172,7 +172,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
     closeBtn->setIcon(QIcon(QLatin1String(Core::Constants::ICON_BUTTON_CLOSE)));
 
     connect(closeBtn, &QToolButton::clicked,
-            this, &ColorDialog::close);
+            this, &ColorEditor::close);
 
     auto leftPanelLayout = new QVBoxLayout;
     leftPanelLayout->addWidget(closeBtn);
@@ -225,12 +225,12 @@ ColorDialog::ColorDialog(QWidget *parent) :
     d->btnGroup->addButton(d->hexBtn);
 
     connect(d->btnGroup, static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
-            this, &ColorDialog::onFormatButtonChecked);
+            this, &ColorEditor::onFormatButtonChecked);
 
     // Color changes logic
     connect(d->colorPicker, &ColorPickerWidget::colorChanged,
             [=](const QColor &newColor) {
-        d->updateColorWidgets(newColor, ColorDialogImpl::UpdateFromColorPicker);
+        d->updateColorWidgets(newColor, ColorEditorImpl::UpdateFromColorPicker);
         d->setCurrentColor(newColor);
     });
 
@@ -242,7 +242,7 @@ ColorDialog::ColorDialog(QWidget *parent) :
                                           d->opacitySlider->value());
 
         d->updateColorWidgets(newColor,
-                              ColorDialogImpl::UpdateFromHueSlider);
+                              ColorEditorImpl::UpdateFromHueSlider);
         d->setCurrentColor(newColor);
     });
 
@@ -254,22 +254,22 @@ ColorDialog::ColorDialog(QWidget *parent) :
                                           opacity);
 
         d->updateColorWidgets(newColor,
-                              ColorDialogImpl::UpdateFromOpacitySlider);
+                              ColorEditorImpl::UpdateFromOpacitySlider);
         d->setCurrentColor(newColor);
     });
 
     setColor(Qt::red);
 }
 
-ColorDialog::~ColorDialog()
+ColorEditor::~ColorEditor()
 {}
 
-ColorFormat ColorDialog::outputFormat() const
+ColorFormat ColorEditor::outputFormat() const
 {
     return d->outputFormat;
 }
 
-void ColorDialog::setOutputFormat(ColorFormat format)
+void ColorEditor::setOutputFormat(ColorFormat format)
 {
     if (d->outputFormat != format) {
         const QSignalBlocker blocker(d->btnGroup);
@@ -281,25 +281,25 @@ void ColorDialog::setOutputFormat(ColorFormat format)
     }
 }
 
-QColor ColorDialog::color() const
+QColor ColorEditor::color() const
 {
     return d->color;
 }
 
-void ColorDialog::setColor(const QColor &color)
+void ColorEditor::setColor(const QColor &color)
 {
     if (d->color != color) {
-        d->updateColorWidgets(color, ColorDialogImpl::UpdateAll);
+        d->updateColorWidgets(color, ColorEditorImpl::UpdateAll);
         d->setCurrentColor(color);
     }
 }
 
-int ColorDialog::hue() const
+int ColorEditor::hue() const
 {
     return d->hueSlider->value();
 }
 
-void ColorDialog::setHue(int hue)
+void ColorEditor::setHue(int hue)
 {
     Q_ASSERT(hue >= 0 && hue <= 359);
 
@@ -310,12 +310,12 @@ void ColorDialog::setHue(int hue)
     }
 }
 
-int ColorDialog::opacity() const
+int ColorEditor::opacity() const
 {
     return d->opacitySlider->value();
 }
 
-void ColorDialog::setOpacity(int opacity)
+void ColorEditor::setOpacity(int opacity)
 {
     Q_ASSERT(opacity >= 0 && opacity <= 255);
 
@@ -326,7 +326,7 @@ void ColorDialog::setOpacity(int opacity)
     }
 }
 
-void ColorDialog::paintEvent(QPaintEvent *)
+void ColorEditor::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
@@ -340,7 +340,7 @@ void ColorDialog::paintEvent(QPaintEvent *)
     painter.drawRoundedRect(opt.rect.adjusted(0, 0, -1, -1), 3, 3);
 }
 
-void ColorDialog::onFormatButtonChecked(QAbstractButton *checkedBtn)
+void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
 {
     ColorFormat format;
 
