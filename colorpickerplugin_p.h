@@ -19,7 +19,7 @@ public:
         q_ptr(qq),
         colorWatcher(new ColorWatcher(qq)),
         colorModifier(new ColorModifier(qq)),
-        colorDialog(new ColorDialog), // no parent
+        colorDialog(0),
         generalSettings()
     {}
 

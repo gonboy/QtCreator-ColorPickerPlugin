@@ -14,11 +14,11 @@
 
 #include <texteditor/texteditor.h>
 
+#include <utils/theme/theme.h>
+
 // Plugin includes
 #include "colorpickeroptionspage.h"
 #include "colorpickerconstants.h"
-
-#include "widgets/colordialog.h"
 
 using namespace Core;
 using namespace TextEditor;
@@ -65,6 +65,16 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
 
     toolsContainer->addMenu(myContainer);
 
+    // Register objects
+    addAutoReleasedObject(optionsPage);
+
+    return true;
+}
+
+void ColorPickerPlugin::extensionsInitialized()
+{
+    d->colorDialog = new ColorDialog; // no parent
+
     // Create connections between internal objects
     connect(d->colorDialog, &ColorDialog::colorChanged,
             [=](const QColor &color) {
@@ -75,15 +85,6 @@ bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString 
             [=](ColorFormat format) {
         d->colorModifier->insertColor(d->colorDialog->color(), format);
     });
-
-    // Register objects
-    addAutoReleasedObject(optionsPage);
-
-    return true;
-}
-
-void ColorPickerPlugin::extensionsInitialized()
-{
 }
 
 void ColorPickerPlugin::onColorEditTriggered()

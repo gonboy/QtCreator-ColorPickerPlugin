@@ -1,11 +1,16 @@
 #include "colordialog.h"
 
+// Qt includes
 #include <QButtonGroup>
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QPushButton>
 
+// QtCreator includes
+#include <utils/theme/theme.h>
+
+// Plugin includes
 #include "colorpicker.h"
 #include "hueslider.h"
 #include "opacityslider.h"
@@ -156,7 +161,9 @@ ColorDialog::ColorDialog(QWidget *parent) :
 {
     setAutoFillBackground(true);
     setFrameShape(QFrame::StyledPanel);
-    setStyleSheet(QLatin1String("QFrame { background-color: grey; }"));
+    setStyleSheet(QLatin1String("QFrame { background-color: ")
+                  + Utils::creatorTheme()->color(Utils::Theme::BackgroundColorNormal).name()
+                  + QLatin1String("; }"));
 
     //    d->colorFrame->setFixedSize(50, 50);
 
