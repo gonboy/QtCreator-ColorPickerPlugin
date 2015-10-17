@@ -41,7 +41,6 @@ public:
         colorPicker(new ColorPickerWidget(qq)),
         hueSlider(new HueSlider(qq)),
         opacitySlider(new OpacitySlider(qq)),/*,*/
-        //        d->colorFrame(new QFrame(q_ptr))
         btnGroup(new QButtonGroup(qq)),
         rgbBtn(new QPushButton(qq)),
         hslBtn(new QPushButton(qq)),
@@ -138,7 +137,6 @@ public:
     ColorPickerWidget *colorPicker;
     HueSlider *hueSlider;
     OpacitySlider *opacitySlider;
-    //    QFrame *d->colorFrame;
 
     QButtonGroup *btnGroup;
     QPushButton *rgbBtn;
@@ -164,8 +162,6 @@ ColorDialog::ColorDialog(QWidget *parent) :
     setStyleSheet(QLatin1String("QFrame { background-color: ")
                   + Utils::creatorTheme()->color(Utils::Theme::BackgroundColorNormal).name()
                   + QLatin1String("; }"));
-
-    //    d->colorFrame->setFixedSize(50, 50);
 
     // Build UI
     d->rgbBtn->setText(QLatin1String("rgb"));
@@ -201,8 +197,6 @@ ColorDialog::ColorDialog(QWidget *parent) :
     mainLayout->addWidget(d->opacitySlider);
     mainLayout->addWidget(d->hueSlider);
     mainLayout->addLayout(formatsLayout);
-
-    //    layout->addWidget(d->colorFrame);
 
     // Color format selection logic
     d->btnGroup->addButton(d->rgbBtn);
