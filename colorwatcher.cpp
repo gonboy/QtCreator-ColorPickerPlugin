@@ -183,7 +183,6 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
 
     QTextCursor currentCursor = textEditor->textCursor();
     QRect cursorRect = textEditor->cursorRect();
-    QPoint cursorPos;
 
     // Search for a color pattern
     QString lineText = currentCursor.block().text();
