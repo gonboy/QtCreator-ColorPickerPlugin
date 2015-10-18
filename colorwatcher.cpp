@@ -36,10 +36,12 @@ public:
     QColor parseColor(ColorFormat type, const QRegularExpressionMatch &match) const;
 
     /* variables */
+    TextEditor::TextEditorWidget *watched;
     QMap<ColorFormat, QRegularExpression> colorRegexes;
 };
 
 ColorWatcherImpl::ColorWatcherImpl() :
+    watched(0),
     colorRegexes()
 {
     // Register regexes
@@ -165,24 +167,25 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 
 ////////////////////////// ColorWatcher //////////////////////////
 
-ColorWatcher::ColorWatcher(QObject *parent) :
-    QObject(parent),
+ColorWatcher::ColorWatcher(TextEditorWidget *textEditor) :
+    QObject(textEditor),
     d(new ColorWatcherImpl)
 {
-
+    Q_ASSERT_X(textEditor, Q_FUNC_INFO, "ColorPickerPlugin > The text editor is invalid.");
+    d->watched = textEditor;
 }
 
 ColorWatcher::~ColorWatcher()
-{}
-
-ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
 {
-    Q_ASSERT_X(textEditor, Q_FUNC_INFO, "The current editor is invalid.");
+    // disconnect if necessary
+}
 
+ColorExpr ColorWatcher::process()
+{
     ColorExpr ret;
 
-    QTextCursor currentCursor = textEditor->textCursor();
-    QRect cursorRect = textEditor->cursorRect();
+    QTextCursor currentCursor = d->watched->textCursor();
+    QRect cursorRect = d->watched->cursorRect();
 
     // Search for a color pattern
     QString lineText = currentCursor.block().text();
@@ -208,12 +211,12 @@ ColorExpr ColorWatcher::processCurrentTextCursor(TextEditorWidget *textEditor)
                 // Select the expression
                 currentCursor.movePosition(QTextCursor::Left, QTextCursor::MoveAnchor,
                                            cursorPosInLine - capturedStart);
-                cursorRect.setLeft(textEditor->cursorRect(currentCursor).left());
+                cursorRect.setLeft(d->watched->cursorRect(currentCursor).left());
                 currentCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor,
                                            capturedEnd - capturedStart);
-                cursorRect.setRight(textEditor->cursorRect(currentCursor).right());
+                cursorRect.setRight(d->watched->cursorRect(currentCursor).right());
 
-                textEditor->setTextCursor(currentCursor);
+                d->watched->setTextCursor(currentCursor);
 
                 //
                 ColorFormat type = it.key();

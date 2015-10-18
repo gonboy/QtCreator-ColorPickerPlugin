@@ -31,7 +31,7 @@ namespace Internal {
 
 ColorPickerPluginImpl::ColorPickerPluginImpl(ColorPickerPlugin *qq) :
     q(qq),
-    colorWatcher(new ColorWatcher(qq)),
+    watchers(),
     colorModifier(new ColorModifier(qq)),
     colorEditor(0),
     generalSettings()
@@ -131,7 +131,20 @@ void ColorPickerPlugin::onColorEditTriggered()
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
 
     if (editorWidget) {
-        ColorExpr toEdit = d->colorWatcher->processCurrentTextCursor(editorWidget);
+        ColorWatcher *watcher = 0;
+
+        if (!d->watchers.contains(editorWidget)) {
+            watcher = new ColorWatcher(editorWidget);
+
+            d->watchers.insert(editorWidget, watcher);
+        }
+        else {
+            watcher = d->watchers.value(editorWidget);
+        }
+
+        Q_ASSERT(watcher);
+
+        ColorExpr toEdit = watcher->process();
 
         if (toEdit.value.isValid()) {
             d->colorEditor->setOutputFormat(toEdit.format);
