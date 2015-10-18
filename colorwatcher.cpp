@@ -25,19 +25,19 @@ namespace Internal {
 
 static QMap<ColorFormat, QRegularExpression> colorRegexes
 {
-    { ColorFormat::QCssRgbType, Constants::REGEX_QCSS_RGB_01 },
-    { ColorFormat::QCssRgbPercentType, Constants::REGEX_QCSS_RGB_02 },
-    { ColorFormat::QCssRgbaAlphaPercentType, Constants::REGEX_QCSS_RGBA_01},
-    { ColorFormat::QCssRgbaAlphaFloatType, Constants::REGEX_QCSS_RGBA_02 },
-    { ColorFormat::QssHsvType, Constants::REGEX_QSS_HSV },
-    { ColorFormat::QssHsvaType, Constants::REGEX_QSS_HSVA },
-    { ColorFormat::CssHslType, Constants::REGEX_CSS_HSL },
-    { ColorFormat::CssHslaType, Constants::REGEX_CSS_HSLA },
-    { ColorFormat::QmlRgbaType, Constants::REGEX_QML_RGBA },
-    { ColorFormat::QmlHslaType, Constants::REGEX_QML_HSLA },
-    { ColorFormat::Vec3Type, Constants::REGEX_VEC3 },
-    { ColorFormat::Vec4Type, Constants::REGEX_VEC4 },
-    { ColorFormat::HexType, Constants::REGEX_HEXCOLOR }
+    { ColorFormat::QCssRgbFormat, Constants::REGEX_QCSS_RGB_01 },
+    { ColorFormat::QCssRgbPercentFormat, Constants::REGEX_QCSS_RGB_02 },
+    { ColorFormat::QCssRgbaAlphaPercentFormat, Constants::REGEX_QCSS_RGBA_01},
+    { ColorFormat::QCssRgbaAlphaFloatFormat, Constants::REGEX_QCSS_RGBA_02 },
+    { ColorFormat::QssHsvFormat, Constants::REGEX_QSS_HSV },
+    { ColorFormat::QssHsvaFormat, Constants::REGEX_QSS_HSVA },
+    { ColorFormat::CssHslFormat, Constants::REGEX_CSS_HSL },
+    { ColorFormat::CssHslaFormat, Constants::REGEX_CSS_HSLA },
+    { ColorFormat::QmlRgbaFormat, Constants::REGEX_QML_RGBA },
+    { ColorFormat::QmlHslaFormat, Constants::REGEX_QML_HSLA },
+    { ColorFormat::Vec3Format, Constants::REGEX_VEC3 },
+    { ColorFormat::Vec4Format, Constants::REGEX_VEC4 },
+    { ColorFormat::HexFormat, Constants::REGEX_HEXCOLOR }
 };
 
 
@@ -66,40 +66,40 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 {
     QColor ret;
 
-    if (type == ColorFormat::QCssRgbType) {
+    if (type == ColorFormat::QCssRgbFormat) {
         int r = match.captured(1).toInt();
         int g = match.captured(2).toInt();
         int b = match.captured(3).toInt();
 
         ret.setRgb(r, g, b);
     }
-    if (type == ColorFormat::QCssRgbPercentType) {
+    if (type == ColorFormat::QCssRgbPercentFormat) {
         int r = match.captured(1).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
         int g = match.captured(2).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
         int b = match.captured(3).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
 
         ret.setRgb(r, g, b);
     }
-    else if (type == ColorFormat::QCssRgbaAlphaPercentType) {
+    else if (type == ColorFormat::QCssRgbaAlphaPercentFormat) {
         ret.setRed(match.captured(1).toInt());
         ret.setGreen(match.captured(2).toInt());
         ret.setBlue(match.captured(3).toInt());
         ret.setAlphaF(match.captured(4).remove(QChar::fromLatin1('%')).toFloat() / 100);
     }
-    else if (type == ColorFormat::QCssRgbaAlphaFloatType) {
+    else if (type == ColorFormat::QCssRgbaAlphaFloatFormat) {
         ret.setRed(match.captured(1).toInt());
         ret.setGreen(match.captured(2).toInt());
         ret.setBlue(match.captured(3).toInt());
         ret.setAlphaF(match.captured(4).toFloat());
     }
-    else if (type == ColorFormat::QssHsvType) {
+    else if (type == ColorFormat::QssHsvFormat) {
         qreal h = match.captured(1).toDouble();
         qreal s = match.captured(2).toDouble();
         qreal v = match.captured(3).toDouble();
 
         ret.setHsvF(h / 359, s / 255, v / 255);
     }
-    else if (type == ColorFormat::QssHsvaType) {
+    else if (type == ColorFormat::QssHsvaFormat) {
         qreal h = match.captured(1).toDouble();
         qreal s = match.captured(2).toDouble();
         qreal v = match.captured(3).toDouble();
@@ -109,14 +109,14 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 
         ret.setHsvF(h / 359, s / 255, v / 255, a);
     }
-    else if (type == ColorFormat::CssHslType) {
+    else if (type == ColorFormat::CssHslFormat) {
         qreal h = match.captured(1).toDouble() / 359;
         qreal s = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
         qreal l = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
 
         ret.setHslF(h, s, l);
     }
-    else if (type == ColorFormat::CssHslaType) {
+    else if (type == ColorFormat::CssHslaFormat) {
         qreal h = match.captured(1).toDouble() / 359;
         float s = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
         qreal l = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
@@ -124,7 +124,7 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 
         ret.setHslF(h, s, l, a);
     }
-    else if (type == ColorFormat::QmlRgbaType) {
+    else if (type == ColorFormat::QmlRgbaFormat) {
         qreal r = match.captured(1).toDouble();
         qreal g = match.captured(2).toDouble();
         qreal b = match.captured(3).toDouble();
@@ -132,7 +132,7 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 
         ret.setRgbF(r, g, b, a);
     }
-    else if (type == ColorFormat::QmlHslaType) {
+    else if (type == ColorFormat::QmlHslaFormat) {
         qreal h = match.captured(1).toDouble();
         qreal s = match.captured(2).toDouble();
         qreal l = match.captured(3).toDouble();
@@ -140,14 +140,14 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 
         ret.setHslF(h, s, l, a);
     }
-    else if (type == ColorFormat::Vec3Type) {
+    else if (type == ColorFormat::Vec3Format) {
         qreal r = match.captured(1).toDouble();
         qreal g = match.captured(2).toDouble();
         qreal b = match.captured(3).toDouble();
 
         ret.setRgbF(r, g, b);
     }
-    else if (type == ColorFormat::Vec4Type) {
+    else if (type == ColorFormat::Vec4Format) {
         qreal r = match.captured(1).toDouble();
         qreal g = match.captured(2).toDouble();
         qreal b = match.captured(3).toDouble();
@@ -155,7 +155,7 @@ QColor ColorWatcherImpl::parseColor(ColorFormat type, const QRegularExpressionMa
 
         ret.setRgbF(r, g, b, a);
     }
-    else if (type == ColorFormat::HexType) {
+    else if (type == ColorFormat::HexFormat) {
         ret.setNamedColor(match.captured());
     }
 

@@ -130,31 +130,31 @@ QAbstractButton *ColorEditorImpl::colorFormatToButton(ColorFormat format) const
     QAbstractButton *ret = 0;
 
     switch (format) {
-    case QCssRgbType:
-    case QCssRgbPercentType:
-    case QCssRgbaAlphaFloatType:
-    case QCssRgbaAlphaPercentType:
+    case QCssRgbFormat:
+    case QCssRgbPercentFormat:
+    case QCssRgbaAlphaFloatFormat:
+    case QCssRgbaAlphaPercentFormat:
         ret = rgbBtn;
         break;
-    case QssHsvType:
-    case QssHsvaType:
+    case QssHsvFormat:
+    case QssHsvaFormat:
         ret = hsvBtn;
         break;
-    case CssHslType:
-    case CssHslaType:
+    case CssHslFormat:
+    case CssHslaFormat:
         ret = hslBtn;
         break;
-    case QmlRgbaType:
+    case QmlRgbaFormat:
         ret = qmlRgbaBtn;
         break;
-    case QmlHslaType:
+    case QmlHslaFormat:
         ret = qmlHslaBtn;
         break;
-    case Vec3Type:
-    case Vec4Type:
+    case Vec3Format:
+    case Vec4Format:
         ret = vecBtn;
         break;
-    case HexType:
+    case HexFormat:
         ret = hexBtn;
         break;
     default:
@@ -357,29 +357,29 @@ void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
     bool useAlpha = d->color.alphaF() < 1.0f;
 
     if (checkedBtn == d->rgbBtn) {
-        format = (useAlpha) ? ColorFormat::QCssRgbaAlphaFloatType
-                            : ColorFormat::QCssRgbType;
+        format = (useAlpha) ? ColorFormat::QCssRgbaAlphaFloatFormat
+                            : ColorFormat::QCssRgbFormat;
     }
     else if (checkedBtn == d->hslBtn) {
-        format = (useAlpha) ? ColorFormat::CssHslaType
-                            : ColorFormat::CssHslType;
+        format = (useAlpha) ? ColorFormat::CssHslaFormat
+                            : ColorFormat::CssHslFormat;
     }
     else if (checkedBtn == d->hsvBtn) {
-        format = (useAlpha) ? ColorFormat::QssHsvaType
-                            : ColorFormat::QssHsvType;
+        format = (useAlpha) ? ColorFormat::QssHsvaFormat
+                            : ColorFormat::QssHsvFormat;
     }
     else if (checkedBtn == d->qmlRgbaBtn) {
-        format = ColorFormat::QmlRgbaType;
+        format = ColorFormat::QmlRgbaFormat;
     }
     else if (checkedBtn == d->qmlHslaBtn) {
-        format = ColorFormat::QmlHslaType;
+        format = ColorFormat::QmlHslaFormat;
     }
     else if (checkedBtn == d->vecBtn) {
-        format = (useAlpha) ? ColorFormat::Vec3Type
-                            : ColorFormat::Vec4Type;
+        format = (useAlpha) ? ColorFormat::Vec3Format
+                            : ColorFormat::Vec4Format;
     }
     else if (checkedBtn == d->hexBtn)
-        format = ColorFormat::HexType;
+        format = ColorFormat::HexFormat;
 
     d->setCurrentFormat(format);
 }
