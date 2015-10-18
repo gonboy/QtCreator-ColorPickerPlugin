@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "colorpicker_global.h"
+#include "colorutilities.h"
 
 namespace ColorPicker {
 namespace Internal {

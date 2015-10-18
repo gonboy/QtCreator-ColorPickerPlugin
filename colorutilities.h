@@ -1,8 +1,7 @@
-#ifndef COLORPICKER_GLOBAL
-#define COLORPICKER_GLOBAL
+#ifndef COLORUTILITIES_H
+#define COLORUTILITIES_H
 
 #include <QColor>
-#include <QMetaType>
 #include <QPoint>
 
 namespace ColorPicker {
@@ -49,10 +48,12 @@ struct ColorExpr
     QPoint pos;
 };
 
+QColor parseColor(ColorFormat type, const QRegularExpressionMatch &match);
+QString colorFormatToPrefix(ColorFormat type);
+QString colorToString(const QColor &color, ColorFormat format);
+
 } // namespace Internal
 } // namespace ColorPicker
 
-Q_DECLARE_METATYPE(ColorPicker::Internal::ColorFormat)
-
-#endif // COLORPICKER_GLOBAL
+#endif // COLORUTILITIES_H
 

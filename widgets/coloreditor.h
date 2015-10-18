@@ -3,7 +3,7 @@
 
 #include <QFrame>
 
-#include "../colorpicker_global.h"
+#include "../colorutilities.h"
 
 class QAbstractButton;
 
