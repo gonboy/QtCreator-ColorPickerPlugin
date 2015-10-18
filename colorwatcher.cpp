@@ -23,6 +23,23 @@ using namespace TextEditor;
 namespace ColorPicker {
 namespace Internal {
 
+static QMap<ColorFormat, QRegularExpression> colorRegexes
+{
+    { ColorFormat::QCssRgbType, Constants::REGEX_QCSS_RGB_01 },
+    { ColorFormat::QCssRgbPercentType, Constants::REGEX_QCSS_RGB_02 },
+    { ColorFormat::QCssRgbaAlphaPercentType, Constants::REGEX_QCSS_RGBA_01},
+    { ColorFormat::QCssRgbaAlphaFloatType, Constants::REGEX_QCSS_RGBA_02 },
+    { ColorFormat::QssHsvType, Constants::REGEX_QSS_HSV },
+    { ColorFormat::QssHsvaType, Constants::REGEX_QSS_HSVA },
+    { ColorFormat::CssHslType, Constants::REGEX_CSS_HSL },
+    { ColorFormat::CssHslaType, Constants::REGEX_CSS_HSLA },
+    { ColorFormat::QmlRgbaType, Constants::REGEX_QML_RGBA },
+    { ColorFormat::QmlHslaType, Constants::REGEX_QML_HSLA },
+    { ColorFormat::Vec3Type, Constants::REGEX_VEC3 },
+    { ColorFormat::Vec4Type, Constants::REGEX_VEC4 },
+    { ColorFormat::HexType, Constants::REGEX_HEXCOLOR }
+};
+
 
 ////////////////////////// ColorWatcherImpl //////////////////////////
 
@@ -37,28 +54,11 @@ public:
 
     /* variables */
     TextEditor::TextEditorWidget *watched;
-    QMap<ColorFormat, QRegularExpression> colorRegexes;
 };
 
 ColorWatcherImpl::ColorWatcherImpl() :
-    watched(0),
-    colorRegexes()
-{
-    // Register regexes
-    colorRegexes.insert(ColorFormat::QCssRgbType, Constants::REGEX_QCSS_RGB_01);
-    colorRegexes.insert(ColorFormat::QCssRgbPercentType, Constants::REGEX_QCSS_RGB_02);
-    colorRegexes.insert(ColorFormat::QCssRgbaAlphaPercentType, Constants::REGEX_QCSS_RGBA_01);
-    colorRegexes.insert(ColorFormat::QCssRgbaAlphaFloatType, Constants::REGEX_QCSS_RGBA_02);
-    colorRegexes.insert(ColorFormat::QssHsvType, Constants::REGEX_QSS_HSV);
-    colorRegexes.insert(ColorFormat::QssHsvaType, Constants::REGEX_QSS_HSVA);
-    colorRegexes.insert(ColorFormat::CssHslType, Constants::REGEX_CSS_HSL);
-    colorRegexes.insert(ColorFormat::CssHslaType, Constants::REGEX_CSS_HSLA);
-    colorRegexes.insert(ColorFormat::QmlRgbaType, Constants::REGEX_QML_RGBA);
-    colorRegexes.insert(ColorFormat::QmlHslaType, Constants::REGEX_QML_HSLA);
-    colorRegexes.insert(ColorFormat::Vec3Type, Constants::REGEX_VEC3);
-    colorRegexes.insert(ColorFormat::Vec4Type, Constants::REGEX_VEC4);
-    colorRegexes.insert(ColorFormat::HexType, Constants::REGEX_HEXCOLOR);
-}
+    watched(0)
+{}
 
 ColorWatcherImpl::~ColorWatcherImpl() {}
 
@@ -190,7 +190,7 @@ ColorExpr ColorWatcher::process()
     // Search for a color pattern
     QString lineText = currentCursor.block().text();
 
-    for (auto it = d->colorRegexes.begin(); it != d->colorRegexes.end(); ++it) {
+    for (auto it = colorRegexes.begin(); it != colorRegexes.end(); ++it) {
         QRegularExpressionMatchIterator matchIt = it.value().globalMatch(lineText);
 
         if (matchIt.hasNext()) {
