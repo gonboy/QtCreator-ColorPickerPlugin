@@ -19,6 +19,8 @@ public:
     ~ColorPickerPluginImpl();
 
     /* functions */
+    ColorCategory colorCategoryForEditor(Core::IEditor *editor) const;
+
     QPoint clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const;
 
     /* variables */

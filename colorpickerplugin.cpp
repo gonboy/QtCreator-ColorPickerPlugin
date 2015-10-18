@@ -10,10 +10,11 @@
 #include <coreplugin/editormanager/editormanager.h>
 #include <coreplugin/editormanager/ieditor.h>
 
+#include <cppeditor/cppeditorconstants.h>
 #include <extensionsystem/pluginmanager.h>
-
+#include <glsleditor/glsleditorconstants.h>
+#include <qmljseditor/qmljseditorconstants.h>
 #include <texteditor/texteditor.h>
-
 #include <utils/theme/theme.h>
 
 // Plugin includes
@@ -39,6 +40,20 @@ ColorPickerPluginImpl::ColorPickerPluginImpl(ColorPickerPlugin *qq) :
 
 ColorPickerPluginImpl::~ColorPickerPluginImpl()
 {}
+
+ColorCategory ColorPickerPluginImpl::colorCategoryForEditor(IEditor *editor) const
+{
+    ColorCategory ret = ColorCategory::AnyCategory;
+
+    Id lastId = *(--editor->context().end());
+
+    if (lastId == QmlJSEditor::Constants::C_QMLJSEDITOR_ID)
+        ret = ColorCategory::QmlCategory;
+    else if (lastId == GlslEditor::Constants::C_GLSLEDITOR_ID)
+        ret = ColorCategory::GlslCategory;
+
+    return ret;
+}
 
 QPoint ColorPickerPluginImpl::clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const
 {
@@ -143,6 +158,12 @@ void ColorPickerPlugin::onColorEditTriggered()
         }
 
         Q_ASSERT(watcher);
+
+        ColorCategory cat = (d->generalSettings.m_editorSensitive)
+                ? d->colorCategoryForEditor(currentEditor)
+                : ColorCategory::AnyCategory;
+
+        d->colorEditor->setColorCategory(cat);
 
         ColorExpr toEdit = watcher->process();
 

@@ -28,6 +28,11 @@ public:
     explicit ColorEditor(QWidget *parent = 0);
     ~ColorEditor();
 
+    ColorCategory colorCategory() const;
+    void setColorCategory(ColorCategory category);
+
+    ColorFormatSet availableFormats() const;
+
     ColorFormat outputFormat() const;
 
     QColor color() const;

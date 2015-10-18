@@ -43,15 +43,20 @@ public:
 
     /* functions */
     void updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate);
+    void updateFormatsLayout();
+
+    void replaceAvailableFormats(const ColorFormatSet &formats);
 
     void setCurrentFormat(ColorFormat f);
-
     void setCurrentColor(const QColor &cl);
 
     QAbstractButton *colorFormatToButton(ColorFormat format) const;
 
     /* variables */
     ColorEditor *q;
+
+    ColorCategory category;
+    ColorFormatSet availableFormats;
 
     ColorFormat outputFormat;
     QColor color;
@@ -60,6 +65,7 @@ public:
     HueSlider *hueSlider;
     OpacitySlider *opacitySlider;
 
+    QVBoxLayout *formatsLayout;
     QButtonGroup *btnGroup;
     QPushButton *rgbBtn;
     QPushButton *hslBtn;
@@ -74,11 +80,14 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(ColorEditorImpl::UpdateReasons)
 
 ColorEditorImpl::ColorEditorImpl(ColorEditor *qq) :
     q(qq),
+    category(ColorCategory::CssCategory), // trick
+    availableFormats(),
     outputFormat(),
     color(QColor::Hsv),
     colorPicker(new ColorPickerWidget(qq)),
     hueSlider(new HueSlider(qq)),
-    opacitySlider(new OpacitySlider(qq)),/*,*/
+    opacitySlider(new OpacitySlider(qq)),
+    formatsLayout(new QVBoxLayout),
     btnGroup(new QButtonGroup(qq)),
     rgbBtn(new QPushButton(qq)),
     hslBtn(new QPushButton(qq)),
@@ -109,6 +118,81 @@ void ColorEditorImpl::updateColorWidgets(const QColor &cl, UpdateReasons whichUp
         hueSlider->setValueAtomic(cl.hsvHue());
         opacitySlider->setValueAtomic(cl.alpha());
     }
+}
+
+void ColorEditorImpl::updateFormatsLayout()
+{
+    // Clear the layout
+    QLayoutItem *child;
+    while ( (child = formatsLayout->takeAt(0)) != 0 ) {
+        delete child;
+    }
+
+    // Populate with right buttons
+    if (availableFormats.contains(ColorFormat::QCssRgbFormat)) {
+        rgbBtn->setVisible(true);
+        formatsLayout->addWidget(rgbBtn);
+    }
+    else {
+        rgbBtn->setVisible(false);
+    }
+
+    if (availableFormats.contains(ColorFormat::QssHsvFormat)) {
+        hsvBtn->setVisible(true);
+        formatsLayout->addWidget(hsvBtn);
+    }
+    else {
+        hsvBtn->setVisible(false);
+    }
+
+    if (availableFormats.contains(ColorFormat::CssHslFormat)) {
+        hslBtn->setVisible(true);
+        formatsLayout->addWidget(hslBtn);
+    }
+    else {
+        hslBtn->setVisible(false);
+    }
+
+    if (availableFormats.contains(ColorFormat::QmlRgbaFormat)) {
+        qmlRgbaBtn->setVisible(true);
+        formatsLayout->addWidget(qmlRgbaBtn);
+    }
+    else {
+        qmlRgbaBtn->setVisible(false);
+    }
+
+    if (availableFormats.contains(ColorFormat::QmlHslaFormat)) {
+        qmlHslaBtn->setVisible(true);
+        formatsLayout->addWidget(qmlHslaBtn);
+    }
+    else {
+        qmlHslaBtn->setVisible(false);
+    }
+
+    if (availableFormats.contains(ColorFormat::Vec3Format)) {
+        vecBtn->setVisible(true);
+        formatsLayout->addWidget(vecBtn);
+    }
+    else {
+        vecBtn->setVisible(false);
+    }
+
+    if (availableFormats.contains(ColorFormat::HexFormat)) {
+        hexBtn->setVisible(true);
+        formatsLayout->addWidget(hexBtn);
+    }
+    else {
+        hexBtn->setVisible(false);
+    }
+
+    formatsLayout->addStretch();
+}
+
+void ColorEditorImpl::replaceAvailableFormats(const ColorFormatSet &formats)
+{
+    availableFormats = formats;
+
+    updateFormatsLayout();
 }
 
 void ColorEditorImpl::setCurrentFormat(ColorFormat f)
@@ -208,22 +292,13 @@ ColorEditor::ColorEditor(QWidget *parent) :
     // Default checked button
     d->rgbBtn->setChecked(true);
 
-    QGridLayout *formatsLayout = new QGridLayout;
-    formatsLayout->addWidget(d->rgbBtn, 0, 0);
-    formatsLayout->addWidget(d->hslBtn, 1, 0);
-    formatsLayout->addWidget(d->hsvBtn, 2, 0);
-    formatsLayout->addWidget(d->qmlRgbaBtn, 3, 0);
-    formatsLayout->addWidget(d->qmlHslaBtn, 4, 0);
-    formatsLayout->addWidget(d->vecBtn, 5, 0);
-    formatsLayout->addWidget(d->hexBtn, 6, 0);
-
     QHBoxLayout *mainLayout = new QHBoxLayout(this);
     mainLayout->addLayout(leftPanelLayout);
     mainLayout->addSpacing(0);
     mainLayout->addWidget(d->colorPicker);
     mainLayout->addWidget(d->opacitySlider);
     mainLayout->addWidget(d->hueSlider);
-    mainLayout->addLayout(formatsLayout);
+    mainLayout->addLayout(d->formatsLayout);
 
     // Color format selection logic
     d->btnGroup->addButton(d->rgbBtn);
@@ -268,11 +343,63 @@ ColorEditor::ColorEditor(QWidget *parent) :
         d->setCurrentColor(newColor);
     });
 
+    setColorCategory(ColorCategory::AnyCategory);
     setColor(Qt::red);
 }
 
 ColorEditor::~ColorEditor()
 {}
+
+ColorCategory ColorEditor::colorCategory() const
+{
+    return d->category;
+}
+
+void ColorEditor::setColorCategory(ColorCategory category)
+{
+    if (d->category != category) {
+        d->category = category;
+
+        ColorFormatSet formats;
+
+        switch (category) {
+        case ColorCategory::AnyCategory:
+            formats << QCssRgbFormat << QCssRgbPercentFormat
+                    << QCssRgbaAlphaFloatFormat << QCssRgbaAlphaPercentFormat
+                    << QssHsvFormat << QssHsvaFormat
+                    << CssHslFormat << CssHslaFormat
+                    << QmlRgbaFormat << QmlHslaFormat
+                    << Vec3Format << Vec4Format
+                    << HexFormat;
+            break;
+        case ColorCategory::QssCategory:
+            formats << QCssRgbFormat << QCssRgbPercentFormat << QCssRgbaAlphaFloatFormat
+                    << QCssRgbaAlphaPercentFormat << QssHsvFormat << QssHsvaFormat
+                    << HexFormat;
+            break;
+        case ColorCategory::CssCategory:
+            formats << QCssRgbFormat << QCssRgbPercentFormat << QCssRgbaAlphaFloatFormat
+                    << QCssRgbaAlphaPercentFormat << CssHslFormat << CssHslaFormat
+                    << HexFormat;
+            break;
+        case ColorCategory::QmlCategory:
+            formats << QmlRgbaFormat << QmlHslaFormat;
+            break;
+        case ColorCategory::GlslCategory:
+            formats << Vec3Format << Vec4Format;
+            break;
+        default:
+            break;
+        }
+
+        d->replaceAvailableFormats(formats);
+    }
+}
+
+ColorFormatSet ColorEditor::availableFormats() const
+{
+    return d->availableFormats;
+}
 
 ColorFormat ColorEditor::outputFormat() const
 {

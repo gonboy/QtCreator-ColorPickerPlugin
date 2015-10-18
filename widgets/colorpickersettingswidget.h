@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class QCheckBox;
+
 namespace ColorPicker {
 namespace Internal {
 
@@ -20,6 +22,7 @@ public:
     void settingsToUI(const GeneralSettings settings);
 
 private:
+    QCheckBox *m_editorSensitiveCheckBox;
 };
 
 } // namespace Internal

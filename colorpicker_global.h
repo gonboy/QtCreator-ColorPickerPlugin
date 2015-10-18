@@ -8,6 +8,15 @@
 namespace ColorPicker {
 namespace Internal {
 
+enum ColorCategory
+{
+    AnyCategory,
+    QssCategory,
+    CssCategory,
+    QmlCategory,
+    GlslCategory
+};
+
 enum ColorFormat
 {
     // Qss-Css common
@@ -24,12 +33,14 @@ enum ColorFormat
     // Qml
     QmlRgbaFormat,                // Qt.rgba(1.0, 1.0, 1.0, 1.0)
     QmlHslaFormat,                // Qt.hsla(1.0, 1.0, 1.0, 1.0)
-    // OpenGL
+    // Glsl
     Vec3Format,                   // vec3(1.0, 1.0, 1.0)
     Vec4Format,                   // vec4(1.0, 1.0, 1.0, 1.0)
     // Others
     HexFormat                     // #FFFFFFFFFFFF | #FFFFFFFFF | #FFFFFFFF | #FFFFFF | #FFF
 };
+
+typedef QSet<ColorFormat> ColorFormatSet;
 
 struct ColorExpr
 {
