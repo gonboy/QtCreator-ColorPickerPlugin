@@ -39,4 +39,3 @@ QBrush HueSlider::gradientBrush() const
 
 } // namespace Internal
 } // namespace ColorPicker
-
