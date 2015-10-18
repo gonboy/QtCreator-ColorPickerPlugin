@@ -57,7 +57,7 @@ public:
 };
 
 ColorWatcherImpl::ColorWatcherImpl() :
-    watched(0)
+    watched(nullptr)
 {}
 
 ColorWatcherImpl::~ColorWatcherImpl() {}

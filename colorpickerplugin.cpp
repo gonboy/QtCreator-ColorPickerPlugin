@@ -33,7 +33,7 @@ ColorPickerPluginImpl::ColorPickerPluginImpl(ColorPickerPlugin *qq) :
     q(qq),
     watchers(),
     colorModifier(new ColorModifier(qq)),
-    colorEditor(0),
+    colorEditor(nullptr),
     generalSettings()
 {}
 
@@ -131,7 +131,7 @@ void ColorPickerPlugin::onColorEditTriggered()
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
 
     if (editorWidget) {
-        ColorWatcher *watcher = 0;
+        ColorWatcher *watcher = nullptr;
 
         if (!d->watchers.contains(editorWidget)) {
             watcher = new ColorWatcher(editorWidget);

@@ -127,7 +127,7 @@ void ColorEditorImpl::setCurrentColor(const QColor &cl)
 
 QAbstractButton *ColorEditorImpl::colorFormatToButton(ColorFormat format) const
 {
-    QAbstractButton *ret = 0;
+    QAbstractButton *ret = nullptr;
 
     switch (format) {
     case QCssRgbFormat:
