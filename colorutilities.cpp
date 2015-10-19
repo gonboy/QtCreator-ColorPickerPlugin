@@ -18,23 +18,29 @@ QColor parseColor(ColorFormat format, const QRegularExpressionMatch &match)
         ret.setRgb(r, g, b);
     }
     if (format == ColorFormat::QCssRgbPercentFormat) {
-        int r = match.captured(1).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
-        int g = match.captured(2).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
-        int b = match.captured(3).remove(QChar::fromLatin1('%')).toInt() / 100 * 255;
+        qreal r = match.captured(1).remove(QChar::fromLatin1('%')).toDouble() / 100;
+        qreal g = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
+        qreal b = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
 
-        ret.setRgb(r, g, b);
-    }
-    else if (format == ColorFormat::QCssRgbaAlphaPercentFormat) {
-        ret.setRed(match.captured(1).toInt());
-        ret.setGreen(match.captured(2).toInt());
-        ret.setBlue(match.captured(3).toInt());
-        ret.setAlphaF(match.captured(4).remove(QChar::fromLatin1('%')).toFloat() / 100);
+        ret.setRgbF(r, g, b);
     }
     else if (format == ColorFormat::QCssRgbaAlphaFloatFormat) {
-        ret.setRed(match.captured(1).toInt());
-        ret.setGreen(match.captured(2).toInt());
-        ret.setBlue(match.captured(3).toInt());
-        ret.setAlphaF(match.captured(4).toFloat());
+        int r = match.captured(1).toInt();
+        int g = match.captured(2).toInt();
+        int b = match.captured(3).toInt();
+        qreal a = match.captured(4).toDouble();
+
+        ret.setRgb(r, g, b);
+        ret.setAlphaF(a);
+    }
+    else if (format == ColorFormat::QCssRgbaAlphaPercentFormat) {
+        int r = match.captured(1).toInt();
+        int g = match.captured(2).toInt();
+        int b = match.captured(3).toInt();
+        qreal a = match.captured(4).remove(QChar::fromLatin1('%')).toDouble() / 100;
+
+        ret.setRgb(r, g, b);
+        ret.setAlphaF(a);
     }
     else if (format == ColorFormat::QssHsvFormat) {
         qreal h = match.captured(1).toDouble();
@@ -117,8 +123,8 @@ QString colorFormatToPrefix(ColorFormat type)
     case ColorFormat::QCssRgbPercentFormat:
         ret = QLatin1String("rgb(");
         break;
-    case ColorFormat::QCssRgbaAlphaPercentFormat:
     case ColorFormat::QCssRgbaAlphaFloatFormat:
+    case ColorFormat::QCssRgbaAlphaPercentFormat:
         ret = QLatin1String("rgba(");
         break;
     case ColorFormat::QssHsvFormat:
@@ -166,21 +172,13 @@ QString colorToString(const QColor &color, ColorFormat format)
                 + QString::number(color.blue());
     }
     if (format == ColorFormat::QCssRgbPercentFormat) {
-        int rP = color.red() / 255;
-        int gP = color.green() / 255;
-        int bP = color.blue() / 255;
+        int rP = qRound(color.redF() * 100);
+        int gP = qRound(color.greenF() * 100);
+        int bP = qRound(color.blueF() * 100);
 
         colorComponents = QString::number(rP) + QChar::fromLatin1('%') + QLatin1String(", ")
                 + QString::number(gP) + QChar::fromLatin1('%') + QLatin1String(", ")
                 + QString::number(bP) + QChar::fromLatin1('%');
-    }
-    else if (format == ColorFormat::QCssRgbaAlphaPercentFormat) {
-        int aP = color.alphaF() * 100;
-
-        colorComponents = QString::number(color.red()) + QLatin1String(", ")
-                + QString::number(color.green()) + QLatin1String(", ")
-                + QString::number(color.blue()) + QLatin1String(", ")
-                + QString::number(aP) + QChar::fromLatin1('%');
     }
     else if (format == ColorFormat::QCssRgbaAlphaFloatFormat) {
         colorComponents = QString::number(color.red()) + QLatin1String(", ")
@@ -188,13 +186,21 @@ QString colorToString(const QColor &color, ColorFormat format)
                 + QString::number(color.blue()) + QLatin1String(", ")
                 + QString::number(color.alphaF());
     }
+    else if (format == ColorFormat::QCssRgbaAlphaPercentFormat) {
+        int aP = qRound(color.alphaF() * 100);
+
+        colorComponents = QString::number(color.red()) + QLatin1String(", ")
+                + QString::number(color.green()) + QLatin1String(", ")
+                + QString::number(color.blue()) + QLatin1String(", ")
+                + QString::number(aP) + QChar::fromLatin1('%');
+    }
     else if (format == ColorFormat::QssHsvFormat) {
         colorComponents = QString::number(color.hsvHue()) + QLatin1String(", ")
                 + QString::number(color.hsvSaturation()) + QLatin1String(", ")
                 + QString::number(color.value());
     }
     else if (format == ColorFormat::QssHsvaFormat) {
-        int aP = color.alphaF() * 100;
+        int aP = qRound(color.alphaF() * 100);
 
         colorComponents = QString::number(color.hsvHue()) + QLatin1String(", ")
                 + QString::number(color.hsvSaturation()) + QLatin1String(", ")
