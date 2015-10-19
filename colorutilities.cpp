@@ -43,16 +43,16 @@ QColor parseColor(ColorFormat format, const QRegularExpressionMatch &match)
         ret.setAlphaF(a);
     }
     else if (format == ColorFormat::QssHsvFormat) {
-        qreal h = match.captured(1).toDouble();
-        qreal s = match.captured(2).toDouble();
-        qreal v = match.captured(3).toDouble();
+        int h = match.captured(1).toInt();
+        int s = match.captured(2).toInt();
+        int v = match.captured(3).toInt();
 
         ret.setHsv(h, s, v);
     }
     else if (format == ColorFormat::QssHsvaFormat) {
-        qreal h = match.captured(1).toDouble();
-        qreal s = match.captured(2).toDouble();
-        qreal v = match.captured(3).toDouble();
+        int h = match.captured(1).toInt();
+        int s = match.captured(2).toInt();
+        int v = match.captured(3).toInt();
         qreal a = match.captured(4).remove(QChar::fromLatin1('%')).toDouble() / 100;
 
         ret.setHsv(h, s, v);
