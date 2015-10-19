@@ -59,19 +59,20 @@ QColor parseColor(ColorFormat format, const QRegularExpressionMatch &match)
         ret.setAlphaF(a);
     }
     else if (format == ColorFormat::CssHslFormat) {
-        qreal h = match.captured(1).toDouble() / 359;
-        qreal s = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
-        qreal l = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
+        int h = match.captured(1).toInt();
+        int s = match.captured(2).remove(QChar::fromLatin1('%')).toInt() * 255 / 100;
+        int l = match.captured(3).remove(QChar::fromLatin1('%')).toInt() * 255 / 100;
 
-        ret.setHslF(h, s, l);
+        ret.setHsl(h, s, l);
     }
     else if (format == ColorFormat::CssHslaFormat) {
-        qreal h = match.captured(1).toDouble() / 359;
-        float s = match.captured(2).remove(QChar::fromLatin1('%')).toDouble() / 100;
-        qreal l = match.captured(3).remove(QChar::fromLatin1('%')).toDouble() / 100;
+        int h = match.captured(1).toInt();
+        int s = match.captured(2).remove(QChar::fromLatin1('%')).toInt() * 255 / 100;
+        int l = match.captured(3).remove(QChar::fromLatin1('%')).toInt() * 255 / 100;
         qreal a = match.captured(4).toDouble();
 
-        ret.setHslF(h, s, l, a);
+        ret.setHsl(h, s, l);
+        ret.setAlphaF(a);
     }
     else if (format == ColorFormat::QmlRgbaFormat) {
         qreal r = match.captured(1).toDouble();
@@ -207,16 +208,16 @@ QString colorToString(const QColor &color, ColorFormat format)
                 + QString::number(aP);
     }
     else if (format == ColorFormat::CssHslFormat) {
-        int sP = color.hslSaturation() * 100 / 255;
-        int lP = color.lightness() * 100 / 255;
+        int sP = qRound(color.hslSaturationF() * 100);
+        int lP = qRound(color.lightnessF() * 100);
 
         colorComponents = QString::number(color.hslHue()) + QLatin1String(", ")
                 + QString::number(sP) + QChar::fromLatin1('%') + QLatin1String(", ")
                 + QString::number(lP) + QChar::fromLatin1('%');
     }
     else if (format == ColorFormat::CssHslaFormat) {
-        int sP = color.hslSaturation() * 100 / 255;
-        int lP = color.lightness() * 100 / 255;
+        int sP = qRound(color.hslSaturationF() * 100);
+        int lP = qRound(color.lightnessF() * 100);
 
         colorComponents = QString::number(color.hslHue()) + QLatin1String(", ")
                 + QString::number(sP) + QChar::fromLatin1('%') + QLatin1String(", ")
