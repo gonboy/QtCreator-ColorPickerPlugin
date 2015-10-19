@@ -48,7 +48,7 @@ struct ColorExpr
     QPoint pos;
 };
 
-QColor parseColor(ColorFormat type, const QRegularExpressionMatch &match);
+QColor parseColor(ColorFormat format, const QRegularExpressionMatch &match);
 QString colorFormatToPrefix(ColorFormat type);
 QString colorToString(const QColor &color, ColorFormat format);
 
