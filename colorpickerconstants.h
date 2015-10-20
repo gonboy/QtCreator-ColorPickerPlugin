@@ -42,115 +42,115 @@ const std::string _RXPART_BLANK = "\\s*?";
 
 // Qss-Css colors
 DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_01,
-                    "rgb" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK
-                    + "\\)");
+                     "rgb" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_02,
-                    "rgb" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE + _RXPART_BLANK
-                    + "\\)");
+                     "rgb" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_01,
-                    "rgba" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE + _RXPART_BLANK
-                    + "\\)");
+                     "rgba" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_02,
-                    "rgba" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-                    + "\\)");
+                     "rgba" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                     + "\\)");
 
 // Qss colors
 DECL_QREGEX_CONSTANT(REGEX_QSS_HSV,
-                    "hsv" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_359  + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255  + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255 + _RXPART_BLANK
-                    + "\\)");
+                     "hsv" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_359  + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255  + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_QSS_HSVA,
-                    "hsva" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_359 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
-                    + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE + _RXPART_BLANK
-                    + "\\)");
+                     "hsva" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_359 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                     + _RXPART_0_TO_255  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK
+                     + "\\)");
 
 // Css colors
 DECL_QREGEX_CONSTANT(REGEX_CSS_HSL,
-                    "hsl" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_359  + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE  + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE + _RXPART_BLANK
-                    + "\\)");
+                     "hsl" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_359  + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE  + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_CSS_HSLA,
-                    "hsla" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_0_TO_359 + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
-                    + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-                    + "\\)");
+                     "hsla" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_359 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE  + _RXPART_BLANK + ","  + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                     + "\\)");
 
 // Qml colors
 DECL_QREGEX_CONSTANT(REGEX_QML_RGBA,
-                    "Qt.rgba" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
-                    + "\\)");
+                     "Qt.rgba" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_QML_HSLA,
-                    "Qt.hsla" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
-                    + "\\)");
+                     "Qt.hsla" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + _RXPART_BLANK
+                     + "\\)");
 
 // OpenGL colors
 DECL_QREGEX_CONSTANT(REGEX_VEC3,
-                    "vec3" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-                    + "\\)");
+                     "vec3" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                     + "\\)");
 
 DECL_QREGEX_CONSTANT(REGEX_VEC4,
-                    "vec4" + _RXPART_BLANK
-                    + "\\(" + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
-                    + _RXPART_FLOAT_VALUE + _RXPART_BLANK
-                    + "\\)");
+                     "vec4" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                     + "\\)");
 
 // Other colors
 DECL_QREGEX_CONSTANT(REGEX_HEXCOLOR,
-                    "(\\#[a-f0-9]{12}|\\#[a-f0-9]{9}|\\#[a-f0-9]{8}|\\#[a-f0-9]{6}|\\#[a-f0-9]{3})");
+                     "(\\#[a-f0-9]{12}|\\#[a-f0-9]{9}|\\#[a-f0-9]{8}|\\#[a-f0-9]{6}|\\#[a-f0-9]{3})");
 
 } // namespace Constants
 } // namespace Internal
