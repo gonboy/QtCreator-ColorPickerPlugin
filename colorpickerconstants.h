@@ -41,7 +41,7 @@ const std::string _RXPART_BLANK = "\\s*?";
 ////////////////////////// Regex //////////////////////////
 
 // Qss-Css colors
-DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_01,
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_UCHAR,
                      "rgb" + _RXPART_BLANK
                      + "\\(" + _RXPART_BLANK
                      + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
@@ -49,7 +49,16 @@ DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_01,
                      + _RXPART_0_TO_255 + _RXPART_BLANK
                      + "\\)");
 
-DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_02,
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_UCHAR,
+                     "rgba" + _RXPART_BLANK
+                     + "\\(" + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_FLOAT_VALUE + _RXPART_BLANK
+                     + "\\)");
+
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_PERCENT,
                      "rgb" + _RXPART_BLANK
                      + "\\(" + _RXPART_BLANK
                      + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
@@ -57,21 +66,12 @@ DECL_QREGEX_CONSTANT(REGEX_QCSS_RGB_02,
                      + _RXPART_PERCENTAGE + _RXPART_BLANK
                      + "\\)");
 
-DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_01,
+DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_PERCENT,
                      "rgba" + _RXPART_BLANK
                      + "\\(" + _RXPART_BLANK
-                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                     + _RXPART_PERCENTAGE + _RXPART_BLANK
-                     + "\\)");
-
-DECL_QREGEX_CONSTANT(REGEX_QCSS_RGBA_02,
-                     "rgba" + _RXPART_BLANK
-                     + "\\(" + _RXPART_BLANK
-                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
-                     + _RXPART_0_TO_255 + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
+                     + _RXPART_PERCENTAGE + _RXPART_BLANK + "," + _RXPART_BLANK
                      + _RXPART_FLOAT_VALUE + _RXPART_BLANK
                      + "\\)");
 

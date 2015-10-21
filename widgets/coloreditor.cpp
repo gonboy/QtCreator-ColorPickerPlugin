@@ -129,7 +129,7 @@ void ColorEditorImpl::updateFormatsLayout()
     }
 
     // Populate with right buttons
-    if (availableFormats.contains(ColorFormat::QCssRgbFormat)) {
+    if (availableFormats.contains(ColorFormat::QCssRgbUCharFormat)) {
         rgbBtn->setVisible(true);
         formatsLayout->addWidget(rgbBtn);
     }
@@ -169,7 +169,7 @@ void ColorEditorImpl::updateFormatsLayout()
         qmlHslaBtn->setVisible(false);
     }
 
-    if (availableFormats.contains(ColorFormat::Vec3Format)) {
+    if (availableFormats.contains(ColorFormat::GlslFormat)) {
         vecBtn->setVisible(true);
         formatsLayout->addWidget(vecBtn);
     }
@@ -214,18 +214,14 @@ QAbstractButton *ColorEditorImpl::colorFormatToButton(ColorFormat format) const
     QAbstractButton *ret = nullptr;
 
     switch (format) {
-    case QCssRgbFormat:
+    case QCssRgbUCharFormat:
     case QCssRgbPercentFormat:
-    case QCssRgbaAlphaFloatFormat:
-    case QCssRgbaAlphaPercentFormat:
         ret = rgbBtn;
         break;
     case QssHsvFormat:
-    case QssHsvaFormat:
         ret = hsvBtn;
         break;
     case CssHslFormat:
-    case CssHslaFormat:
         ret = hslBtn;
         break;
     case QmlRgbaFormat:
@@ -234,8 +230,7 @@ QAbstractButton *ColorEditorImpl::colorFormatToButton(ColorFormat format) const
     case QmlHslaFormat:
         ret = qmlHslaBtn;
         break;
-    case Vec3Format:
-    case Vec4Format:
+    case GlslFormat:
         ret = vecBtn;
         break;
     case HexFormat:
@@ -367,29 +362,28 @@ void ColorEditor::setColorCategory(ColorCategory category)
 
         switch (category) {
         case ColorCategory::AnyCategory:
-            formats << QCssRgbFormat << QCssRgbPercentFormat
-                    << QCssRgbaAlphaFloatFormat << QCssRgbaAlphaPercentFormat
-                    << QssHsvFormat << QssHsvaFormat
-                    << CssHslFormat << CssHslaFormat
+            formats << QCssRgbUCharFormat << QCssRgbPercentFormat
+                    << QssHsvFormat
+                    << CssHslFormat
                     << QmlRgbaFormat << QmlHslaFormat
-                    << Vec3Format << Vec4Format
+                    << GlslFormat
                     << HexFormat;
             break;
         case ColorCategory::QssCategory:
-            formats << QCssRgbFormat << QCssRgbPercentFormat << QCssRgbaAlphaFloatFormat
-                    << QCssRgbaAlphaPercentFormat << QssHsvFormat << QssHsvaFormat
+            formats << QCssRgbUCharFormat << QCssRgbPercentFormat
+                    << QssHsvFormat
                     << HexFormat;
             break;
         case ColorCategory::CssCategory:
-            formats << QCssRgbFormat << QCssRgbPercentFormat << QCssRgbaAlphaFloatFormat
-                    << QCssRgbaAlphaPercentFormat << CssHslFormat << CssHslaFormat
+            formats << QCssRgbUCharFormat << QCssRgbPercentFormat
+                    << CssHslFormat
                     << HexFormat;
             break;
         case ColorCategory::QmlCategory:
             formats << QmlRgbaFormat << QmlHslaFormat;
             break;
         case ColorCategory::GlslCategory:
-            formats << Vec3Format << Vec4Format;
+            formats << GlslFormat;
             break;
         default:
             break;
@@ -484,19 +478,14 @@ void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
 {
     ColorFormat format;
 
-    bool useAlpha = d->color.alphaF() < 1.0f;
-
     if (checkedBtn == d->rgbBtn) {
-        format = (useAlpha) ? ColorFormat::QCssRgbaAlphaFloatFormat
-                            : ColorFormat::QCssRgbFormat;
+        format = ColorFormat::QCssRgbUCharFormat;
     }
     else if (checkedBtn == d->hslBtn) {
-        format = (useAlpha) ? ColorFormat::CssHslaFormat
-                            : ColorFormat::CssHslFormat;
+        format = ColorFormat::CssHslFormat;
     }
     else if (checkedBtn == d->hsvBtn) {
-        format = (useAlpha) ? ColorFormat::QssHsvaFormat
-                            : ColorFormat::QssHsvFormat;
+        format = ColorFormat::QssHsvFormat;
     }
     else if (checkedBtn == d->qmlRgbaBtn) {
         format = ColorFormat::QmlRgbaFormat;
@@ -505,8 +494,7 @@ void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
         format = ColorFormat::QmlHslaFormat;
     }
     else if (checkedBtn == d->vecBtn) {
-        format = (useAlpha) ? ColorFormat::Vec3Format
-                            : ColorFormat::Vec4Format;
+        format = ColorFormat::GlslFormat;
     }
     else if (checkedBtn == d->hexBtn)
         format = ColorFormat::HexFormat;

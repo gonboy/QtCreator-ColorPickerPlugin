@@ -23,20 +23,20 @@ using namespace TextEditor;
 namespace ColorPicker {
 namespace Internal {
 
-static QMap<ColorFormat, QRegularExpression> colorRegexes
+static QMultiMap<ColorFormat, QRegularExpression> colorRegexes
 {
-    { ColorFormat::QCssRgbFormat, Constants::REGEX_QCSS_RGB_01 },
-    { ColorFormat::QCssRgbPercentFormat, Constants::REGEX_QCSS_RGB_02 },
-    { ColorFormat::QCssRgbaAlphaPercentFormat, Constants::REGEX_QCSS_RGBA_01},
-    { ColorFormat::QCssRgbaAlphaFloatFormat, Constants::REGEX_QCSS_RGBA_02 },
+    { ColorFormat::QCssRgbUCharFormat, Constants::REGEX_QCSS_RGB_UCHAR },
+    { ColorFormat::QCssRgbUCharFormat, Constants::REGEX_QCSS_RGBA_UCHAR },
+    { ColorFormat::QCssRgbPercentFormat, Constants::REGEX_QCSS_RGB_PERCENT },
+    { ColorFormat::QCssRgbPercentFormat, Constants::REGEX_QCSS_RGBA_PERCENT },
     { ColorFormat::QssHsvFormat, Constants::REGEX_QSS_HSV },
-    { ColorFormat::QssHsvaFormat, Constants::REGEX_QSS_HSVA },
+    { ColorFormat::QssHsvFormat, Constants::REGEX_QSS_HSVA },
     { ColorFormat::CssHslFormat, Constants::REGEX_CSS_HSL },
-    { ColorFormat::CssHslaFormat, Constants::REGEX_CSS_HSLA },
+    { ColorFormat::CssHslFormat, Constants::REGEX_CSS_HSLA },
     { ColorFormat::QmlRgbaFormat, Constants::REGEX_QML_RGBA },
     { ColorFormat::QmlHslaFormat, Constants::REGEX_QML_HSLA },
-    { ColorFormat::Vec3Format, Constants::REGEX_VEC3 },
-    { ColorFormat::Vec4Format, Constants::REGEX_VEC4 },
+    { ColorFormat::GlslFormat, Constants::REGEX_VEC3 },
+    { ColorFormat::GlslFormat, Constants::REGEX_VEC4 },
     { ColorFormat::HexFormat, Constants::REGEX_HEXCOLOR }
 };
 
@@ -118,6 +118,8 @@ ColorExpr ColorWatcher::process()
                 //
                 ColorFormat type = it.key();
                 QColor color = parseColor(type, match);
+
+                qDebug() << "output";
 
                 ret.format = type;
                 ret.value = color;
