@@ -292,7 +292,7 @@ ColorEditor::ColorEditor(QWidget *parent) :
     // Default checked button
     d->rgbBtn->setChecked(true);
 
-    QHBoxLayout *mainLayout = new QHBoxLayout(this);
+    auto *mainLayout = new QHBoxLayout(this);
     mainLayout->addLayout(leftPanelLayout);
     mainLayout->addSpacing(0);
     mainLayout->addWidget(d->colorPicker);

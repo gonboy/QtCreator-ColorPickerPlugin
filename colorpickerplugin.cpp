@@ -89,7 +89,7 @@ ColorPickerPlugin::~ColorPickerPlugin()
 
 bool ColorPickerPlugin::initialize(const QStringList & /* arguments */, QString * /* errorMessage */)
 {
-    ColorPickerOptionsPage *optionsPage = new ColorPickerOptionsPage;
+    auto *optionsPage = new ColorPickerOptionsPage;
     d->generalSettings = optionsPage->generalSettings();
 
     connect(optionsPage, &ColorPickerOptionsPage::generalSettingsChanged,
