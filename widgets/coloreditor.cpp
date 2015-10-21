@@ -314,7 +314,10 @@ ColorEditor::ColorEditor(QWidget *parent) :
 
     // Color changes logic
     connect(d->colorPicker, &ColorPickerWidget::colorChanged,
-            [=](const QColor &newColor) {
+            [=](const QColor &pureColor) {
+        QColor newColor(pureColor);
+        newColor.setAlpha(d->opacitySlider->value());
+
         d->updateColorWidgets(newColor, ColorEditorImpl::UpdateFromColorPicker);
         d->setCurrentColor(newColor);
     });
