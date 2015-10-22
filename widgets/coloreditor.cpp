@@ -48,6 +48,7 @@ public:
     void replaceAvailableFormats(const ColorFormatSet &formats);
 
     void setCurrentFormat(ColorFormat f);
+    void setCurrentFormat_atomic(ColorFormat f);
     void setCurrentColor(const QColor &cl);
 
     QAbstractButton *colorFormatToButton(ColorFormat format) const;
@@ -200,6 +201,11 @@ void ColorEditorImpl::setCurrentFormat(ColorFormat f)
     outputFormat = f;
 
     emit q->outputFormatChanged(f);
+}
+
+void ColorEditorImpl::setCurrentFormat_atomic(ColorFormat f)
+{
+    outputFormat = f;
 }
 
 void ColorEditorImpl::setCurrentColor(const QColor &cl)
@@ -360,6 +366,15 @@ void ColorEditor::setColorCategory(ColorCategory category)
 
         ColorFormatSet formats = formatsFromCategory(category);
         d->replaceAvailableFormats(formats);
+
+        // Set the first format in the set and check the right button
+        ColorFormat firstFormat = (*formats.begin());
+
+        const QSignalBlocker blocker(d->btnGroup);
+        QAbstractButton *btn = d->colorFormatToButton(firstFormat);
+        btn->click();
+
+        d->setCurrentFormat_atomic(firstFormat);
     }
 }
 
