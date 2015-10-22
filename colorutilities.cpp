@@ -6,6 +6,17 @@
 namespace ColorPicker {
 namespace Internal {
 
+static QString colorDoubleToQString(double n)
+{
+    QString ret = QString::number(n, 'f', 2);
+
+    QString toReplace = QLatin1String(".00");
+    if (ret.contains(toReplace))
+        ret.replace(toReplace, QLatin1String(".0"));
+
+    return ret;
+}
+
 ColorFormatSet formatsFromCategory(ColorCategory category)
 {
     ColorFormatSet ret;
@@ -159,7 +170,7 @@ QString colorToString(const QColor &color, ColorFormat format)
         qreal alpha = color.alphaF();
         if (alpha < 1.0) {
             prefix.insert(3, QLatin1Char('a'));
-            colorComponents += QLatin1String(", ") + QString::number(color.alphaF());
+            colorComponents += QLatin1String(", ") + colorDoubleToQString(color.alphaF());
         }
     }
     if (format == ColorFormat::QCssRgbPercentFormat) {
@@ -176,7 +187,7 @@ QString colorToString(const QColor &color, ColorFormat format)
 
         if (alpha < 1.0) {
             prefix.insert(3, QLatin1Char('a'));
-            colorComponents += QLatin1String(", ") + QString::number(alpha);
+            colorComponents += QLatin1String(", ") + colorDoubleToQString(alpha);
         }
     }
     else if (format == ColorFormat::QssHsvFormat) {
@@ -189,7 +200,7 @@ QString colorToString(const QColor &color, ColorFormat format)
 
         if (aP < 100) {
             prefix.insert(3, QLatin1Char('a'));
-            colorComponents += QLatin1String(", ") + QString::number(aP);
+            colorComponents += QLatin1String(", ") + colorDoubleToQString(aP);
         }
     }
     else if (format == ColorFormat::CssHslFormat) {
@@ -205,34 +216,34 @@ QString colorToString(const QColor &color, ColorFormat format)
         qreal alpha = color.alphaF();
         if (alpha < 1.0) {
             prefix.insert(3, QLatin1Char('a'));
-            colorComponents += QLatin1String(", ") + QString::number(color.alphaF());
+            colorComponents += QLatin1String(", ") + colorDoubleToQString(color.alphaF());
         }
     }
     else if (format == ColorFormat::QmlRgbaFormat) {
         prefix = QLatin1String("Qt.rgba(");
-        colorComponents = QString::number(color.redF()) + QLatin1String(", ")
-                + QString::number(color.greenF()) + QLatin1String(", ")
-                + QString::number(color.blueF()) + QLatin1String(", ")
-                + QString::number(color.alphaF());
+        colorComponents = colorDoubleToQString(color.redF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.greenF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.blueF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.alphaF());
     }
     else if (format == ColorFormat::QmlHslaFormat) {
         prefix = QLatin1String("Qt.hsla(");
-        colorComponents = QString::number(color.hueF()) + QLatin1String(", ")
-                + QString::number(color.saturationF()) + QLatin1String(", ")
-                + QString::number(color.lightnessF()) + QLatin1String(", ")
-                + QString::number(color.alphaF());
+        colorComponents = colorDoubleToQString(color.hueF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.saturationF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.lightnessF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.alphaF());
     }
     else if (format == ColorFormat::GlslFormat) {
         prefix = QLatin1String("vec");
 
-        colorComponents = QString::number(color.redF()) + QLatin1String(", ")
-                + QString::number(color.greenF()) + QLatin1String(", ")
-                + QString::number(color.blueF());
+        colorComponents = colorDoubleToQString(color.redF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.greenF()) + QLatin1String(", ")
+                + colorDoubleToQString(color.blueF());
 
         qreal alpha = color.alphaF();
         if (alpha < 1.0) {
             prefix.append(QLatin1Char('4'));
-            colorComponents += QLatin1String(", ") + QString::number(color.alphaF());
+            colorComponents += QLatin1String(", ") + colorDoubleToQString(color.alphaF());
         } else {
             prefix.append(QLatin1Char('3'));
         }
