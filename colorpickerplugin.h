@@ -28,6 +28,7 @@ public:
 private slots:
     void onColorEditTriggered();
     void onGeneralSettingsChanged(const GeneralSettings &gs);
+    void onEditorAboutToClose();
 
     // The following tests expect that no projects are loaded on start-up.
     void test_addAndReplaceColor();

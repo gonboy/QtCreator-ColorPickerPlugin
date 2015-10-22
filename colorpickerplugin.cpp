@@ -135,6 +135,9 @@ void ColorPickerPlugin::extensionsInitialized()
             [=](ColorFormat format) {
         d->colorModifier->insertColor(d->colorEditor->color(), format);
     });
+
+    connect(EditorManager::instance(), &EditorManager::editorAboutToClose,
+            this, &ColorPickerPlugin::onEditorAboutToClose);
 }
 
 void ColorPickerPlugin::onColorEditTriggered()
@@ -202,6 +205,11 @@ void ColorPickerPlugin::onGeneralSettingsChanged(const GeneralSettings &gs)
         if (d->colorEditor->parentWidget() == editorWidget->viewport())
             d->colorEditor->setColorCategory(newCat);
     }
+}
+
+void ColorPickerPlugin::onEditorAboutToClose()
+{
+    d->colorEditor->setParent(0);
 }
 
 } // namespace Internal
