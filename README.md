@@ -3,6 +3,17 @@ ColorPickerPlugin for QtCreator
 
 A color picker plugin to easily insert and modify colors in QtCreator's text documents.
 
+![Overview](readme_resources/overview.png)
+
+Features
+-----------------
+
+- Supports the following color formats : `rgb`, `hsv`, `hsl`, `QML`, `GLSL` and `hex`.
+
+Settings
+-----------------
+
+- Available formats can only be those supported by the current text editor. For example, the dialog only proposes `Qt.rgba` and `Qt.hsla` formats if you're editing a `QML` file.
 
 Build the plugin
 -----------------
