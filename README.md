@@ -1,7 +1,7 @@
 ColorPickerPlugin for QtCreator
 ===============================
 
-A color picker plugin to easily insert and modify colors in QtCreator's text documents.
+A color picker plugin to easily insert and modify colors in QtCreator's text documents, inspired by Adobe Brackets.
 
 ![Overview](readme_resources/overview.png)
 
