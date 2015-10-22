@@ -36,6 +36,8 @@ enum ColorFormat
 
 typedef QSet<ColorFormat> ColorFormatSet;
 
+ColorFormatSet formatsFromCategory(ColorCategory category);
+
 struct ColorExpr
 {
     ColorFormat format;

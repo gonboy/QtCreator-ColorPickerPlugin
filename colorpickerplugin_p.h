@@ -26,7 +26,7 @@ public:
     /* variables */
     ColorPickerPlugin *q;
 
-    QMap<TextEditor::TextEditorWidget *, ColorWatcher *> watchers;
+    QMap<Core::IEditor *, ColorWatcher *> watchers;
     ColorModifier *colorModifier;
     ColorEditor *colorEditor;
 

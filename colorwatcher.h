@@ -22,6 +22,9 @@ public:
     ColorWatcher(TextEditor::TextEditorWidget *textEditor);
     ~ColorWatcher();
 
+    ColorCategory colorCategory() const;
+    void setColorCategory(ColorCategory category);
+
     ColorExpr process();
 
 private:

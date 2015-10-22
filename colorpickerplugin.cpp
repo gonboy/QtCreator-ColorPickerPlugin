@@ -146,22 +146,23 @@ void ColorPickerPlugin::onColorEditTriggered()
     TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(currentEditor->widget());
 
     if (editorWidget) {
-        ColorWatcher *watcher = nullptr;
-
-        if (!d->watchers.contains(editorWidget)) {
-            watcher = new ColorWatcher(editorWidget);
-
-            d->watchers.insert(editorWidget, watcher);
-        }
-        else {
-            watcher = d->watchers.value(editorWidget);
-        }
-
-        Q_ASSERT(watcher);
-
         ColorCategory cat = (d->generalSettings.m_editorSensitive)
                 ? d->colorCategoryForEditor(currentEditor)
                 : ColorCategory::AnyCategory;
+
+        ColorWatcher *watcher = nullptr;
+
+        if (!d->watchers.contains(currentEditor)) {
+            watcher = new ColorWatcher(editorWidget);
+            watcher->setColorCategory(cat);
+
+            d->watchers.insert(currentEditor, watcher);
+        }
+        else {
+            watcher = d->watchers.value(currentEditor);
+        }
+
+        Q_ASSERT(watcher);
 
         d->colorEditor->setColorCategory(cat);
 
@@ -186,6 +187,21 @@ void ColorPickerPlugin::onColorEditTriggered()
 void ColorPickerPlugin::onGeneralSettingsChanged(const GeneralSettings &gs)
 {
     d->generalSettings = gs;
+
+    for (auto it = d->watchers.begin(); it != d->watchers.end(); ++it) {
+        ColorCategory newCat = (gs.m_editorSensitive) ? d->colorCategoryForEditor(it.key())
+                                                      : ColorCategory::AnyCategory;
+
+        ColorWatcher *watcher = it.value();
+        watcher->setColorCategory(newCat);
+
+        // Update the color editor
+        TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(it.key()->widget());
+        Q_ASSERT(editorWidget);
+
+        if (d->colorEditor->parentWidget() == editorWidget->viewport())
+            d->colorEditor->setColorCategory(newCat);
+    }
 }
 
 } // namespace Internal

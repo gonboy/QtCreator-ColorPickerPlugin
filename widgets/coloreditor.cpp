@@ -358,37 +358,7 @@ void ColorEditor::setColorCategory(ColorCategory category)
     if (d->category != category) {
         d->category = category;
 
-        ColorFormatSet formats;
-
-        switch (category) {
-        case ColorCategory::AnyCategory:
-            formats << QCssRgbUCharFormat << QCssRgbPercentFormat
-                    << QssHsvFormat
-                    << CssHslFormat
-                    << QmlRgbaFormat << QmlHslaFormat
-                    << GlslFormat
-                    << HexFormat;
-            break;
-        case ColorCategory::QssCategory:
-            formats << QCssRgbUCharFormat << QCssRgbPercentFormat
-                    << QssHsvFormat
-                    << HexFormat;
-            break;
-        case ColorCategory::CssCategory:
-            formats << QCssRgbUCharFormat << QCssRgbPercentFormat
-                    << CssHslFormat
-                    << HexFormat;
-            break;
-        case ColorCategory::QmlCategory:
-            formats << QmlRgbaFormat << QmlHslaFormat;
-            break;
-        case ColorCategory::GlslCategory:
-            formats << GlslFormat;
-            break;
-        default:
-            break;
-        }
-
+        ColorFormatSet formats = formatsFromCategory(category);
         d->replaceAvailableFormats(formats);
     }
 }

@@ -50,16 +50,27 @@ public:
     ~ColorWatcherImpl();
 
     /* functions */
+    void updateSearchFormats();
 
     /* variables */
     TextEditor::TextEditorWidget *watched;
+    ColorCategory category;
+    ColorFormatSet searchFormats;
 };
 
 ColorWatcherImpl::ColorWatcherImpl() :
-    watched(nullptr)
+    watched(nullptr),
+    category(ColorCategory::AnyCategory),
+    searchFormats()
 {}
 
-ColorWatcherImpl::~ColorWatcherImpl() {}
+ColorWatcherImpl::~ColorWatcherImpl()
+{}
+
+void ColorWatcherImpl::updateSearchFormats()
+{
+    searchFormats = formatsFromCategory(category);
+}
 
 
 ////////////////////////// ColorWatcher //////////////////////////
@@ -70,11 +81,27 @@ ColorWatcher::ColorWatcher(TextEditorWidget *textEditor) :
 {
     Q_ASSERT_X(textEditor, Q_FUNC_INFO, "ColorPickerPlugin > The text editor is invalid.");
     d->watched = textEditor;
+
+    d->updateSearchFormats();
 }
 
 ColorWatcher::~ColorWatcher()
 {
     // disconnect if necessary
+}
+
+ColorCategory ColorWatcher::colorCategory() const
+{
+    return d->category;
+}
+
+void ColorWatcher::setColorCategory(ColorCategory category)
+{
+    if (d->category != category) {
+        d->category = category;
+
+        d->updateSearchFormats();
+    }
 }
 
 ColorExpr ColorWatcher::process()
@@ -88,6 +115,11 @@ ColorExpr ColorWatcher::process()
     QString lineText = currentCursor.block().text();
 
     for (auto it = colorRegexes.begin(); it != colorRegexes.end(); ++it) {
+        ColorFormat format = it.key();
+
+        if (!d->searchFormats.contains(format))
+            continue;
+
         QRegularExpressionMatchIterator matchIt = it.value().globalMatch(lineText);
 
         if (matchIt.hasNext()) {
@@ -116,12 +148,9 @@ ColorExpr ColorWatcher::process()
                 d->watched->setTextCursor(currentCursor);
 
                 //
-                ColorFormat type = it.key();
-                QColor color = parseColor(type, match);
+                QColor color = parseColor(format, match);
 
-                qDebug() << "output";
-
-                ret.format = type;
+                ret.format = format;
                 ret.value = color;
 
                 break;

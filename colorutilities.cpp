@@ -6,6 +6,44 @@
 namespace ColorPicker {
 namespace Internal {
 
+ColorFormatSet formatsFromCategory(ColorCategory category)
+{
+    ColorFormatSet ret;
+
+    switch (category) {
+    case ColorCategory::AnyCategory:
+        ret << QCssRgbUCharFormat << QCssRgbPercentFormat
+            << QssHsvFormat
+            << CssHslFormat
+            << QmlRgbaFormat << QmlHslaFormat
+            << GlslFormat
+            << HexFormat;
+        break;
+    case ColorCategory::QssCategory:
+        ret << QCssRgbUCharFormat << QCssRgbPercentFormat
+            << QssHsvFormat
+            << HexFormat;
+        break;
+    case ColorCategory::CssCategory:
+        ret << QCssRgbUCharFormat << QCssRgbPercentFormat
+            << CssHslFormat
+            << HexFormat;
+        break;
+    case ColorCategory::QmlCategory:
+        ret << QmlRgbaFormat << QmlHslaFormat;
+        break;
+    case ColorCategory::GlslCategory:
+        ret << GlslFormat;
+        break;
+    default:
+        break;
+    }
+
+    Q_ASSERT(ret.size());
+
+    return ret;
+}
+
 QColor parseColor(ColorFormat format, const QRegularExpressionMatch &match)
 {
     QColor ret;
