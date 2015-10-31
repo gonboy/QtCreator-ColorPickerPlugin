@@ -41,41 +41,6 @@ ColorPickerPluginImpl::ColorPickerPluginImpl(ColorPickerPlugin *qq) :
 ColorPickerPluginImpl::~ColorPickerPluginImpl()
 {}
 
-ColorCategory ColorPickerPluginImpl::colorCategoryForEditor(IEditor *editor) const
-{
-    ColorCategory ret = ColorCategory::AnyCategory;
-
-    Id lastId = *(--editor->context().end());
-
-    if (lastId == QmlJSEditor::Constants::C_QMLJSEDITOR_ID)
-        ret = ColorCategory::QmlCategory;
-    else if (lastId == GlslEditor::Constants::C_GLSLEDITOR_ID)
-        ret = ColorCategory::GlslCategory;
-
-    return ret;
-}
-
-QPoint ColorPickerPluginImpl::clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const
-{
-    QPoint ret;
-    ret.ry() = cursorPos.y();
-
-    int colorEditorWidth = colorEditor->width();
-    int colorEditorHalfWidth = (colorEditorWidth / 2);
-
-    int posX = cursorPos.x() - colorEditorHalfWidth;
-    int widgetRight = rect.right();
-
-    if (posX < 0)
-        posX = 0;
-    else if ( (cursorPos.x() + colorEditorHalfWidth) > (widgetRight) )
-        posX = widgetRight - colorEditorWidth;
-
-    ret.rx() = posX;
-
-    return ret;
-}
-
 
 ////////////////////////// ColorPickerPlugin //////////////////////////
 
@@ -126,15 +91,10 @@ void ColorPickerPlugin::extensionsInitialized()
     d->colorEditor = new ColorEditor; // no parent
 
     // Create connections between internal objects
-    connect(d->colorEditor, &ColorEditor::colorChanged,
-            [=](const QColor &color) {
-        d->colorModifier->insertColor(color, d->colorEditor->outputFormat());
-    });
+    setInsertOnChange(d->generalSettings.m_insertOnChange);
 
-    connect(d->colorEditor, &ColorEditor::outputFormatChanged,
-            [=](ColorFormat format) {
-        d->colorModifier->insertColor(d->colorEditor->color(), format);
-    });
+    connect(d->colorEditor, &ColorEditor::colorSelected,
+            this, &ColorPickerPlugin::onColorSelected);
 
     connect(EditorManager::instance(), &EditorManager::editorAboutToClose,
             this, &ColorPickerPlugin::onEditorAboutToClose);
@@ -150,7 +110,7 @@ void ColorPickerPlugin::onColorEditTriggered()
 
     if (editorWidget) {
         ColorCategory cat = (d->generalSettings.m_editorSensitive)
-                ? d->colorCategoryForEditor(currentEditor)
+                ? colorCategoryForEditor(currentEditor)
                 : ColorCategory::AnyCategory;
 
         ColorWatcher *watcher = nullptr;
@@ -181,7 +141,7 @@ void ColorPickerPlugin::onColorEditTriggered()
         QWidget *editorViewport = editorWidget->viewport();
 
         d->colorEditor->setParent(editorViewport);
-        d->colorEditor->move(d->clampColorEditorPosition(toEdit.pos, editorViewport->rect()));
+        d->colorEditor->move(clampColorEditorPosition(toEdit.pos, editorViewport->rect()));
 
         d->colorEditor->show();
     }
@@ -189,27 +149,105 @@ void ColorPickerPlugin::onColorEditTriggered()
 
 void ColorPickerPlugin::onGeneralSettingsChanged(const GeneralSettings &gs)
 {
-    d->generalSettings = gs;
+    bool editorSensitiveChanged = (d->generalSettings.m_editorSensitive != gs.m_editorSensitive);
+    bool insertOnChangeChanged = (d->generalSettings.m_insertOnChange != gs.m_insertOnChange);
 
-    for (auto it = d->watchers.begin(); it != d->watchers.end(); ++it) {
-        ColorCategory newCat = (gs.m_editorSensitive) ? d->colorCategoryForEditor(it.key())
-                                                      : ColorCategory::AnyCategory;
+    // Setting : editor sensitive
+    if (editorSensitiveChanged) {
+        for (auto it = d->watchers.begin(); it != d->watchers.end(); ++it) {
+            ColorCategory newCat = (gs.m_editorSensitive) ? colorCategoryForEditor(it.key())
+                                                          : ColorCategory::AnyCategory;
 
-        ColorWatcher *watcher = it.value();
-        watcher->setColorCategory(newCat);
+            ColorWatcher *watcher = it.value();
+            watcher->setColorCategory(newCat);
 
-        // Update the color editor
-        TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(it.key()->widget());
-        Q_ASSERT(editorWidget);
+            // Update the color editor
+            TextEditorWidget *editorWidget = qobject_cast<TextEditorWidget *>(it.key()->widget());
+            Q_ASSERT(editorWidget);
 
-        if (d->colorEditor->parentWidget() == editorWidget->viewport())
-            d->colorEditor->setColorCategory(newCat);
+            if (d->colorEditor->parentWidget() == editorWidget->viewport())
+                d->colorEditor->setColorCategory(newCat);
+        }
     }
+
+    // Setting : insert on change
+    if (insertOnChangeChanged)
+        setInsertOnChange(gs.m_insertOnChange);
+
+    d->generalSettings = gs;
 }
 
 void ColorPickerPlugin::onEditorAboutToClose()
 {
     d->colorEditor->setParent(0);
+}
+
+void ColorPickerPlugin::onColorSelected(const QColor &color, ColorFormat format)
+{
+    d->colorModifier->insertColor(color, format);
+}
+
+void ColorPickerPlugin::onColorChanged(const QColor &color)
+{
+    d->colorModifier->insertColor(color, d->colorEditor->outputFormat());
+}
+
+void ColorPickerPlugin::onOutputFormatChanged(ColorFormat format)
+{
+    d->colorModifier->insertColor(d->colorEditor->color(), format);
+}
+
+void ColorPickerPlugin::setInsertOnChange(bool enable)
+{
+    if (enable) {
+        connect(d->colorEditor, &ColorEditor::colorChanged,
+                this, &ColorPickerPlugin::onColorChanged);
+
+        connect(d->colorEditor, &ColorEditor::outputFormatChanged,
+                this, &ColorPickerPlugin::onOutputFormatChanged);
+    }
+    else {
+        disconnect(d->colorEditor, &ColorEditor::colorChanged,
+                   this, &ColorPickerPlugin::onColorChanged);
+
+        disconnect(d->colorEditor, &ColorEditor::outputFormatChanged,
+                   this, &ColorPickerPlugin::onOutputFormatChanged);
+    }
+}
+
+ColorCategory ColorPickerPlugin::colorCategoryForEditor(IEditor *editor) const
+{
+    ColorCategory ret = ColorCategory::AnyCategory;
+
+    Id lastId = *(--editor->context().end());
+
+    if (lastId == QmlJSEditor::Constants::C_QMLJSEDITOR_ID)
+        ret = ColorCategory::QmlCategory;
+    else if (lastId == GlslEditor::Constants::C_GLSLEDITOR_ID)
+        ret = ColorCategory::GlslCategory;
+
+    return ret;
+}
+
+QPoint ColorPickerPlugin::clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const
+{
+    QPoint ret;
+    ret.ry() = cursorPos.y();
+
+    int colorEditorWidth = d->colorEditor->width();
+    int colorEditorHalfWidth = (colorEditorWidth / 2);
+
+    int posX = cursorPos.x() - colorEditorHalfWidth;
+    int widgetRight = rect.right();
+
+    if (posX < 0)
+        posX = 0;
+    else if ( (cursorPos.x() + colorEditorHalfWidth) > (widgetRight) )
+        posX = widgetRight - colorEditorWidth;
+
+    ret.rx() = posX;
+
+    return ret;
 }
 
 } // namespace Internal

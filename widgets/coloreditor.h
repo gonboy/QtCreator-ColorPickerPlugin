@@ -47,6 +47,7 @@ public slots:
     void setOpacity(int opacity);
 
 signals:
+    void colorSelected(const QColor &, ColorFormat);
     void outputFormatChanged(ColorFormat);
     void colorChanged(const QColor &);
     void hueChanged(int);
@@ -54,6 +55,7 @@ signals:
 
 protected:
     void paintEvent(QPaintEvent *) override;
+    void keyPressEvent(QKeyEvent *e) override;
 
 private slots:
     void onFormatButtonChecked(QAbstractButton *checkedBtn);

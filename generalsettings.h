@@ -23,6 +23,7 @@ public:
 
     /* variables */
     bool m_editorSensitive;
+    bool m_insertOnChange;
 };
 
 inline bool operator==(const GeneralSettings &t1, const GeneralSettings &t2) { return t1.equals(t2); }

@@ -3,6 +3,8 @@
 
 #include <extensionsystem/iplugin.h>
 
+#include "colorutilities.h"
+
 namespace Core {
 class IEditor;
 }
@@ -29,11 +31,19 @@ private slots:
     void onColorEditTriggered();
     void onGeneralSettingsChanged(const GeneralSettings &gs);
     void onEditorAboutToClose();
+    void onColorSelected(const QColor &color, ColorFormat format);
+    void onColorChanged(const QColor &color);
+    void onOutputFormatChanged(ColorFormat format);
 
     // The following tests expect that no projects are loaded on start-up.
     void test_addAndReplaceColor();
 
 private:
+    void setInsertOnChange(bool enable);
+
+    ColorCategory colorCategoryForEditor(Core::IEditor *editor) const;
+    QPoint clampColorEditorPosition(const QPoint &cursorPos, const QRect &rect) const;
+
     QScopedPointer<ColorPickerPluginImpl> d;
 };
 

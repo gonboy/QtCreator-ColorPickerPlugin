@@ -28,9 +28,7 @@ public:
 };
 
 ColorModifierImpl::ColorModifierImpl()
-{
-
-}
+{}
 
 
 ////////////////////////// ColorModifier //////////////////////////

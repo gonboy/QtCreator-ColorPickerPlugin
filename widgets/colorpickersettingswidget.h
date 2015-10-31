@@ -23,6 +23,7 @@ public:
 
 private:
     QCheckBox *m_editorSensitiveCheckBox;
+    QCheckBox *m_insertOnChangeCheckBox;
 };
 
 } // namespace Internal

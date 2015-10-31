@@ -15,6 +15,8 @@ Settings
 
 - Available formats can only be those supported by the current text editor. For example, the dialog only proposes `Qt.rgba` and `Qt.hsla` formats if you're editing a `QML` file.
 
+- There are two ways to insert a color in the current text editor : you can press the `Return` key or just change the color or the format in the color editor.
+
 Build the plugin
 -----------------
 Put all files in `<QtCreatorSourcesDir>/src/plugins/colorpicker`.

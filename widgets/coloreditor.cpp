@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
+#include <QKeyEvent>
 #include <QPainter>
 #include <QPushButton>
 #include <QToolButton>
@@ -257,7 +258,7 @@ ColorEditor::ColorEditor(QWidget *parent) :
     QFrame(parent),
     d(new ColorEditorImpl(this))
 {
-    //    setAutoFillBackground(true);
+    setFocusPolicy(Qt::StrongFocus);
     setFrameShape(QFrame::StyledPanel);
 
     // Build UI
@@ -457,6 +458,14 @@ void ColorEditor::paintEvent(QPaintEvent *)
     painter.setPen(creatorTheme->color(Utils::Theme::TextColorNormal));
     painter.setBrush(creatorTheme->color(Utils::Theme::BackgroundColorNormal));
     painter.drawRoundedRect(opt.rect.adjusted(0, 0, -1, -1), 3, 3);
+}
+
+void ColorEditor::keyPressEvent(QKeyEvent *e)
+{
+    int key = e->key();
+
+    if (key == Qt::Key_Return || key == Qt::Key_Enter)
+        emit colorSelected(d->color, d->outputFormat);
 }
 
 void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
