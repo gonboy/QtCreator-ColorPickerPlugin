@@ -252,7 +252,15 @@ QString colorToString(const QColor &color, ColorFormat format)
     }
     else if (format == ColorFormat::HexFormat) {
         prefix = QLatin1String("#");
-        colorComponents = color.name().toUpper().remove(0, 1);
+
+        int alpha = color.alpha();
+
+        if (alpha < 255)
+            colorComponents.sprintf("%02x%02x%02x%02x", alpha, color.red(), color.green(), color.blue());
+        else
+            colorComponents.sprintf("%02x%02x%02x", color.red(), color.green(), color.blue());
+
+        colorComponents = colorComponents.toUpper();
     }
 
     Q_ASSERT(!prefix.isNull());
