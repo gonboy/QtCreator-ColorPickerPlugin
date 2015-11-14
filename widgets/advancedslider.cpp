@@ -39,16 +39,24 @@ void AdvancedSlider::paintEvent(QPaintEvent *e)
     Q_UNUSED(e);
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.setPen(Qt::NoPen);
+
+    painter.save();
 
     // Draw background
     QRect myRect = rect();
+    const int rectRadius = 7;
 
     painter.setBrush(m_backgroundBrush);
-    painter.drawRect(myRect);
+    painter.drawRoundedRect(myRect, rectRadius, rectRadius);
+
+    painter.setPen(QPen(Qt::black, 0.5));
 
     painter.setBrush(m_gradientBrush);
-    painter.drawRect(myRect);
+    painter.drawRoundedRect(myRect, rectRadius, rectRadius);
+
+    painter.restore();
 
     // Draw handle
     QStyleOptionSlider opt;
@@ -61,7 +69,7 @@ void AdvancedSlider::paintEvent(QPaintEvent *e)
     pen.setWidth(4);
 
     painter.setPen(pen);
-    painter.drawRect(handleRect);
+    painter.drawRoundedRect(handleRect, rectRadius, rectRadius);
 }
 
 void AdvancedSlider::resizeEvent(QResizeEvent *e)
