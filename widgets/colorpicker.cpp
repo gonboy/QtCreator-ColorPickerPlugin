@@ -142,6 +142,7 @@ void ColorPickerWidget::setColor(const QColor &color)
 void ColorPickerWidget::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
     painter.drawImage(rect(), d->gradientImage);
 
     // Draw cursor circle

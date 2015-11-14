@@ -63,10 +63,10 @@ void AdvancedSlider::paintEvent(QPaintEvent *e)
     initStyleOption(&opt);
 
     QRect handleRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle);
-    handleRect.setWidth(width());
+    handleRect.adjust(1, 1, -1, -1);
 
     QPen pen(Qt::white);
-    pen.setWidth(4);
+    pen.setWidth(2);
 
     painter.setPen(pen);
     painter.drawRoundedRect(handleRect, rectRadius, rectRadius);
