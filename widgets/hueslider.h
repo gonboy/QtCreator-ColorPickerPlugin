@@ -14,7 +14,14 @@ public:
     explicit HueSlider(QWidget *parent = 0);
     ~HueSlider();
 
-    QBrush gradientBrush() const override;
+protected:
+    void resizeEvent(QResizeEvent *) override;
+
+    void drawBackground(QPainter *painter, const QRect &rect, int radius) const override;
+    void drawHandleBackground(QPainter *painter, const QRect &rect, int radius) const override;
+
+private:
+    QLinearGradient m_gradient;
 };
 
 #endif // HUESLIDER_H

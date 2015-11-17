@@ -1,5 +1,6 @@
 #include "opacityslider.h"
 
+#include <QDebug>
 #include <QPainter>
 
 namespace ColorPicker {
@@ -15,15 +16,18 @@ public:
 
     /* functions */
     QImage opacityCheckerboard(const QRect &rect, int xSquareCount = 3) const;
+    void updateCheckerboard(const QRect &rect);
 
     /* variables */
     int h, s, v;
+    QBrush checkerboard;
 };
 
 OpacitySliderImpl::OpacitySliderImpl() :
     h(0),
     s(0),
-    v(0)
+    v(0),
+    checkerboard()
 {}
 
 QImage OpacitySliderImpl::opacityCheckerboard(const QRect &rect, int xSquareCount) const
@@ -68,6 +72,11 @@ QImage OpacitySliderImpl::opacityCheckerboard(const QRect &rect, int xSquareCoun
     return pix.toImage();
 }
 
+void OpacitySliderImpl::updateCheckerboard(const QRect &rect)
+{
+    checkerboard = opacityCheckerboard(rect);
+}
+
 
 //////////////////////////// OpacitySlider /////////////////////////////
 
@@ -109,29 +118,42 @@ void OpacitySlider::setHsv(int h, int s, int v)
     }
 
     if (updateImage) {
-        updateBrushes();
-
         update();
     }
 }
 
-QBrush OpacitySlider::backgroundBrush() const
+void OpacitySlider::resizeEvent(QResizeEvent *)
 {
-    return d->opacityCheckerboard(rect());
+    d->updateCheckerboard(rect());
 }
 
-QBrush OpacitySlider::gradientBrush() const
+void OpacitySlider::drawBackground(QPainter *painter, const QRect &rect, int radius) const
 {
-    QLinearGradient colorGradient(QPoint(0.0, 0.0), QPoint(width(), height()));
+    painter->setBrush(d->checkerboard);
+    painter->drawRoundedRect(rect, radius, radius);
+
+    painter->setPen(QPen(Qt::black, 0.5));
+
+    QLinearGradient gradient(QPoint(0.0, 0.0), QPoint(width(), height()));
     QColor gradientColor = QColor::fromHsv(d->h, d->s, d->v);
 
     gradientColor.setAlphaF(1.0);
-    colorGradient.setColorAt(0.0, gradientColor);
+    gradient.setColorAt(0.0, gradientColor);
 
     gradientColor.setAlphaF(0.0);
-    colorGradient.setColorAt(1.0, gradientColor);
+    gradient.setColorAt(1.0, gradientColor);
 
-    return colorGradient;
+    painter->setBrush(gradient);
+    painter->drawRoundedRect(rect, radius, radius);
+}
+
+void OpacitySlider::drawHandleBackground(QPainter *painter, const QRect &rect, int radius) const
+{
+    painter->setBrush(d->checkerboard);
+    painter->drawRoundedRect(rect, radius, radius);
+
+    painter->setBrush(QColor::fromHsv(d->h, d->s, d->v, value()));
+    painter->drawRoundedRect(rect, radius, radius);
 }
 
 } // namespace Internal

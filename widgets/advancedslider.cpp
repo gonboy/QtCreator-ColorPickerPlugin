@@ -5,10 +5,11 @@
 #include <QPainter>
 #include <QStyleOptionSlider>
 
+namespace ColorPicker {
+namespace Internal {
+
 AdvancedSlider::AdvancedSlider(QWidget *parent) :
-    QSlider(parent),
-    m_backgroundBrush(),
-    m_gradientBrush()
+    QSlider(parent)
 {}
 
 void AdvancedSlider::setValueAtomic(int newValue)
@@ -18,20 +19,18 @@ void AdvancedSlider::setValueAtomic(int newValue)
     setValue(newValue);
 }
 
-QBrush AdvancedSlider::backgroundBrush() const
+void AdvancedSlider::drawBackground(QPainter *painter, const QRect &rect, int radius) const
 {
-    return Qt::NoBrush;
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+    Q_UNUSED(radius);
 }
 
-QBrush AdvancedSlider::gradientBrush() const
+void AdvancedSlider::drawHandleBackground(QPainter *painter, const QRect &rect, int radius) const
 {
-    return Qt::NoBrush;
-}
-
-void AdvancedSlider::updateBrushes()
-{
-    m_backgroundBrush = backgroundBrush();
-    m_gradientBrush = gradientBrush();
+    Q_UNUSED(painter);
+    Q_UNUSED(rect);
+    Q_UNUSED(radius);
 }
 
 void AdvancedSlider::paintEvent(QPaintEvent *e)
@@ -45,16 +44,10 @@ void AdvancedSlider::paintEvent(QPaintEvent *e)
     painter.save();
 
     // Draw background
-    QRect myRect = rect();
-    const int rectRadius = 7;
+    QRect myRect = rect().adjusted(3, 0, -3, 0);
+    const int rectRadius = 3;
 
-    painter.setBrush(m_backgroundBrush);
-    painter.drawRoundedRect(myRect, rectRadius, rectRadius);
-
-    painter.setPen(QPen(Qt::black, 0.5));
-
-    painter.setBrush(m_gradientBrush);
-    painter.drawRoundedRect(myRect, rectRadius, rectRadius);
+    drawBackground(&painter, myRect, rectRadius);
 
     painter.restore();
 
@@ -64,19 +57,13 @@ void AdvancedSlider::paintEvent(QPaintEvent *e)
 
     QRect handleRect = style()->subControlRect(QStyle::CC_Slider, &opt, QStyle::SC_SliderHandle);
     handleRect.adjust(1, 1, -1, -1);
+    const int handleRadius = 7;
 
     QPen pen(Qt::white);
     pen.setWidth(2);
 
     painter.setPen(pen);
-    painter.drawRoundedRect(handleRect, rectRadius, rectRadius);
-}
-
-void AdvancedSlider::resizeEvent(QResizeEvent *e)
-{
-    Q_UNUSED(e);
-
-    updateBrushes();
+    drawHandleBackground(&painter, handleRect, handleRadius);
 }
 
 void AdvancedSlider::mousePressEvent(QMouseEvent *e)
@@ -93,3 +80,6 @@ void AdvancedSlider::mousePressEvent(QMouseEvent *e)
 
     QSlider::mousePressEvent(e);
 }
+
+} // namespace Internal
+} // namespace ColorPicker

@@ -19,8 +19,11 @@ public:
     void hsv(int *h, int *s, int *v) const;
     void setHsv(int h, int s, int v);
 
-    QBrush backgroundBrush() const override;
-    QBrush gradientBrush() const override;
+protected:
+    void resizeEvent(QResizeEvent *) override;
+
+    void drawBackground(QPainter *painter, const QRect &rect, int radius) const override;
+    void drawHandleBackground(QPainter *painter, const QRect &rect, int radius) const override;
 
 private:
     QScopedPointer<OpacitySliderImpl> d;
