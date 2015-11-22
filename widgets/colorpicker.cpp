@@ -16,7 +16,7 @@ public:
     ColorPickerWidgetImpl(ColorPickerWidget *qq);
 
     /* functions */
-    void createGradientImage();
+    void createGradientImage(float hueF);
 
     QColor positionToColor(const QPoint &pos) const;
     QPoint colorToPosition(const QColor &color) const;
@@ -42,12 +42,10 @@ ColorPickerWidgetImpl::ColorPickerWidgetImpl(ColorPickerWidget *qq) :
 {}
 
 // Many thanks to gbdivers > http://blog.developpez.com/gpu/?p=353
-void ColorPickerWidgetImpl::createGradientImage()
+void ColorPickerWidgetImpl::createGradientImage(float hueF)
 {
     if (q->rect() != gradientImage.rect())
         gradientImage = QImage(q->size(), QImage::Format_RGB32);
-
-    float h = color.hsvHueF();
 
     int qWidth = q->width();
     int qHeight = q->height();
@@ -55,7 +53,7 @@ void ColorPickerWidgetImpl::createGradientImage()
     for (int s = 0; s < qWidth; ++s) {
         for (int v = 0; v < qHeight; ++v) {
             QColor color = QColor::fromHsvF(
-                        h,
+                        hueF,
                         1.0 * s / (qWidth - 1),
                         1.0 - (1.0 * v / (qHeight - 1)));
 
@@ -121,10 +119,12 @@ void ColorPickerWidgetImpl::processMouseEvent(QMouseEvent *e)
 
 void ColorPickerWidgetImpl::updateInternalColor(const QColor &c)
 {
-    color = c;
+    float newHue = c.hueF();
 
-    if (color.hue() != c.hue())
-        createGradientImage();
+    if (color.hueF() != newHue)
+        createGradientImage(newHue);
+
+    color = c;
 
     q->update();
     emit q->colorChanged(c);
@@ -157,7 +157,6 @@ QSize ColorPickerWidget::sizeHint() const
 void ColorPickerWidget::setColor(const QColor &color)
 {
     if (d->color != color) {
-        d->createGradientImage();
         d->cursorPos = d->colorToPosition(color);
 
         d->updateInternalColor(color);
@@ -182,7 +181,7 @@ void ColorPickerWidget::paintEvent(QPaintEvent *)
 
 void ColorPickerWidget::resizeEvent(QResizeEvent *)
 {
-    d->createGradientImage();
+    d->createGradientImage(d->color.hueF());
 }
 
 void ColorPickerWidget::mousePressEvent(QMouseEvent *e)
