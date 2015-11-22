@@ -159,7 +159,7 @@ ColorExpr ColorWatcher::process()
     }
 
     ret.pos = QPoint(cursorRect.center().x(),
-                     cursorRect.bottom());
+                     cursorRect.bottom() + 2);
 
     return ret;
 }
