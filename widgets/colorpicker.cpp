@@ -18,13 +18,13 @@ public:
     /* functions */
     void createGradientImage();
 
-    void updateCursorPos();
+    QColor positionToColor(const QPoint &pos) const;
+    QPoint colorToPosition(const QColor &color) const;
 
-    QColor colorUnderCursor(const QPoint &pos) const;
+    QPoint clampPos(const QPoint &pos, const QRect &rect) const;
 
-    QPoint findPixel(const QColor &color) const;
-
-    void processMousePressAndMoveEvent(const QPoint &pos);
+    void processMouseEvent(QMouseEvent *e);
+    void updateInternalColor(const QColor &color);
 
     /* variables */
     ColorPickerWidget *q;
@@ -49,57 +49,85 @@ void ColorPickerWidgetImpl::createGradientImage()
 
     float h = color.hsvHueF();
 
-    int qqWidth = q->width();
-    int qqHeight = q->height();
+    int qWidth = q->width();
+    int qHeight = q->height();
 
-    for (int s = 0; s < qqWidth; ++s) {
-        for (int v = 0; v < qqHeight; ++v) {
+    for (int s = 0; s < qWidth; ++s) {
+        for (int v = 0; v < qHeight; ++v) {
             QColor color = QColor::fromHsvF(
                         h,
-                        1.0 * s / (qqWidth - 1),
-                        1.0 - (1.0 * v / (qqHeight - 1)));
+                        1.0 * s / (qWidth - 1),
+                        1.0 - (1.0 * v / (qHeight - 1)));
 
             gradientImage.setPixel(s, v, color.rgb());
         }
     }
 }
 
-void ColorPickerWidgetImpl::updateCursorPos()
+QColor ColorPickerWidgetImpl::positionToColor(const QPoint &pos) const
 {
-    cursorPos = findPixel(color.rgb());
+    float s = 1.0 * static_cast<float>(pos.x()) / (q->width() - 1);
+    float v = 1.0 - (1.0 * static_cast<float>(pos.y()) / (q->height() - 1));
+
+    return QColor::fromHsvF(color.hueF(), s, v);
 }
 
-QColor ColorPickerWidgetImpl::colorUnderCursor(const QPoint &pos) const
+QPoint ColorPickerWidgetImpl::colorToPosition(const QColor &color) const
 {
-    return gradientImage.pixel(pos);
+    int x = color.saturationF() * (q->width() - 1);
+    int y = (1 - color.valueF()) * (q->height() - 1);
+
+    return QPoint(x, y);
 }
 
-QPoint ColorPickerWidgetImpl::findPixel(const QColor &color) const
+QPoint ColorPickerWidgetImpl::clampPos(const QPoint &pos, const QRect &rect) const
 {
-    for (int i = 0; i < gradientImage.width(); ++i) {
-        for (int j = 0; j < gradientImage.height(); ++j) {
-            QColor pixel = QColor::fromRgb(gradientImage.pixel(i, j));
+    int x = pos.x();
+    int rLeft = rect.left();
+    int rRight = rect.right();
 
-            if (pixel == color)
-                return QPoint(i, j);
-        }
-    }
+    if (x < rLeft)
+        x = rLeft;
+    else if (x > rRight)
+        x = rRight;
 
-    return QPoint(-1, -1);
+    int y = pos.y();
+    int rTop = rect.top();
+    int rBottom = rect.bottom();
+
+    if (y < rTop)
+        y = rTop;
+    else if (y > rBottom)
+        y = rBottom;
+
+    return QPoint(x, y);
 }
 
-void ColorPickerWidgetImpl::processMousePressAndMoveEvent(const QPoint &pos)
+void ColorPickerWidgetImpl::processMouseEvent(QMouseEvent *e)
 {
+    QPoint pos = e->pos();
+    QRect qRect = q->rect();
+
+    if (!qRect.contains(pos))
+        pos = clampPos(pos, qRect);
+
     cursorPos = pos;
 
-    if (!gradientImage.valid(cursorPos))
-        return;
+    QColor posColor = positionToColor(pos);
+    updateInternalColor(posColor);
 
-    color = colorUnderCursor(cursorPos);
+    e->accept();
+}
+
+void ColorPickerWidgetImpl::updateInternalColor(const QColor &c)
+{
+    color = c;
+
+    if (color.hue() != c.hue())
+        createGradientImage();
 
     q->update();
-
-    emit q->colorChanged(color);
+    emit q->colorChanged(c);
 }
 
 
@@ -109,6 +137,7 @@ ColorPickerWidget::ColorPickerWidget(QWidget *parent) :
     QWidget(parent),
     d(new ColorPickerWidgetImpl(this))
 {
+    setFocusPolicy(Qt::StrongFocus);
     setAttribute(Qt::WA_OpaquePaintEvent);
 }
 
@@ -128,14 +157,10 @@ QSize ColorPickerWidget::sizeHint() const
 void ColorPickerWidget::setColor(const QColor &color)
 {
     if (d->color != color) {
-        d->color = color;
-
         d->createGradientImage();
-        d->updateCursorPos();
+        d->cursorPos = d->colorToPosition(color);
 
-        update();
-
-        emit colorChanged(color);
+        d->updateInternalColor(color);
     }
 }
 
@@ -158,17 +183,46 @@ void ColorPickerWidget::paintEvent(QPaintEvent *)
 void ColorPickerWidget::resizeEvent(QResizeEvent *)
 {
     d->createGradientImage();
-    d->updateCursorPos();
 }
 
 void ColorPickerWidget::mousePressEvent(QMouseEvent *e)
 {
-    d->processMousePressAndMoveEvent(e->pos());
+    d->processMouseEvent(e);
 }
 
 void ColorPickerWidget::mouseMoveEvent(QMouseEvent *e)
 {
-    d->processMousePressAndMoveEvent(e->pos());
+    d->processMouseEvent(e);
+}
+
+void ColorPickerWidget::keyPressEvent(QKeyEvent *e)
+{
+    int h, s ,v;
+    d->color.getHsv(&h, &s, &v);
+
+    switch (e->key()) {
+    case Qt::Key_Left:
+        if (s > 0)
+            --s;
+        break;
+    case Qt::Key_Right:
+        if (s < 255)
+            ++s;
+        break;
+    case Qt::Key_Up:
+        if (v < 255)
+            ++v;
+        break;
+    case Qt::Key_Down:
+        if (v > 0)
+            --v;
+        break;
+    default:
+        break;
+    }
+
+    QColor c = QColor::fromHsv(h, s, v);
+    setColor(c);
 }
 
 } // namespace Internal
