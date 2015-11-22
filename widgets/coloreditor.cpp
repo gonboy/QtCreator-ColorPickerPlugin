@@ -260,6 +260,7 @@ ColorEditor::ColorEditor(QWidget *parent) :
 {
     setFocusPolicy(Qt::StrongFocus);
     setFrameShape(QFrame::StyledPanel);
+    setCursor(QCursor(Qt::ArrowCursor));
 
     // Build UI
     // Close button
