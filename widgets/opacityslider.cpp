@@ -1,7 +1,10 @@
 #include "opacityslider.h"
 
-#include <QDebug>
+// Qt includes
 #include <QPainter>
+
+// Plugin includes
+#include "drawhelpers.h"
 
 namespace ColorPicker {
 namespace Internal {
@@ -15,7 +18,6 @@ public:
     OpacitySliderImpl();
 
     /* functions */
-    QImage opacityCheckerboard(const QRect &rect, int xSquareCount = 3) const;
     void updateCheckerboard(const QRect &rect);
 
     /* variables */
@@ -30,51 +32,9 @@ OpacitySliderImpl::OpacitySliderImpl() :
     checkerboard()
 {}
 
-QImage OpacitySliderImpl::opacityCheckerboard(const QRect &rect, int xSquareCount) const
-{
-    QPixmap pix(rect.size());
-    pix.fill();
-
-    QPainter painter(&pix);
-    painter.setPen(QPen(Qt::NoPen));
-    painter.setBrush(Qt::gray);
-
-    int squareSide = rect.width() / xSquareCount;
-    int ySquareCount = rect.height() / squareSide;
-
-    QSize squareSize(squareSide, squareSide);
-    QPoint currentTopLeft;
-
-    for (int i = 0; i < xSquareCount; ++i)
-    {
-        bool inverseBrushesOrder = (i % 2) == 0;
-
-        for (int j = 0; j < ySquareCount; ++j)
-        {
-            if (j % 2 == 0)
-            {
-                if (inverseBrushesOrder)
-                    painter.drawRect(QRect(currentTopLeft, squareSize));
-            }
-            else
-            {
-                if (!inverseBrushesOrder)
-                    painter.drawRect(QRect(currentTopLeft, squareSize));
-            }
-
-            currentTopLeft.ry() += squareSide;
-        }
-
-        currentTopLeft.rx() += squareSide;
-        currentTopLeft.ry() = 0;
-    }
-
-    return pix.toImage();
-}
-
 void OpacitySliderImpl::updateCheckerboard(const QRect &rect)
 {
-    checkerboard = opacityCheckerboard(rect);
+    checkerboard = opacityCheckerboard(rect, 3);
 }
 
 
