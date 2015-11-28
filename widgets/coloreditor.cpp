@@ -21,6 +21,8 @@
 #include "colorpicker.h"
 #include "hueslider.h"
 #include "opacityslider.h"
+#include "saturationslider.h"
+#include "valueslider.h"
 
 namespace ColorPicker {
 namespace Internal {
@@ -35,9 +37,13 @@ public:
     {
         UpdateFromColorPicker = 1 << 0,
         UpdateFromHueSlider = 1 << 1,
-        UpdateFromOpacitySlider = 1 << 2,
-        UpdateProgrammatically = 1 << 3,
-        UpdateAll = UpdateFromColorPicker | UpdateFromHueSlider | UpdateFromOpacitySlider | UpdateProgrammatically
+        UpdateFromSaturationSlider = 1 << 2,
+        UpdateFromValueSlider = 1 << 3,
+        UpdateFromOpacitySlider = 1 << 4,
+        UpdateProgrammatically = 1 << 5,
+
+        UpdateAll = UpdateFromColorPicker | UpdateFromHueSlider | UpdateFromSaturationSlider
+        | UpdateFromValueSlider | UpdateFromOpacitySlider | UpdateProgrammatically
     };
     Q_DECLARE_FLAGS(UpdateReasons, UpdateReason)
 
@@ -66,6 +72,8 @@ public:
 
     ColorPickerWidget *colorPicker;
     HueSlider *hueSlider;
+    SaturationSlider *saturationSlider;
+    ValueSlider *valueSlider;
     OpacitySlider *opacitySlider;
 
     ColorFrame *colorFrame;
@@ -90,6 +98,8 @@ ColorEditorImpl::ColorEditorImpl(ColorEditor *qq) :
     color(QColor::Hsv),
     colorPicker(new ColorPickerWidget(qq)),
     hueSlider(new HueSlider(qq)),
+    saturationSlider(new SaturationSlider(qq)),
+    valueSlider(new ValueSlider(qq)),
     opacitySlider(new OpacitySlider(qq)),
     colorFrame(new ColorFrame()),
     formatsLayout(new QHBoxLayout),
@@ -106,25 +116,48 @@ ColorEditorImpl::ColorEditorImpl(ColorEditor *qq) :
 void ColorEditorImpl::updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate)
 {
     if (whichUpdate & ColorEditorImpl::UpdateFromColorPicker) {
+        const QSignalBlocker blocker(colorPicker);
+
+        saturationSlider->setValueAtomic(cl.hsvSaturation());
+        valueSlider->setValueAtomic(cl.value());
         opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+
         colorFrame->setColor(cl);
     }
 
     if (whichUpdate & ColorEditorImpl::UpdateFromHueSlider) {
         const QSignalBlocker blocker(colorPicker);
 
+        int newHue = cl.hsvHue();
+
         colorPicker->setColor(cl);
-        opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+
+        saturationSlider->setHue(newHue);
+        valueSlider->setHue(newHue);
+        opacitySlider->setHsv(newHue, cl.hsvSaturation(), cl.value());
+
+        colorFrame->setColor(cl);
+    }
+
+    if (whichUpdate & ColorEditorImpl::UpdateFromSaturationSlider
+            || whichUpdate & ColorEditorImpl::UpdateFromValueSlider) {
+        const QSignalBlocker blocker(colorPicker);
+
+        colorPicker->setColor(cl);
         colorFrame->setColor(cl);
     }
 
     if (whichUpdate & ColorEditorImpl::UpdateFromOpacitySlider) {
+        const QSignalBlocker blocker(colorPicker);
         colorFrame->setColor(cl);
     }
 
     if (whichUpdate & ColorEditorImpl::UpdateProgrammatically) {
         hueSlider->setValueAtomic(cl.hsvHue());
+        saturationSlider->setValueAtomic(cl.hsvSaturation());
+        valueSlider->setValueAtomic(cl.value());
         opacitySlider->setValueAtomic(cl.alpha());
+
         colorFrame->setColor(cl);
     }
 }
@@ -310,8 +343,10 @@ ColorEditor::ColorEditor(QWidget *parent) :
 
     auto *colorWidgetsLayout = new QHBoxLayout;
     colorWidgetsLayout->addWidget(d->colorPicker);
-    colorWidgetsLayout->addWidget(d->opacitySlider);
     colorWidgetsLayout->addWidget(d->hueSlider);
+    colorWidgetsLayout->addWidget(d->saturationSlider);
+    colorWidgetsLayout->addWidget(d->valueSlider);
+    colorWidgetsLayout->addWidget(d->opacitySlider);
     colorWidgetsLayout->addLayout(rightLayout);
 
     auto *centerLayout = new QVBoxLayout;
@@ -356,6 +391,31 @@ ColorEditor::ColorEditor(QWidget *parent) :
                               ColorEditorImpl::UpdateFromHueSlider);
         d->setCurrentColor(newColor);
     });
+
+    connect(d->saturationSlider, &SaturationSlider::valueChanged,
+            [=](int sat) {
+        QColor newColor = QColor::fromHsv(d->color.hsvHue(),
+                                          sat,
+                                          d->color.value(),
+                                          d->opacitySlider->value());
+
+        d->updateColorWidgets(newColor,
+                              ColorEditorImpl::UpdateFromSaturationSlider);
+        d->setCurrentColor(newColor);
+    });
+
+    connect(d->valueSlider, &ValueSlider::valueChanged,
+            [=](int val) {
+        QColor newColor = QColor::fromHsv(d->color.hsvHue(),
+                                          d->color.hsvSaturation(),
+                                          val,
+                                          d->opacitySlider->value());
+
+        d->updateColorWidgets(newColor,
+                              ColorEditorImpl::UpdateFromValueSlider);
+        d->setCurrentColor(newColor);
+    });
+
 
     connect(d->opacitySlider, &OpacitySlider::valueChanged,
             [=](int opacity) {

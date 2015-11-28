@@ -11,9 +11,6 @@ namespace ColorPicker {
 namespace Internal {
 
 class ColorEditorImpl;
-class ColorPickerWidget;
-class HueSlider;
-class OpacitySlider;
 
 class ColorEditor : public QFrame
 {

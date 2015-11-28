@@ -42,6 +42,10 @@ QtcPlugin {
         "widgets/hueslider.h",
         "widgets/opacityslider.cpp",
         "widgets/opacityslider.h",
+        "widgets/saturationslider.cpp",
+        "widgets/saturationslider.h",
+        "widgets/valueslider.cpp",
+        "widgets/valueslider.h",
     ]
 
     Group {
