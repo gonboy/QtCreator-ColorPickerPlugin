@@ -217,7 +217,8 @@ void ColorPickerWidget::keyPressEvent(QKeyEvent *e)
             --v;
         break;
     default:
-        break;
+        e->ignore();
+        return;
     }
 
     QColor c = QColor::fromHsv(h, s, v);
