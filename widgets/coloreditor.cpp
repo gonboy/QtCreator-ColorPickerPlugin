@@ -1,13 +1,13 @@
 #include "coloreditor.h"
 
 // Qt includes
+#include <QApplication>
 #include <QButtonGroup>
 #include <QDebug>
 #include <QFrame>
 #include <QHBoxLayout>
 #include <QKeyEvent>
 #include <QPainter>
-#include <QPushButton>
 #include <QToolButton>
 #include <QStyleOption>
 
@@ -17,6 +17,7 @@
 #include <utils/theme/theme.h>
 
 // Plugin includes
+#include "colorframe.h"
 #include "colorpicker.h"
 #include "hueslider.h"
 #include "opacityslider.h"
@@ -67,15 +68,16 @@ public:
     HueSlider *hueSlider;
     OpacitySlider *opacitySlider;
 
-    QVBoxLayout *formatsLayout;
+    ColorFrame *colorFrame;
+    QHBoxLayout *formatsLayout;
     QButtonGroup *btnGroup;
-    QPushButton *rgbBtn;
-    QPushButton *hslBtn;
-    QPushButton *hsvBtn;
-    QPushButton *qmlRgbaBtn;
-    QPushButton *qmlHslaBtn;
-    QPushButton *vecBtn;
-    QPushButton *hexBtn;
+    QToolButton *rgbBtn;
+    QToolButton *hslBtn;
+    QToolButton *hsvBtn;
+    QToolButton *qmlRgbaBtn;
+    QToolButton *qmlHslaBtn;
+    QToolButton *vecBtn;
+    QToolButton *hexBtn;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(ColorEditorImpl::UpdateReasons)
@@ -89,36 +91,41 @@ ColorEditorImpl::ColorEditorImpl(ColorEditor *qq) :
     colorPicker(new ColorPickerWidget(qq)),
     hueSlider(new HueSlider(qq)),
     opacitySlider(new OpacitySlider(qq)),
-    formatsLayout(new QVBoxLayout),
+    colorFrame(new ColorFrame()),
+    formatsLayout(new QHBoxLayout),
     btnGroup(new QButtonGroup(qq)),
-    rgbBtn(new QPushButton(qq)),
-    hslBtn(new QPushButton(qq)),
-    hsvBtn(new QPushButton(qq)),
-    qmlRgbaBtn(new QPushButton(qq)),
-    qmlHslaBtn(new QPushButton(qq)),
-    vecBtn(new QPushButton(qq)),
-    hexBtn(new QPushButton(qq))
+    rgbBtn(new QToolButton(qq)),
+    hslBtn(new QToolButton(qq)),
+    hsvBtn(new QToolButton(qq)),
+    qmlRgbaBtn(new QToolButton(qq)),
+    qmlHslaBtn(new QToolButton(qq)),
+    vecBtn(new QToolButton(qq)),
+    hexBtn(new QToolButton(qq))
 {}
 
 void ColorEditorImpl::updateColorWidgets(const QColor &cl, UpdateReasons whichUpdate)
 {
-    if (whichUpdate & ColorEditorImpl::UpdateFromColorPicker)
+    if (whichUpdate & ColorEditorImpl::UpdateFromColorPicker) {
         opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+        colorFrame->setColor(cl);
+    }
 
     if (whichUpdate & ColorEditorImpl::UpdateFromHueSlider) {
         const QSignalBlocker blocker(colorPicker);
 
         colorPicker->setColor(cl);
         opacitySlider->setHsv(cl.hsvHue(), cl.hsvSaturation(), cl.value());
+        colorFrame->setColor(cl);
     }
 
     if (whichUpdate & ColorEditorImpl::UpdateFromOpacitySlider) {
-
+        colorFrame->setColor(cl);
     }
 
     if (whichUpdate & ColorEditorImpl::UpdateProgrammatically) {
         hueSlider->setValueAtomic(cl.hsvHue());
         opacitySlider->setValueAtomic(cl.alpha());
+        colorFrame->setColor(cl);
     }
 }
 
@@ -271,10 +278,6 @@ ColorEditor::ColorEditor(QWidget *parent) :
     connect(closeBtn, &QToolButton::clicked,
             this, &ColorEditor::close);
 
-    auto leftPanelLayout = new QVBoxLayout;
-    leftPanelLayout->addWidget(closeBtn);
-    leftPanelLayout->addStretch();
-
     // Color format selection
     d->rgbBtn->setText(QLatin1String("rgb"));
     d->hslBtn->setText(QLatin1String("hsl"));
@@ -295,13 +298,30 @@ ColorEditor::ColorEditor(QWidget *parent) :
     // Default checked button
     d->rgbBtn->setChecked(true);
 
+    // Build layouts
+    d->formatsLayout->setSpacing(0);
+
+    auto rightLayout = new QVBoxLayout;
+    rightLayout->addWidget(d->colorFrame);
+
+    auto leftPanelLayout = new QVBoxLayout;
+    leftPanelLayout->addWidget(closeBtn);
+    leftPanelLayout->addStretch();
+
+    auto *colorWidgetsLayout = new QHBoxLayout;
+    colorWidgetsLayout->addWidget(d->colorPicker);
+    colorWidgetsLayout->addWidget(d->opacitySlider);
+    colorWidgetsLayout->addWidget(d->hueSlider);
+    colorWidgetsLayout->addLayout(rightLayout);
+
+    auto *centerLayout = new QVBoxLayout;
+    centerLayout->addLayout(colorWidgetsLayout);
+    centerLayout->addLayout(d->formatsLayout);
+
     auto *mainLayout = new QHBoxLayout(this);
     mainLayout->addLayout(leftPanelLayout);
     mainLayout->addSpacing(0);
-    mainLayout->addWidget(d->colorPicker);
-    mainLayout->addWidget(d->opacitySlider);
-    mainLayout->addWidget(d->hueSlider);
-    mainLayout->addLayout(d->formatsLayout);
+    mainLayout->addLayout(centerLayout);
 
     // Color format selection logic
     d->btnGroup->addButton(d->rgbBtn);
