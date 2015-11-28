@@ -334,8 +334,11 @@ ColorEditor::ColorEditor(QWidget *parent) :
     // Build layouts
     d->formatsLayout->setSpacing(0);
 
+    d->colorFrame->setMinimumSize(QSize(30, 35));
+
     auto rightLayout = new QVBoxLayout;
     rightLayout->addWidget(d->colorFrame);
+    rightLayout->addStretch();
 
     auto leftPanelLayout = new QVBoxLayout;
     leftPanelLayout->addWidget(closeBtn);

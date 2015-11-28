@@ -33,11 +33,6 @@ void ColorFrame::setColor(const QColor &color)
     }
 }
 
-QSize ColorFrame::sizeHint() const
-{
-    return QPushButton().sizeHint();
-}
-
 void ColorFrame::paintEvent(QPaintEvent *e)
 {
     Q_UNUSED(e);

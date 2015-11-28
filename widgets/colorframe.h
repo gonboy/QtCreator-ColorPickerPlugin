@@ -22,8 +22,6 @@ signals:
     void colorChanged(QColor);
 
 protected:
-    QSize sizeHint() const override;
-
     void paintEvent(QPaintEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
 
