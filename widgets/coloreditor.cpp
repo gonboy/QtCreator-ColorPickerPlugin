@@ -80,8 +80,8 @@ public:
     QHBoxLayout *formatsLayout;
     QButtonGroup *btnGroup;
     QToolButton *rgbBtn;
-    QToolButton *hslBtn;
     QToolButton *hsvBtn;
+    QToolButton *hslBtn;
     QToolButton *qmlRgbaBtn;
     QToolButton *qmlHslaBtn;
     QToolButton *vecBtn;
@@ -105,8 +105,8 @@ ColorEditorImpl::ColorEditorImpl(ColorEditor *qq) :
     formatsLayout(new QHBoxLayout),
     btnGroup(new QButtonGroup(qq)),
     rgbBtn(new QToolButton(qq)),
-    hslBtn(new QToolButton(qq)),
     hsvBtn(new QToolButton(qq)),
+    hslBtn(new QToolButton(qq)),
     qmlRgbaBtn(new QToolButton(qq)),
     qmlHslaBtn(new QToolButton(qq)),
     vecBtn(new QToolButton(qq)),
@@ -313,23 +313,20 @@ ColorEditor::ColorEditor(QWidget *parent) :
 
     // Color format selection
     d->rgbBtn->setText(QLatin1String("rgb"));
-    d->hslBtn->setText(QLatin1String("hsl"));
     d->hsvBtn->setText(QLatin1String("hsv"));
+    d->hslBtn->setText(QLatin1String("hsl"));
     d->qmlRgbaBtn->setText(QLatin1String("Qt.rgba"));
     d->qmlHslaBtn->setText(QLatin1String("Qt.hsla"));
     d->vecBtn->setText(QLatin1String("vec"));
     d->hexBtn->setText(QLatin1String("hex"));
 
     d->rgbBtn->setCheckable(true);
-    d->hslBtn->setCheckable(true);
     d->hsvBtn->setCheckable(true);
+    d->hslBtn->setCheckable(true);
     d->qmlRgbaBtn->setCheckable(true);
     d->qmlHslaBtn->setCheckable(true);
     d->vecBtn->setCheckable(true);
     d->hexBtn->setCheckable(true);
-
-    // Default checked button
-    d->rgbBtn->setChecked(true);
 
     // Build layouts
     d->formatsLayout->setSpacing(0);
@@ -363,8 +360,8 @@ ColorEditor::ColorEditor(QWidget *parent) :
 
     // Color format selection logic
     d->btnGroup->addButton(d->rgbBtn);
-    d->btnGroup->addButton(d->hslBtn);
     d->btnGroup->addButton(d->hsvBtn);
+    d->btnGroup->addButton(d->hslBtn);
     d->btnGroup->addButton(d->qmlRgbaBtn);
     d->btnGroup->addButton(d->qmlHslaBtn);
     d->btnGroup->addButton(d->vecBtn);
@@ -433,6 +430,7 @@ ColorEditor::ColorEditor(QWidget *parent) :
     });
 
     setColorCategory(ColorCategory::AnyCategory);
+    setOutputFormat(ColorFormat::QCssRgbUCharFormat);
     setColor(Qt::red);
 }
 
@@ -559,11 +557,11 @@ void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
     if (checkedBtn == d->rgbBtn) {
         format = ColorFormat::QCssRgbUCharFormat;
     }
-    else if (checkedBtn == d->hslBtn) {
-        format = ColorFormat::CssHslFormat;
-    }
     else if (checkedBtn == d->hsvBtn) {
         format = ColorFormat::QssHsvFormat;
+    }
+    else if (checkedBtn == d->hslBtn) {
+        format = ColorFormat::CssHslFormat;
     }
     else if (checkedBtn == d->qmlRgbaBtn) {
         format = ColorFormat::QmlRgbaFormat;
