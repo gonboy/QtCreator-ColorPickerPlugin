@@ -25,6 +25,11 @@ Now open `<QtCreatorSourcesDir>/src/plugins.qbs` with your favorite text editor 
 
 Build QtCreator. That's it.
 
+How to use it ?
+----------------
+
+Open the `Tools` menu and trigger the action `ColorPicker | Trigger Color Edit`, or use `Ctrl + Alt + C`.
+
 Please note
 -----------------
 - This plugin is developed for QtCreator >= 3.5.0. I will not test it with earlier versions.
