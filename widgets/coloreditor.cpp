@@ -368,7 +368,32 @@ ColorEditor::ColorEditor(QWidget *parent) :
     d->btnGroup->addButton(d->hexBtn);
 
     connect(d->btnGroup, static_cast<void (QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonClicked),
-            this, &ColorEditor::onFormatButtonChecked);
+            [=] (QAbstractButton *btn) {
+        ColorFormat format;
+
+        if (btn == d->rgbBtn) {
+            format = ColorFormat::QCssRgbUCharFormat;
+        }
+        else if (btn == d->hsvBtn) {
+            format = ColorFormat::QssHsvFormat;
+        }
+        else if (btn == d->hslBtn) {
+            format = ColorFormat::CssHslFormat;
+        }
+        else if (btn == d->qmlRgbaBtn) {
+            format = ColorFormat::QmlRgbaFormat;
+        }
+        else if (btn == d->qmlHslaBtn) {
+            format = ColorFormat::QmlHslaFormat;
+        }
+        else if (btn == d->vecBtn) {
+            format = ColorFormat::GlslFormat;
+        }
+        else if (btn == d->hexBtn)
+            format = ColorFormat::HexFormat;
+
+        d->setCurrentFormat(format);
+    });
 
     // Color changes logic
     connect(d->colorPicker, &ColorPickerWidget::colorChanged,
@@ -548,34 +573,6 @@ void ColorEditor::keyPressEvent(QKeyEvent *e)
 
     if (key == Qt::Key_Return || key == Qt::Key_Enter)
         emit colorSelected(d->color, d->outputFormat);
-}
-
-void ColorEditor::onFormatButtonChecked(QAbstractButton *checkedBtn)
-{
-    ColorFormat format;
-
-    if (checkedBtn == d->rgbBtn) {
-        format = ColorFormat::QCssRgbUCharFormat;
-    }
-    else if (checkedBtn == d->hsvBtn) {
-        format = ColorFormat::QssHsvFormat;
-    }
-    else if (checkedBtn == d->hslBtn) {
-        format = ColorFormat::CssHslFormat;
-    }
-    else if (checkedBtn == d->qmlRgbaBtn) {
-        format = ColorFormat::QmlRgbaFormat;
-    }
-    else if (checkedBtn == d->qmlHslaBtn) {
-        format = ColorFormat::QmlHslaFormat;
-    }
-    else if (checkedBtn == d->vecBtn) {
-        format = ColorFormat::GlslFormat;
-    }
-    else if (checkedBtn == d->hexBtn)
-        format = ColorFormat::HexFormat;
-
-    d->setCurrentFormat(format);
 }
 
 } // namespace Internal

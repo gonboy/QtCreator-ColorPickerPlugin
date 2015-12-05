@@ -54,9 +54,6 @@ protected:
     void paintEvent(QPaintEvent *) override;
     void keyPressEvent(QKeyEvent *e) override;
 
-private slots:
-    void onFormatButtonChecked(QAbstractButton *checkedBtn);
-
 private:
     QScopedPointer<ColorEditorImpl> d;
 };
